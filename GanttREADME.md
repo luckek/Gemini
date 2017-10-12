@@ -1,2 +1,2 @@
 # Gemini
-We are using a website called TrackingTime for our Gantt charts.
+We are using an excel sheet for our Gantt chart.
