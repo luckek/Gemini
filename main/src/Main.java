@@ -9,7 +9,6 @@ public class Main {
   private static String COMPANY_NAME = "Gemini Corp.";
   private static String FRAME_STRING = SOFTWARE_NAME + " Version: " + VERSION;
   private static String DEV_STRING = "Developed By: " + COMPANY_NAME;
-  // private static JComboBox<String> accountList;
   private static InitialScreen initialScreen;
   private static JFrame frame;
 
@@ -24,35 +23,34 @@ public class Main {
 
     JButton button = new JButton("Login");
     frame.add(button);
-    button.addActionListener (new Action1());
+    button.addActionListener (new loginAction());
   }
 
   public void initializeScreen() {}
 
-  static class Action1 implements ActionListener {
+  static class loginAction implements ActionListener {
     public void actionPerformed (ActionEvent e) {
 
-      String[] accountNames = {"All", "Michael", "Trish", "Rob"};
-      double accountBalance = 4200.00;
-      boolean isSucessful = true; // Assume login works (For now)
+      boolean isSucessful = true;
 
 
-      if(isSucessful == true) {
+      if(isSucessful == true) { // Eveything inside this if statement must be copied together in order to work properly.
+
+        String[] accountNames = {"All", "Michael", "Trish", "Rob"}; // This should be replaced with all acct names
+        double accountBalance = 4200.00; // This may stay hardcoded for now.
 
         // This should be populated by all of the transaction data.
         String data [][] = { {"Micheal Cassens", "10/7/2017", "2000.00", "Credit Card"},
                             {"Robert Smith", "10/5/2017", "200.00", "Check"},
                             {"Patricia Duce", "10/7/2017", "2000.00", "Cash"}};
 
-        System.out.println("Login sucessfull"); // Debugging
-        frame.dispose();
+        frame.dispose(); // This should be replaced with Jared's frame.
 
         initialScreen = new InitialScreen(FRAME_STRING, data);
 
         initialScreen.initComboBox(accountNames);
-        initialScreen.updateBalance(accountBalance); //
+        initialScreen.updateBalance(accountBalance);
 
-        // End hardcoded test stuff
 
       } else {
         System.out.println("Login unsucessful");
