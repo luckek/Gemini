@@ -218,7 +218,9 @@ public class InitialScreen extends JFrame {
 
   class logoutAction implements ActionListener {
     public void actionPerformed (ActionEvent e) {
+      // Closes current frame and opens LoginPanel when logout button is pressed
       dispose();
+      LoginPanel.main(null);
 
     }
   }
