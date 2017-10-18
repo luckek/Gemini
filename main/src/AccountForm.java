@@ -57,7 +57,7 @@ public class AccountForm extends JDialog {
 
     infoPanel.add(Box.createRigidArea(new Dimension(10, 50)));
     infoPanel.add(new JLabel("<html><center><p>Please enter the name of the " +
-    "account</p><p>and the initial amount of money in the account" +
+    "account</p><p>and all other pertinent information" +
     "</p></center></html>"));
 
     namePanel.add(nameLabel);
@@ -96,7 +96,6 @@ public class AccountForm extends JDialog {
 
    class okAction implements ActionListener {
     public void actionPerformed (ActionEvent e) {
-      System.out.println("okay button pressed");
       if(nameField.getText().isEmpty() || amntField.getText().isEmpty() ||
       emailField.getText().isEmpty() || descriptionField.getText().isEmpty() ){
         showWarning();

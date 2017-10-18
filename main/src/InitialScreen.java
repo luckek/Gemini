@@ -5,7 +5,7 @@ import java.awt.event.*;
 public class InitialScreen extends JFrame {
 
   private static String VERSION = "0.0.1";
-  private static String SOFTWARE_NAME = "Software name";
+  private static String SOFTWARE_NAME = "Astro Account Management Software";
   private static String COMPANY_NAME = "Gemini Corp.";
   private static String FRAME_STRING = SOFTWARE_NAME + " Version: " + VERSION;
   private static String DEV_STRING = "Developed By: " + COMPANY_NAME;
@@ -94,8 +94,6 @@ public class InitialScreen extends JFrame {
 
     transactionPanel.add(Box.createRigidArea(new Dimension(0, 20)));
     transactionPanel.add(transactionPane);
-    // transactionPanel.add(Box.createRigidArea(new Dimension(0, 10)));
-    // transactionPanel.add(balanceLabel);
 
     headerPanel.add(transactionLabel);
 
@@ -138,7 +136,9 @@ public class InitialScreen extends JFrame {
     String newAcctEmail = accountForm.getEmail();
     String newAcctDesc = accountForm.getDescription();
 
-    accountList.addItem(newAcctName);
+    if(!newAcctName.isEmpty()){
+      accountList.addItem(newAcctName);
+    }
     // create new account object / update necessary data structures
   }
 
@@ -164,19 +164,21 @@ public class InitialScreen extends JFrame {
     return names;
   }
 
-  public String getAcct() {
+  // Creates popup warning
+  public int showWarning() {
+    return JOptionPane.showOptionDialog(this, "Are you sure you want to delete this account?",
+                                  "Warning!", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+
+  }
+
+  public String getAcct(String optionMessage) {
 
     Object[] possibilities = retrieveAccountNames();
 
-
-    String acctName = (String)JOptionPane.showInputDialog(
-                    this, "Please select an account to view:",
+    return (String)JOptionPane.showInputDialog(
+                    this, optionMessage,
                     FRAME_STRING, JOptionPane.PLAIN_MESSAGE,
                     null, possibilities, possibilities[0]);
-
-      System.out.println(acctName);
-      return acctName;
-
   }
 
   public void viewAcct(String acctToView) {
@@ -191,32 +193,33 @@ public class InitialScreen extends JFrame {
 
   static class calcAction implements ActionListener {
     public void actionPerformed (ActionEvent e) {
-      System.out.println("Benefits calculator button pressed");
     }
   }
 
-  static class deleteAction implements ActionListener {
+ class deleteAction implements ActionListener {
     public void actionPerformed (ActionEvent e) {
-      System.out.println("Delete accounts button pressed");
+      int option = -1;
       // Delete account - need warning
-
-      String acctName = "Michael";
-      accountList.removeItem(acctName);
+      String acctToDelete = getAcct("Please select the account you want to delete");
+      option = showWarning();
+      if(option == 0) {
+      accountList.removeItem(acctToDelete);
+      }
     }
   }
 
   class acctInfoAction implements ActionListener {
     public void actionPerformed (ActionEvent e) {
 
-    String acctToView = getAcct();
+    String acctToView = getAcct("Please select the account you would like to view");
     viewAcct(acctToView);
     }
   }
 
-  static class logoutAction implements ActionListener {
+  class logoutAction implements ActionListener {
     public void actionPerformed (ActionEvent e) {
-      System.out.println("logout button pressed");
-      // this.dispose();
+      dispose();
+
     }
   }
 }

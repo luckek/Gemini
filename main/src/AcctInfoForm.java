@@ -69,7 +69,6 @@ public class AcctInfoForm extends JDialog {
 
    class okAction implements ActionListener {
     public void actionPerformed (ActionEvent e) {
-      System.out.println("okay button pressed");
 
       close();
     }
