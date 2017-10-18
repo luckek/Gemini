@@ -118,7 +118,6 @@ public class InitialScreen extends JFrame {
   }
 
   public void updateBalance(double newBalance) {
-
     String newBalanceStr =  Double.toString(newBalance);
 
     // This ensures that account balances with 0 cents display properly.
@@ -134,10 +133,12 @@ public class InitialScreen extends JFrame {
     AccountForm accountForm = new AccountForm(this, FRAME_STRING, true);
 
     // Grab information
-    String newAccountName = accountForm.getName();
-    String newAccountAmnt = accountForm.getAmnt();
+    String newAcctName = accountForm.getName();
+    String newAcctAmnt = accountForm.getAmnt();
+    String newAcctEmail = accountForm.getEmail();
+    String newAcctDesc = accountForm.getDescription();
 
-    accountList.addItem(newAccountName);
+    accountList.addItem(newAcctName);
     // create new account object / update necessary data structures
   }
 
