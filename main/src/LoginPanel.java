@@ -24,7 +24,7 @@ public class LoginPanel
     private static InitialScreen initialScreen;
     private static JFrame frame;
     
-    public static void main(String[] args)
+    public static void startPanel()
     {
         // Create frame
         frame = new JFrame("Login");

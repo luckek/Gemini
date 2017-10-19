@@ -185,6 +185,8 @@ public class InitialScreen extends JFrame {
     AcctInfoForm viewAcctDlg = new AcctInfoForm(this, FRAME_STRING, true, acctToView);
   }
 
+  //Do these need to be classes?
+  
   class addAction implements ActionListener {
     public void actionPerformed (ActionEvent e) {
     createAccount();
@@ -220,7 +222,7 @@ public class InitialScreen extends JFrame {
     public void actionPerformed (ActionEvent e) {
       // Closes current frame and opens LoginPanel when logout button is pressed
       dispose();
-      LoginPanel.main(null);
+      LoginPanel.startPanel();
 
     }
   }
