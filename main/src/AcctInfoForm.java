@@ -4,22 +4,23 @@ import java.awt.event.*;
 
 public class AcctInfoForm extends JDialog {
 
-  public AcctInfoForm(JFrame frame, String titleString, boolean modality, String acctToView) {
+  public AcctInfoForm(JFrame frame, String titleString, boolean modality, Account currAccount) {
 
     super(frame, titleString, modality);
 
-    int balance = 0;
-    String description = "description";
-    String email = "email";
+    String name = currAccount.getName();
+    String balance = currAccount.getBalance();
+    String description = currAccount.getDescription();
+    String email = currAccount.getEmail();
 
     setPreferredSize(new Dimension(300, 300));
 
     JLabel nameLabel  = new JLabel("Name: ");
     nameLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-    JLabel nameLabel2 = new JLabel(acctToView);
+    JLabel nameLabel2 = new JLabel(name);
     JLabel amntLabel = new JLabel("Account Balance: ");
     amntLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-    JLabel balanceLabel = new JLabel(Integer.toString(balance));
+    JLabel balanceLabel = new JLabel(balance);
     JLabel descriptionLabel = new JLabel("Description: ");
     JLabel descriptionLabel2 = new JLabel(description);
     JLabel emailLabel = new JLabel("E-mail: ");
@@ -69,7 +70,6 @@ public class AcctInfoForm extends JDialog {
 
    class okAction implements ActionListener {
     public void actionPerformed (ActionEvent e) {
-
       close();
     }
   }

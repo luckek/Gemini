@@ -14,6 +14,7 @@ public class InitialScreen extends JFrame {
   private static JTable transactionTable;
   private static JLabel balanceLabel;
   private static String[] columnNames = {"Name", "Date", "Amount", "Type"};
+  private Account[] acctArray = new Account[10];
 
   public InitialScreen(String title, String[][] data) {
 
@@ -138,7 +139,13 @@ public class InitialScreen extends JFrame {
 
     if(!newAcctName.isEmpty()){
       accountList.addItem(newAcctName);
+
+      String[] names = retrieveAccountNames();
+      int position = names.length - 1;
+      System.out.println(Integer.toString(position));
+      acctArray[position] = new Account(newAcctName, newAcctAmnt, newAcctEmail, newAcctDesc);
     }
+
     // create new account object / update necessary data structures
   }
 
@@ -175,6 +182,15 @@ public class InitialScreen extends JFrame {
 
     Object[] possibilities = retrieveAccountNames();
 
+    for(int i = 0; i < possibilities.length; i++) {
+
+      System.out.println(possibilities[i]);
+    }
+    if(possibilities.length == 0) {
+      possibilities = new Object[1];
+      possibilities[0] = "None";
+    }
+
     return (String)JOptionPane.showInputDialog(
                     this, optionMessage,
                     FRAME_STRING, JOptionPane.PLAIN_MESSAGE,
@@ -182,7 +198,19 @@ public class InitialScreen extends JFrame {
   }
 
   public void viewAcct(String acctToView) {
-    AcctInfoForm viewAcctDlg = new AcctInfoForm(this, FRAME_STRING, true, acctToView);
+
+    Account currAccount = new Account("", "0", "", "This should not be here");
+    for(int i = 0; i < acctArray.length; i++) {
+
+        if((acctArray[i] != null) && (acctArray[i].getName().equalsIgnoreCase(acctToView))){
+          currAccount.setName(acctArray[i].getName());
+          currAccount.setBalance(acctArray[i].getBalance());
+          currAccount.setEmail(acctArray[i].getEmail());
+          currAccount.setDesc(acctArray[i].getDescription());
+        }
+    }
+    System.out.println(acctToView);
+    AcctInfoForm viewAcctDlg = new AcctInfoForm(this, FRAME_STRING, true, currAccount);
   }
 
   class addAction implements ActionListener {
@@ -201,9 +229,11 @@ public class InitialScreen extends JFrame {
       int option = -1;
       // Delete account - need warning
       String acctToDelete = getAcct("Please select the account you want to delete");
-      option = showWarning();
-      if(option == 0) {
-      accountList.removeItem(acctToDelete);
+      if((acctToDelete != null) && (!acctToDelete.isEmpty())){
+        option = showWarning();
+        if(option == 0) {
+          accountList.removeItem(acctToDelete);
+        }
       }
     }
   }
@@ -211,8 +241,10 @@ public class InitialScreen extends JFrame {
   class acctInfoAction implements ActionListener {
     public void actionPerformed (ActionEvent e) {
 
-    String acctToView = getAcct("Please select the account you would like to view");
-    viewAcct(acctToView);
+      String acctToView = getAcct("Please select the account you would like to view");
+      if((acctToView != null) && (!acctToView.isEmpty())) {
+        viewAcct(acctToView);
+      }
     }
   }
 
@@ -221,7 +253,6 @@ public class InitialScreen extends JFrame {
       // Closes current frame and opens LoginPanel when logout button is pressed
       dispose();
       LoginPanel.main(null);
-
     }
   }
 }

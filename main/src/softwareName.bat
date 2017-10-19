@@ -1,2 +1,2 @@
-javac Main.java AccountForm.java InitialScreen.java AcctInfoForm.java -Xdiags:verbose
-java Main
+javac LoginPanel.java AccountForm.java InitialScreen.java AcctInfoForm.java Account.java -Xdiags:verbose
+java LoginPanel
