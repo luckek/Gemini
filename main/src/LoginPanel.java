@@ -13,19 +13,19 @@ public class LoginPanel
 {
 
     // Components and variables
-    private static JTextField usernameTF;
-    private static JPasswordField passwordPF;
-    private static JLabel invalid;
+    private JTextField usernameTF;
+    private JPasswordField passwordPF;
+    private JLabel invalid;
+    private InitialScreen initialScreen;
+    private JFrame frame;
 
-    private static String VERSION = "0.0.1";
-    private static String SOFTWARE_NAME = "Astro Account Management Software";
-    private static String COMPANY_NAME = "Gemini Corp.";
-    private static String FRAME_STRING = SOFTWARE_NAME + " Version: " + VERSION;
-    private static String DEV_STRING = "Developed By: " + COMPANY_NAME;
-    private static InitialScreen initialScreen;
-    private static JFrame frame;
+    static String VERSION = "0.0.1";
+    static String SOFTWARE_NAME = "Astro Account Management Software";
+    static String COMPANY_NAME = "Gemini Corp.";
+    static String FRAME_STRING = SOFTWARE_NAME + " Version: " + VERSION;
+    static String DEV_STRING = "Developed By: " + COMPANY_NAME;
 
-    public static void startPanel()
+    void startPanel()
     {
         // Create frame
         frame = new JFrame("Login");
@@ -100,7 +100,7 @@ public class LoginPanel
     }
 
     // When login button is pushed
-    static class LoginAction implements ActionListener
+    class LoginAction implements ActionListener
     {
         public void actionPerformed (ActionEvent e)
         {

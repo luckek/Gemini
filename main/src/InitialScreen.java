@@ -5,16 +5,16 @@ import java.awt.event.*;
 
 public class InitialScreen extends JFrame {
 
-    private static String VERSION = "0.0.1";
-    private static String SOFTWARE_NAME = "Astro Account Management Software";
-    private static String COMPANY_NAME = "Gemini Corp.";
-    private static String FRAME_STRING = SOFTWARE_NAME + " Version: " + VERSION;
-    private static String DEV_STRING = "Developed By: " + COMPANY_NAME;
+    private final String VERSION = "0.0.1";
+    private final String SOFTWARE_NAME = "Astro Account Management Software";
+    private final String COMPANY_NAME = "Gemini Corp.";
+    private final String FRAME_STRING = SOFTWARE_NAME + " Version: " + VERSION;
+    private final String DEV_STRING = "Developed By: " + COMPANY_NAME;
 
-    private static JComboBox<String> accountList;
-    private static JTable transactionTable;
-    private static JLabel balanceLabel;
-    private static String[] columnNames = {"Name", "Date", "Amount", "Type"};
+    private JComboBox<String> accountList;
+    private JTable transactionTable;
+    private JLabel balanceLabel;
+    private String[] columnNames = {"Name", "Date", "Amount", "Type"};
     private Account[] acctArray = new Account[10];
 
     public InitialScreen(String title, String[][] data) {
@@ -167,7 +167,6 @@ public class InitialScreen extends JFrame {
         for(int i = 1; i < numberOfNames; i++) {
             names[i - 1] = accountList.getItemAt(i);
         }
-
         return names;
     }
 
@@ -212,12 +211,11 @@ public class InitialScreen extends JFrame {
         }
     }
 
-    static class calcAction implements ActionListener {
+    class calcAction implements ActionListener {
         public void actionPerformed (ActionEvent e) {}
     }
 
     class deleteAction implements ActionListener {
-
         public void actionPerformed (ActionEvent e) {
 
             int option = -1;
@@ -246,7 +244,8 @@ public class InitialScreen extends JFrame {
         public void actionPerformed (ActionEvent e) {
             // Closes current frame and opens LoginPanel when logout button is pressed
             dispose();
-            LoginPanel.startPanel();
+            LoginPanel main = new LoginPanel();
+            main.startPanel();
         }
     }
 }
