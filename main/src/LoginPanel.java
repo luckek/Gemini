@@ -72,7 +72,7 @@ public class LoginPanel
         passwordPF = new JPasswordField();
         passwordPF.setBounds(250, 270, 250, 40);
         panel.add(passwordPF);
-        passwordPF.addActionListener(new LoginAction());
+        passwordPF.addActionListener(new LoginAction()); // Why is this needed?
 
         // Create login button
         JButton login = new JButton("Login");
@@ -108,7 +108,8 @@ public class LoginPanel
             boolean usernameCheck;
             boolean passwordCheck;
             String username = usernameTF.getText();
-            String password = passwordPF.getText();
+            char[] password = passwordPF.getPassword(); // getText has been depreciated
+            String passStr = new String(password); // convert char[] to string
 
             // Check if the username is right
             if(username.equals("csadmin"))
@@ -121,7 +122,7 @@ public class LoginPanel
             }
 
             // Check if the password is right
-            if(password.equals("csci323"))
+            if(passStr.equals("csci323"))
             {
                 passwordCheck = true;
             }
