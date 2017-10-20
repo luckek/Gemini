@@ -83,7 +83,7 @@ public class LoginPanel
         panel.add(invalid);
 
         // Create Developed by Label
-        JLabel develop = new JLabel("Devloped by Gemini Corp.");
+        JLabel develop = new JLabel(Main.DEV_STRING);
         develop.setBounds(50,600, 200, 20);
         panel.add(develop);
 

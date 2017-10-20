@@ -5,12 +5,6 @@ import java.awt.event.*;
 
 public class InitialScreen extends JFrame {
 
-    private final String VERSION = "0.0.1";
-    private final String SOFTWARE_NAME = "Astro Account Management Software";
-    private final String COMPANY_NAME = "Gemini Corp.";
-    private final String FRAME_STRING = SOFTWARE_NAME + " Version: " + VERSION;
-    private final String DEV_STRING = "Developed By: " + COMPANY_NAME;
-
     private JComboBox<String> accountList;
     private JTable transactionTable;
     private JLabel balanceLabel;
@@ -39,7 +33,7 @@ public class InitialScreen extends JFrame {
 
         JLabel acctLabel = new JLabel("Account: ");
         JLabel transactionLabel = new JLabel("Transactions: ");
-        JLabel devLabel = new JLabel(DEV_STRING);
+        JLabel devLabel = new JLabel(Main.DEV_STRING);
         balanceLabel = new JLabel("Current Balance: ");
 
         JButton addBttn = new JButton("Add Account");
@@ -131,7 +125,7 @@ public class InitialScreen extends JFrame {
     private void createAccount() {
 
         // Opens dialog / form to get information about new account
-        AccountForm accountForm = new AccountForm(this, FRAME_STRING, true);
+        AccountForm accountForm = new AccountForm(this, Main.FRAME_STRING, true);
 
         // Grab information
         String newAcctName = accountForm.getName();
@@ -186,7 +180,7 @@ public class InitialScreen extends JFrame {
             possibilities[0] = "None";
         }
 
-        return (String)JOptionPane.showInputDialog(this, optionMessage, FRAME_STRING,
+        return (String)JOptionPane.showInputDialog(this, optionMessage, Main.FRAME_STRING,
                 JOptionPane.PLAIN_MESSAGE, null, possibilities, possibilities[0]);
     }
 
@@ -202,7 +196,7 @@ public class InitialScreen extends JFrame {
                 account.setDesc(currAcct.getDescription());
             }
         }
-        AcctInfoForm viewAcctDlg = new AcctInfoForm(this, FRAME_STRING, true, account);
+        AcctInfoForm viewAcctDlg = new AcctInfoForm(this, Main.FRAME_STRING, true, account);
     }
 
     class addAction implements ActionListener {
