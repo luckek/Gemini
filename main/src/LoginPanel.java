@@ -19,12 +19,6 @@ public class LoginPanel
     private InitialScreen initialScreen;
     private JFrame frame;
 
-    static String VERSION = "0.0.1";
-    static String SOFTWARE_NAME = "Astro Account Management Software";
-    static String COMPANY_NAME = "Gemini Corp.";
-    static String FRAME_STRING = SOFTWARE_NAME + " Version: " + VERSION;
-    static String DEV_STRING = "Developed By: " + COMPANY_NAME;
-
     void startPanel()
     {
         // Create frame
@@ -147,7 +141,7 @@ public class LoginPanel
                 // Creates new InitialScreen frame on successful login
                 frame.dispose();
 
-                initialScreen = new InitialScreen(FRAME_STRING, data);
+                initialScreen = new InitialScreen(Main.FRAME_STRING, data);
 
                 initialScreen.initComboBox(accountNames);
                 initialScreen.updateBalance(accountBalance);
