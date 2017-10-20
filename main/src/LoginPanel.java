@@ -11,6 +11,7 @@ import java.awt.event.*;
 
 public class LoginPanel
 {
+
     // Components and variables
     private static JTextField usernameTF;
     private static JPasswordField passwordPF;
@@ -31,7 +32,7 @@ public class LoginPanel
         frame.pack();
         frame.setVisible(true);
         frame.setSize(700, 700);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         // Create panel
         JPanel panel = new JPanel();
