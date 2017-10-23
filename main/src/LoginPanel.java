@@ -145,10 +145,11 @@ public class LoginPanel
                 // Creates new InitialScreen frame on successful login
                 frame.dispose();
 
-                initialScreen = new InitialScreen(FRAME_STRING, data);
+                initialScreen = new InitialScreen(FRAME_STRING);
 
                 initialScreen.initComboBox(accountNames);
                 initialScreen.updateBalance(accountBalance);
+                initialScreen.initTranscationTable(data);
 
             }
             // If one of them is wrong, that tell user that they have an invalid username or password

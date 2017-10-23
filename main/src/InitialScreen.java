@@ -1,7 +1,14 @@
 
+import com.intellij.ui.JBColor;
+import org.apache.batik.svggen.font.table.Table;
+
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import java.awt.*;
 import java.awt.event.*;
+
+// For filtering... get desired data, make new model and set table model
 
 public class InitialScreen extends JFrame {
 
@@ -17,7 +24,7 @@ public class InitialScreen extends JFrame {
   private static String[] columnNames = {"Name", "Date", "Amount", "Type"};
   private Account[] acctArray = new Account[10];
 
-  public InitialScreen(String title, String[][] data) {
+  public InitialScreen(String title) {
 
     super(title);
 
@@ -36,20 +43,23 @@ public class InitialScreen extends JFrame {
     JPanel headerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
     JPanel balancePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
     JPanel outterBalancePanel = new JPanel();
+    JPanel addRemovePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 
     JLabel acctLabel = new JLabel("Account: ");
     JLabel transactionLabel = new JLabel("Transactions: ");
     JLabel devLabel = new JLabel(DEV_STRING);
     balanceLabel = new JLabel("Current Balance: ");
 
-    JButton addBttn = new JButton("Add Account");
+    JButton addAcctButton = new JButton("Add Account");
     JButton calcBttn = new JButton("Benefits Calculator");
     JButton acctInfoButton = new JButton("View Account Info");
     JButton deleteButton = new JButton("Delete Account");
     JButton logoutBttn = new JButton("Logout");
+    JButton addButton = new JButton("Add");
+    JButton removeButton = new JButton("Remove");
 
     accountList = new JComboBox<>(); // This shold be populated by a list of all accounts
-    transactionTable = new JTable(data, columnNames); // Could not be avoided...
+    transactionTable = new JTable(new DefaultTableModel(columnNames, 0));
 
     // More components
     JScrollPane transactionPane = new JScrollPane(transactionTable);
@@ -64,6 +74,8 @@ public class InitialScreen extends JFrame {
     transactionPane.setMaximumSize(new Dimension(400, 500));
     headerPanel.setPreferredSize(new Dimension(300, 25));
     outterBalancePanel.setPreferredSize(new Dimension(100, 100));
+    addButton.setPreferredSize(new Dimension(100, 22));
+    removeButton.setPreferredSize(new Dimension(100, 22));
 
     // Populating panels / content pane
     add(mainPanel);
@@ -81,7 +93,7 @@ public class InitialScreen extends JFrame {
     buttonPanel.add(Box.createRigidArea(new Dimension(0, 50)));
     buttonPanel.add(acctLabel);
     buttonPanel.add(accountList);
-    buttonPanel.add(addBttn);
+    buttonPanel.add(addAcctButton);
     buttonPanel.add(calcBttn);
     buttonPanel.add(deleteButton);
     buttonPanel.add(logoutBttn);
@@ -95,7 +107,12 @@ public class InitialScreen extends JFrame {
     outterPanel.add(outterBalancePanel, BorderLayout.PAGE_END);
 
     transactionPanel.add(Box.createRigidArea(new Dimension(0, 20)));
+    transactionPanel.add(addRemovePanel);
     transactionPanel.add(transactionPane);
+
+    addRemovePanel.add(addButton);
+    addRemovePanel.add(Box.createRigidArea(new Dimension(15, 0)));
+    addRemovePanel.add(removeButton);
 
     headerPanel.add(transactionLabel);
 
@@ -104,11 +121,13 @@ public class InitialScreen extends JFrame {
 
     balancePanel.add(balanceLabel);
 
-    addBttn.addActionListener(new addAction());
+    addAcctButton.addActionListener(new addAction());
     calcBttn.addActionListener(new calcAction());
     deleteButton.addActionListener(new deleteAction());
     acctInfoButton.addActionListener(new acctInfoAction());
     logoutBttn.addActionListener(new logoutAction());
+    addButton.addActionListener(new addTransaction());
+    removeButton.addActionListener(new removeTransaction());
   }
 
   public void initComboBox(String[] accountNames) {
@@ -150,14 +169,10 @@ public class InitialScreen extends JFrame {
   }
 
   // Currently not used (table will not display)
-  public void initTranscationTable(String[][] data, String[] columnNames) {
-
-    transactionTable = new JTable(data, columnNames);
-    this.invalidate();
-    this.repaint();
-    this.validate();
-    setVisible(true);
-
+  void initTranscationTable(String[][] data) {
+    for(String[] row : data) {
+      addTableRow(row);
+    }
   }
 
   // Returns list of available Accounts.
@@ -211,6 +226,17 @@ public class InitialScreen extends JFrame {
     AcctInfoForm viewAcctDlg = new AcctInfoForm(this, FRAME_STRING, true, currAccount);
   }
 
+  private void addTableRow(String[] rowData) {
+    DefaultTableModel tmpModel = (DefaultTableModel)transactionTable.getModel();
+    tmpModel.addRow(rowData); // This is the method call that will add information to the table.
+  }
+
+  private void removeTableRow(int rowIndex) {
+    // TODO: error checking (make sure row index is valid)
+    DefaultTableModel tmpModel = (DefaultTableModel)transactionTable.getModel();
+    tmpModel.removeRow(rowIndex);
+  }
+
   class addAction implements ActionListener {
     public void actionPerformed (ActionEvent e) {
     createAccount();
@@ -250,6 +276,20 @@ public class InitialScreen extends JFrame {
       // Closes current frame and opens LoginPanel when logout button is pressed
       dispose();
       LoginPanel.startPanel();
+    }
+  }
+
+  class addTransaction implements ActionListener {
+    public void actionPerformed(ActionEvent e) {
+
+      String[] newRowData = new String[] {"Col0", "col1", "col2", "col3"};
+      addTableRow(newRowData);
+    }
+  }
+
+  class removeTransaction implements ActionListener {
+    public void actionPerformed(ActionEvent e) {
+      removeTableRow(transactionTable.getRowCount() - 1); // Just removes last row for now
     }
   }
 }

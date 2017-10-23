@@ -32,7 +32,7 @@ public class Controller {
 	        // This should be populated by all of the transaction data.
 	        String data [][] = {};
 
-	        initialScreen = new InitialScreen(FRAME_STRING, data);
+	        initialScreen = new InitialScreen(FRAME_STRING);
 
 	        initialScreen.initComboBox(accountNames);
 	        initialScreen.updateBalance(accountBalance);
