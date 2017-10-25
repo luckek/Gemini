@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.event.*;
 
 // For filtering... get desired data, make new model and set table model
+// TODO: make sure exiting w/all fields filled out does NOT make a new acct / transaction
 
 public class InitialScreen extends JFrame {
 
@@ -13,7 +14,7 @@ public class InitialScreen extends JFrame {
   private static String FRAME_STRING = SOFTWARE_NAME + " Version: " + VERSION;
   private static String DEV_STRING = "Developed By: " + COMPANY_NAME;
 
-  private static JComboBox<String> accountList;
+  private JComboBox<String> accountList;
   private static JTable transactionTable;
   private static JLabel balanceLabel;
   private static String[] columnNames = {"Name", "Date", "Amount", "Type"};
@@ -141,37 +142,22 @@ public class InitialScreen extends JFrame {
     balanceLabel.setText("Current Balance: " + newBalanceStr);
   }
 
-  public void createAccount() {
-
-    // Opens dialog / form to get information about new account
-    AccountForm accountForm = new AccountForm(this, FRAME_STRING, true);
-
-    // Grab information
-    String newAcctName = accountForm.getName();
-    String newAcctAmnt = accountForm.getAmnt();
-    String newAcctEmail = accountForm.getEmail();
-    String newAcctDesc = accountForm.getDescription();
-
-    if((!newAcctName.isEmpty()) && (!newAcctAmnt.isEmpty()) && (!newAcctEmail.isEmpty()) && (!newAcctDesc.isEmpty())){
-      accountList.addItem(newAcctName);
-
-      String[] names = retrieveAccountNames();
-      int position = names.length - 1;
-      acctArray[position] = new Account(newAcctName, newAcctAmnt, newAcctEmail, newAcctDesc);
-    }
-
-    // create new account object / update necessary data structures
-  }
-
-  // Currently not used (table will not display)
   void initTranscationTable(String[][] data) {
     for(String[] row : data) {
       addTableRow(row);
     }
   }
 
-  // Returns list of available Accounts.
-  public String[] retrieveAccountNames() {
+  // Creates popup warning
+
+  public int showWarning() {
+    return JOptionPane.showOptionDialog(this, "Are you sure you want to delete this account?",
+            "Warning!", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+
+  }
+
+  // Returns array of available Accounts.
+  public String[] getAccountNames() {
     int numberOfNames = accountList.getItemCount();
     String[] names = new String[numberOfNames - 1];
 
@@ -181,31 +167,23 @@ public class InitialScreen extends JFrame {
     return names;
   }
 
-  // Creates popup warning
-  public int showWarning() {
-    return JOptionPane.showOptionDialog(this, "Are you sure you want to delete this account?",
-                                  "Warning!", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
-
-  }
-
+  // Uses JOptionPane to get user selected account
   public String getAcct(String optionMessage) {
 
-    Object[] possibilities = retrieveAccountNames();
+    Object[] possibilities = getAccountNames();
 
-    for(int i = 0; i < possibilities.length; i++) {
-
-    }
     if(possibilities.length == 0) {
       possibilities = new Object[1];
       possibilities[0] = "None";
     }
 
     return (String)JOptionPane.showInputDialog(
-                    this, optionMessage,
-                    FRAME_STRING, JOptionPane.PLAIN_MESSAGE,
-                    null, possibilities, possibilities[0]);
+            this, optionMessage,
+            FRAME_STRING, JOptionPane.PLAIN_MESSAGE,
+            null, possibilities, possibilities[0]);
   }
 
+  // Displays all the account information for acctToView
   public void viewAcct(String acctToView) {
 
     Account currAccount = new Account("", "0", "", "This should not be here");
@@ -221,7 +199,49 @@ public class InitialScreen extends JFrame {
     AcctInfoForm viewAcctDlg = new AcctInfoForm(this, FRAME_STRING, true, currAccount);
   }
 
+  public void createAccount() {
+
+    // Opens dialog / form to get information about new account
+    AccountForm accountForm = new AccountForm(this, FRAME_STRING, true);
+
+    // Grab information
+    String newAcctName = accountForm.getName();
+    String newAcctAmnt = accountForm.getAmnt();
+    String newAcctEmail = accountForm.getEmail();
+    String newAcctDesc = accountForm.getDescription();
+
+    if((!newAcctName.isEmpty()) && (!newAcctAmnt.isEmpty()) && (!newAcctEmail.isEmpty()) && (!newAcctDesc.isEmpty())){
+      accountList.addItem(newAcctName);
+
+      String[] names = getAccountNames();
+      int position = names.length - 1;
+      acctArray[position] = new Account(newAcctName, newAcctAmnt, newAcctEmail, newAcctDesc);
+    }
+
+    // create new account object / update necessary data structures
+  }
+
+  private String[] createTransaction() {
+
+    // Open form and initialize it
+    TransactionForm tForm = new TransactionForm(this, FRAME_STRING, true, getAccountNames());
+
+    String[] transactionData = new String[5];
+
+    // Get transaction data (this will eventually be an account object)
+    transactionData[0] = tForm.getAcctName();
+    transactionData[1] = tForm.getDate();
+    transactionData[2] = tForm.getAmnt();
+    transactionData[3] = tForm.getTransactionType();
+    transactionData[4] = tForm.getDescription();
+
+    return transactionData;
+  }
+
   private void addTableRow(String[] rowData) {
+
+
+
     DefaultTableModel tmpModel = (DefaultTableModel)transactionTable.getModel();
     tmpModel.addRow(rowData); // This is the method call that will add information to the table.
   }
@@ -230,6 +250,48 @@ public class InitialScreen extends JFrame {
     // TODO: error checking (make sure row index is valid)
     DefaultTableModel tmpModel = (DefaultTableModel)transactionTable.getModel();
     tmpModel.removeRow(rowIndex);
+  }
+
+  private int getTransactionIndex() {
+
+    DefaultTableModel tmpModel = (DefaultTableModel)transactionTable.getModel();
+    int rowIndex = Integer.MIN_VALUE;
+
+    if(tmpModel.getRowCount() == 0) {
+
+      JOptionPane.showMessageDialog(this, "There are no transactions to remove!",
+              "Warning!", JOptionPane.WARNING_MESSAGE);
+
+      return rowIndex;
+    }
+
+    // Get row index from user
+    String rowStr = JOptionPane.showInputDialog(this, "Please enter the row index of the transaction to be removed");
+
+    // If user enters something, parse the index
+    if(rowStr != null) {
+      rowIndex = Integer.parseInt(rowStr) - 1;
+    }
+
+    // If user actually entered something
+    if(rowIndex != Integer.MIN_VALUE) {
+      while ( rowIndex < 0 || rowIndex > tmpModel.getRowCount()) {
+
+        JOptionPane.showMessageDialog(this, "Please select a valid index");
+        rowStr = JOptionPane.showInputDialog(this, "Please enter the row index of the transaction to be removed");
+
+        // If user decided to exit
+        if (rowStr == null) {
+          rowIndex = Integer.MIN_VALUE;
+          return rowIndex;
+
+          // else parse integer and make sure it is valid
+        } else {
+          rowIndex = Integer.parseInt(rowStr) - 1;
+        }
+      }
+    }
+    return rowIndex;
   }
 
   class addAction implements ActionListener {
@@ -277,14 +339,26 @@ public class InitialScreen extends JFrame {
   class addTransaction implements ActionListener {
     public void actionPerformed(ActionEvent e) {
 
-      String[] newRowData = new String[] {"Col0", "col1", "col2", "col3"};
+      String[] newRowData = createTransaction();
+
+      // Don't want to create a transaction if we have missing data
+      for(String data : newRowData) {
+        if(data == null || data.isEmpty()) {
+          return;
+        }
+      }
       addTableRow(newRowData);
     }
   }
 
   class removeTransaction implements ActionListener {
     public void actionPerformed(ActionEvent e) {
-      removeTableRow(transactionTable.getRowCount() - 1); // Just removes last row for now
+      int index = getTransactionIndex();
+
+      // If index IS MIN_VALUE nothing was selected, so we should not remove a transaction
+      if(index != Integer.MIN_VALUE) {
+        removeTableRow(index);
+      }
     }
   }
 }
