@@ -1,5 +1,6 @@
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.awt.event.*;
 
@@ -124,6 +125,7 @@ public class InitialScreen extends JFrame {
     logoutBttn.addActionListener(new logoutAction());
     addButton.addActionListener(new addTransaction());
     removeButton.addActionListener(new removeTransaction());
+    accountList.addActionListener(new accountListener());
   }
 
   public void initComboBox(String[] accountNames) {
@@ -358,6 +360,25 @@ public class InitialScreen extends JFrame {
       // If index IS MIN_VALUE nothing was selected, so we should not remove a transaction
       if(index != Integer.MIN_VALUE) {
         removeTableRow(index);
+      }
+    }
+  }
+
+  class accountListener implements ActionListener {
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+
+      String filterString = (String)accountList.getSelectedItem();
+
+      if(filterString != null && !filterString.equalsIgnoreCase("All")) {
+        TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(((DefaultTableModel) transactionTable.getModel()));
+        sorter.setRowFilter(RowFilter.regexFilter(filterString));
+
+        transactionTable.setRowSorter(sorter);
+      }
+      else if(filterString == null || filterString.equalsIgnoreCase("All")) {
+        transactionTable.setRowSorter(null);
       }
     }
   }
