@@ -1,11 +1,15 @@
+import com.intellij.ui.components.panels.FlowLayoutWrapper;
+
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.awt.event.*;
 
-// For filtering... get desired data, make new model and set table model
 // TODO: make sure exiting w/all fields filled out does NOT make a new acct / transaction
+// TODO: Update balance label upon filtering transactions
 
 public class InitialScreen extends JFrame {
 
@@ -18,7 +22,7 @@ public class InitialScreen extends JFrame {
   private JComboBox<String> accountList;
   private static JTable transactionTable;
   private static JLabel balanceLabel;
-  private static String[] columnNames = {"Name", "Date", "Amount", "Type"};
+  private static String[] columnNames = {"Name", "Date", " Gross Amount", "Net Amount", "Type", "Code"};
   private Account[] acctArray = new Account[10];
 
   public InitialScreen(String title) {
@@ -27,7 +31,7 @@ public class InitialScreen extends JFrame {
 
     // Configuring frame behavior
     setVisible(true);
-    setSize(700,700);
+    setSize(800,700);
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
     // Inistaniating components
@@ -68,7 +72,7 @@ public class InitialScreen extends JFrame {
     outterBalancePanel.setLayout(new BoxLayout(outterBalancePanel, BoxLayout.PAGE_AXIS));
 
     leftPanel.setMaximumSize(new Dimension(700, 200));
-    transactionPane.setMaximumSize(new Dimension(400, 500));
+    transactionPane.setMaximumSize(new Dimension(600, 500));
     headerPanel.setPreferredSize(new Dimension(300, 25));
     outterBalancePanel.setPreferredSize(new Dimension(100, 100));
     addButton.setPreferredSize(new Dimension(100, 22));
@@ -145,8 +149,24 @@ public class InitialScreen extends JFrame {
   }
 
   void initTranscationTable(String[][] data) {
+
     for(String[] row : data) {
       addTableRow(row);
+    }
+
+    setCellsAlignment(transactionTable, SwingConstants.CENTER);
+  }
+
+  private void setCellsAlignment(JTable table, int alignment) {
+
+    DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
+    rightRenderer.setHorizontalAlignment(alignment);
+
+    TableModel tableModel = table.getModel();
+
+    for (int columnIndex = 0; columnIndex < tableModel.getColumnCount(); columnIndex++)
+    {
+      table.getColumnModel().getColumn(columnIndex).setCellRenderer(rightRenderer);
     }
   }
 
@@ -236,6 +256,8 @@ public class InitialScreen extends JFrame {
     transactionData[2] = tForm.getAmnt();
     transactionData[3] = tForm.getTransactionType();
     transactionData[4] = tForm.getDescription();
+
+    // Update / calculate balance
 
     return transactionData;
   }
@@ -376,10 +398,10 @@ public class InitialScreen extends JFrame {
         sorter.setRowFilter(RowFilter.regexFilter(filterString));
 
         transactionTable.setRowSorter(sorter);
-      }
-      else if(filterString == null || filterString.equalsIgnoreCase("All")) {
+      } else if(filterString == null || filterString.equalsIgnoreCase("All")) {
         transactionTable.setRowSorter(null);
       }
+      // Update / calculate balance
     }
   }
 }
