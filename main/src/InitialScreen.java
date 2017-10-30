@@ -33,14 +33,14 @@ public class InitialScreen extends JFrame {
 
     // Configuring frame behavior
     setVisible(true);
-    setSize(800,700);
+    setSize(1000,700);
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
     // Inistaniating components
     JPanel mainPanel = new JPanel(new BorderLayout());
     JPanel buttonPanel = new JPanel(new GridLayout(12, 0, 20, 35));
     JPanel leftPanel = new JPanel();
-    JPanel fillerPanel = new JPanel();
+    JPanel wrapperPanel = new JPanel();
     JPanel transactionPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
     JPanel outterPanel = new JPanel(new BorderLayout());
     JPanel headerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
@@ -79,6 +79,7 @@ public class InitialScreen extends JFrame {
     leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.LINE_AXIS));
     outterBalancePanel.setLayout(new BoxLayout(outterBalancePanel, BoxLayout.PAGE_AXIS));
     radioPanel.setLayout(new BoxLayout(radioPanel, BoxLayout.PAGE_AXIS));
+    wrapperPanel.setLayout(new GridLayout(0, 1));
 
     leftPanel.setMaximumSize(new Dimension(700, 200));
     transactionPane.setMaximumSize(new Dimension(600, 500));
@@ -86,6 +87,9 @@ public class InitialScreen extends JFrame {
     outterBalancePanel.setPreferredSize(new Dimension(100, 100));
     addButton.setPreferredSize(new Dimension(100, 22));
     removeButton.setPreferredSize(new Dimension(100, 22));
+    wrapperPanel.setPreferredSize(new Dimension(150, 700));
+    wrapperPanel.setMaximumSize(new Dimension(150, 700));
+    radioPanel.setMaximumSize(new Dimension(150, 700));
 
     bothButton.setActionCommand("Both");
     creditButton.setActionCommand("Credit");
@@ -97,7 +101,7 @@ public class InitialScreen extends JFrame {
     mainPanel.add(leftPanel, BorderLayout.LINE_START);
     mainPanel.add(outterPanel, BorderLayout.CENTER);
     mainPanel.add(devLabel, BorderLayout.PAGE_END);
-    mainPanel.add(radioPanel, BorderLayout.LINE_END);
+    mainPanel.add(wrapperPanel, BorderLayout.LINE_END);
 
     leftPanel.add(Box.createRigidArea(new Dimension(50, 200)));
     leftPanel.add(buttonPanel);
@@ -139,6 +143,12 @@ public class InitialScreen extends JFrame {
     radioGroup.add(bothButton);
     radioGroup.add(debitButton);
     radioGroup.add(creditButton);
+
+    Box vertBox = Box.createVerticalBox();
+//    vertBox.setMaximumSize(new Dimension(10, 700));
+
+    wrapperPanel.add(radioPanel);
+//    wrapperPanel.add(vertBox);
 
     radioPanel.add(Box.createRigidArea(new Dimension(30, 250)));
     radioPanel.add(bothButton);
