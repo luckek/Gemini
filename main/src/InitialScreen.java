@@ -421,15 +421,53 @@ public class InitialScreen extends JFrame {
     public void actionPerformed(ActionEvent e) {
 
       String filterString = (String)accountList.getSelectedItem();
+      String filterString2 = radioGroup.getSelection().getActionCommand();
+
+      TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(((DefaultTableModel) transactionTable.getModel()));
+
+      RowFilter nameFilter = null;
+      RowFilter typeFilter = null;
+
+      ArrayList<RowFilter<Object, Object>> filters = new ArrayList<>(2);
 
       if(filterString != null && !filterString.equalsIgnoreCase("All")) {
-        TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(((DefaultTableModel) transactionTable.getModel()));
-        sorter.setRowFilter(RowFilter.regexFilter(filterString));
+
+        nameFilter = RowFilter.regexFilter(filterString);
+      }
+
+      if(filterString2 != null && !filterString2.equalsIgnoreCase("Both")) {
+
+        typeFilter = RowFilter.regexFilter(filterString2);
+      }
+
+      if(nameFilter == null && typeFilter == null) {
+
+        transactionTable.setRowSorter(null);
+
+      } else if (nameFilter == null) {
+
+        typeFilter = RowFilter.regexFilter(filterString2);
+        sorter.setRowFilter(typeFilter);
 
         transactionTable.setRowSorter(sorter);
-      } else if(filterString == null || filterString.equalsIgnoreCase("All")) {
-        transactionTable.setRowSorter(null);
+
+      } else if(typeFilter == null) {
+
+        nameFilter = RowFilter.regexFilter(filterString);
+        sorter.setRowFilter(nameFilter);
+
+        transactionTable.setRowSorter(sorter);
+
+      } else {
+
+        filters.add(nameFilter);
+        filters.add(typeFilter);
+
+        sorter.setRowFilter(RowFilter.andFilter(filters));
+
+        transactionTable.setRowSorter(sorter);
       }
+
       // Update / calculate balance
     }
   }
