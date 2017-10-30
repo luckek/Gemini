@@ -7,6 +7,7 @@ import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 
 // TODO: make sure exiting w/all fields filled out does NOT make a new acct / transaction
 // TODO: Update balance label upon filtering transactions
@@ -86,6 +87,10 @@ public class InitialScreen extends JFrame {
     addButton.setPreferredSize(new Dimension(100, 22));
     removeButton.setPreferredSize(new Dimension(100, 22));
 
+    bothButton.setActionCommand("Both");
+    creditButton.setActionCommand("Credit");
+    debitButton.setActionCommand("Debit");
+
     // Populating panels / content pane
     add(mainPanel);
 
@@ -150,6 +155,9 @@ public class InitialScreen extends JFrame {
     addButton.addActionListener(new addTransaction());
     removeButton.addActionListener(new removeTransaction());
     accountList.addActionListener(new accountListener());
+    bothButton.addActionListener(new accountListener());
+    debitButton.addActionListener(new accountListener());
+    creditButton.addActionListener(new accountListener());
   }
 
   public void initComboBox(String[] accountNames) {
