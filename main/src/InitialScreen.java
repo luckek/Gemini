@@ -22,6 +22,7 @@ public class InitialScreen extends JFrame {
   private JComboBox<String> accountList;
   private static JTable transactionTable;
   private static JLabel balanceLabel;
+  private ButtonGroup radioGroup;
   private static String[] columnNames = {"Name", "Date", " Gross Amount", "Net Amount", "Type", "Code"};
   private Account[] acctArray = new Account[10];
 
@@ -45,6 +46,7 @@ public class InitialScreen extends JFrame {
     JPanel balancePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
     JPanel outterBalancePanel = new JPanel();
     JPanel addRemovePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+    JPanel radioPanel = new JPanel();
 
     JLabel acctLabel = new JLabel("Account: ");
     JLabel transactionLabel = new JLabel("Transactions: ");
@@ -59,6 +61,11 @@ public class InitialScreen extends JFrame {
     JButton addButton = new JButton("Add");
     JButton removeButton = new JButton("Remove");
 
+    radioGroup = new ButtonGroup();
+    JRadioButton bothButton = new JRadioButton("Both", true);
+    JRadioButton debitButton = new JRadioButton("Debit");
+    JRadioButton creditButton = new JRadioButton("Credit");
+
     accountList = new JComboBox<>(); // This shold be populated by a list of all accounts
     transactionTable = new JTable(new DefaultTableModel(columnNames, 0));
 
@@ -70,6 +77,7 @@ public class InitialScreen extends JFrame {
     transactionPanel.setLayout(new BoxLayout(transactionPanel, BoxLayout.PAGE_AXIS));
     leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.LINE_AXIS));
     outterBalancePanel.setLayout(new BoxLayout(outterBalancePanel, BoxLayout.PAGE_AXIS));
+    radioPanel.setLayout(new BoxLayout(radioPanel, BoxLayout.PAGE_AXIS));
 
     leftPanel.setMaximumSize(new Dimension(700, 200));
     transactionPane.setMaximumSize(new Dimension(600, 500));
@@ -84,6 +92,7 @@ public class InitialScreen extends JFrame {
     mainPanel.add(leftPanel, BorderLayout.LINE_START);
     mainPanel.add(outterPanel, BorderLayout.CENTER);
     mainPanel.add(devLabel, BorderLayout.PAGE_END);
+    mainPanel.add(radioPanel, BorderLayout.LINE_END);
 
     leftPanel.add(Box.createRigidArea(new Dimension(50, 200)));
     leftPanel.add(buttonPanel);
@@ -121,6 +130,17 @@ public class InitialScreen extends JFrame {
     outterBalancePanel.add(Box.createRigidArea(new Dimension(0, 25)));
 
     balancePanel.add(balanceLabel);
+
+    radioGroup.add(bothButton);
+    radioGroup.add(debitButton);
+    radioGroup.add(creditButton);
+
+    radioPanel.add(Box.createRigidArea(new Dimension(30, 250)));
+    radioPanel.add(bothButton);
+    radioPanel.add(Box.createRigidArea(new Dimension(30, 20)));
+    radioPanel.add(debitButton);
+    radioPanel.add(Box.createRigidArea(new Dimension(30, 20)));
+    radioPanel.add(creditButton);
 
     addAcctButton.addActionListener(new addAction());
     calcBttn.addActionListener(new calcAction());
