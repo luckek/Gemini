@@ -24,7 +24,7 @@ public class InitialScreen extends JFrame {
   private static JTable transactionTable;
   private static JLabel balanceLabel;
   private ButtonGroup radioGroup;
-  private static String[] columnNames = {"Name", "Date", " Gross Amount", "Net Amount", "Type", "Code"};
+  private static String[] columnNames = {"Name", "Date", " Gross Amount", "Type", "Code", "Dr / Cr",  "Net Amount"};
   private Account[] acctArray = new Account[10];
 
   public InitialScreen(String title) {
@@ -276,7 +276,7 @@ public class InitialScreen extends JFrame {
     // Open form and initialize it
     TransactionForm tForm = new TransactionForm(this, FRAME_STRING, true, getAccountNames());
 
-    String[] transactionData = new String[5];
+    String[] transactionData = new String[6];
 
     // Get transaction data (this will eventually be an account object)
     transactionData[0] = tForm.getAcctName();
@@ -284,6 +284,7 @@ public class InitialScreen extends JFrame {
     transactionData[2] = tForm.getAmnt();
     transactionData[3] = tForm.getTransactionType();
     transactionData[4] = tForm.getDescription();
+    transactionData[5] = tForm.getIsDebit();
 
     // Update / calculate balance
 

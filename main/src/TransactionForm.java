@@ -10,6 +10,7 @@ public class TransactionForm extends JDialog {
     private JTextField amntField;
     private JTextField descriptionField;
     private JComboBox<String> typeBox;
+    private JComboBox<String> debitCreditBox;
     private String[] transactionTypes = new String[] {"Check", "Credit Card", "Cash"}; // Make enum class / constant of transaction class?
 
     public TransactionForm(Frame frame, String title, boolean modality, String[] accountNames) {
@@ -32,6 +33,8 @@ public class TransactionForm extends JDialog {
         JLabel descriptionLabel = new JLabel("Description: ");
         descriptionField = new JTextField(10);
         JButton okButton = new JButton("Ok");
+        JLabel debitCreditLabel = new JLabel("Dr / Cr");
+        debitCreditBox = new JComboBox<>(new String[] {"Credit", "Debit"});
 
         okButton.addActionListener(new okAction());
 
@@ -43,12 +46,14 @@ public class TransactionForm extends JDialog {
         JPanel descriptionPanel = new JPanel();
         JPanel typePanel = new JPanel();
         JPanel centerPanel = new JPanel();
+        JPanel debitCreditPanel = new JPanel();
 
         // Setting layouts
-        centerPanel.setLayout(new GridLayout(6, 0, 90, 0));
-        mainPanel.setPreferredSize(new Dimension(500, 500));
+        centerPanel.setLayout(new GridLayout(7, 0, 90, 0));
+        mainPanel.setPreferredSize(new Dimension(300, 400));
         nameBox.setPreferredSize(new Dimension(112, 20));
         typeBox.setPreferredSize(new Dimension(112, 20));
+        debitCreditBox.setPreferredSize(new Dimension(112, 20));
         mainPanel.setLayout(new BorderLayout());
 
         // Adding components
@@ -63,6 +68,7 @@ public class TransactionForm extends JDialog {
         centerPanel.add(amntPanel);
         centerPanel.add(typePanel);
         centerPanel.add(descriptionPanel);
+        centerPanel.add(debitCreditPanel);
 
         infoPanel.add(Box.createRigidArea(new Dimension(10, 50)));
         infoPanel.add(new JLabel("<html><center><p>Please enter the name of the " +
@@ -89,6 +95,10 @@ public class TransactionForm extends JDialog {
         descriptionPanel.add(Box.createRigidArea(new Dimension(8, 10)));
         descriptionPanel.add(descriptionField);
 
+        debitCreditPanel.add(debitCreditLabel);
+        debitCreditPanel.add(Box.createRigidArea(new Dimension(35, 10)));
+        debitCreditPanel.add(debitCreditBox);
+
         pack();
         setVisible(true);
     }
@@ -97,6 +107,7 @@ public class TransactionForm extends JDialog {
     public String getDate() { return dateField.getText(); }
     public String getAmnt() { return amntField.getText(); }
     public String getTransactionType() { return (String)typeBox.getSelectedItem(); }
+    public String getIsDebit() { return (String)debitCreditBox.getSelectedItem(); }
     public String getDescription() { return descriptionField.getText(); }
 
     // Closes dialog
