@@ -141,7 +141,7 @@ public class LoginPanel
                 // Creates new InitialScreen frame on successful login
                 frame.dispose();
 
-                initialScreen = new InitialScreen(FRAME_STRING);
+                initialScreen = new InitialScreen(Main.FRAME_STRING);
 
                 initialScreen.initComboBox(accountNames);
                 initialScreen.updateBalance(accountBalance);

@@ -12,17 +12,11 @@ import java.util.ArrayList;
 
 public class InitialScreen extends JFrame {
 
-  private static String VERSION = "0.0.1";
-  private static String SOFTWARE_NAME = "Astro Account Management Software";
-  private static String COMPANY_NAME = "Gemini Corp.";
-  private static String FRAME_STRING = SOFTWARE_NAME + " Version: " + VERSION;
-  private static String DEV_STRING = "Developed By: " + COMPANY_NAME;
-
   private JComboBox<String> accountList;
-  private static JTable transactionTable;
-  private static JLabel balanceLabel;
+  private JTable transactionTable;
+  private JLabel balanceLabel;
   private ButtonGroup radioGroup;
-  private static String[] columnNames = {"Name", "Date", "Gross Amt", "Type", "Code", "Dr / Cr",  "Net Amt"};
+  private String[] columnNames = {"Name", "Date", "Gross Amt", "Type", "Code", "Dr / Cr",  "Net Amt"};
   private Account[] acctArray = new Account[10];
 
   public InitialScreen(String title) {
@@ -49,7 +43,7 @@ public class InitialScreen extends JFrame {
 
     JLabel acctLabel = new JLabel("Account: ");
     JLabel transactionLabel = new JLabel("Transactions: ");
-    JLabel devLabel = new JLabel(DEV_STRING);
+    JLabel devLabel = new JLabel(Main.DEV_STRING);
     balanceLabel = new JLabel("Current Balance: ");
 
     JButton addAcctButton = new JButton("Add Account");
@@ -227,14 +221,14 @@ public class InitialScreen extends JFrame {
 
     return (String)JOptionPane.showInputDialog(
             this, optionMessage,
-            FRAME_STRING, JOptionPane.PLAIN_MESSAGE,
+            Main.FRAME_STRING, JOptionPane.PLAIN_MESSAGE,
             null, possibilities, possibilities[0]);
   }
 
   public void createAccount() {
 
     // Opens dialog / form to get information about new account
-    AccountForm accountForm = new AccountForm(this, FRAME_STRING, true);
+    AccountForm accountForm = new AccountForm(this, Main.FRAME_STRING, true);
 
     // Grab information
     String newAcctName = accountForm.getName();
@@ -256,7 +250,7 @@ public class InitialScreen extends JFrame {
   private String[] createTransaction() {
 
     // Open form and initialize it
-    TransactionForm tForm = new TransactionForm(this, FRAME_STRING, true, getAccountNames());
+    TransactionForm tForm = new TransactionForm(this, Main.FRAME_STRING, true, getAccountNames());
 
     String[] transactionData = new String[6];
 
@@ -300,7 +294,7 @@ public class InitialScreen extends JFrame {
         currAccount.setDesc(acctArray[i].getDescription());
       }
     }
-    AcctInfoForm viewAcctDlg = new AcctInfoForm(this, FRAME_STRING, true, currAccount);
+    AcctInfoForm viewAcctDlg = new AcctInfoForm(this, Main.FRAME_STRING, true, currAccount);
   }
 
   private int getTransactionIndex() {
@@ -390,7 +384,8 @@ public class InitialScreen extends JFrame {
     public void actionPerformed (ActionEvent e) {
       // Closes current frame and opens LoginPanel when logout button is pressed
       dispose();
-      LoginPanel.startPanel();
+      LoginPanel loginPanel = new LoginPanel();
+      loginPanel.startPanel();
     }
   }
 
