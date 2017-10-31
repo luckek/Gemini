@@ -32,33 +32,38 @@ public class LoginPanel
         JPanel panel = new JPanel();
         panel.setLayout(null);
         frame.add(panel);
+        
+        // Create fonts
+        Font basic = new Font("Arial", Font.PLAIN, 20);
+        Font title = new Font("Arial", Font.BOLD, 25);
 
         // Create Software name label
         JLabel loginTitle1 = new JLabel("Astro Account");
         loginTitle1.setBounds(300, 40, 500, 40);
-        loginTitle1.setFont(new Font("Arial", Font.BOLD, 25));
+        loginTitle1.setFont(title);
         panel.add(loginTitle1);
 
         JLabel loginTitle2 = new JLabel("Management Software");
         loginTitle2.setBounds(250, 80, 500, 40);
-        loginTitle2.setFont(new Font("Arial", Font.BOLD, 25));
+        loginTitle2.setFont(title);
         panel.add(loginTitle2);
 
 
         // Create username label
         JLabel username = new JLabel("Username:");
-        username.setFont(new Font("Arial", Font.PLAIN, 20));
+        username.setFont(basic);
         username.setBounds(100, 180, 200, 20);
         panel.add(username);
 
         // Create password label
         JLabel password = new JLabel("Password:");
-        password.setFont(new Font("Arial", Font.PLAIN, 20));
+        password.setFont(basic);
         password.setBounds(100, 280, 200, 20);
         panel.add(password);
 
         // Create username text field
         usernameTF = new JTextField();
+        usernameTF.setFont(basic);
         usernameTF.setBounds(250, 170, 250, 40);
         panel.add(usernameTF);
 
@@ -70,7 +75,7 @@ public class LoginPanel
 
         // Create login button
         JButton login = new JButton("Login");
-        login.setFont(new Font("Arial", Font.PLAIN, 20));
+        login.setFont(basic);
         login.setBounds(300, 380, 150, 50);
         panel.add(login);
         login.addActionListener(new LoginAction());
@@ -78,7 +83,7 @@ public class LoginPanel
         // Create invalid username or password label
         invalid = new JLabel("");
         invalid.setForeground(Color.red);
-        invalid.setFont(new Font("Arial", Font.PLAIN, 20));
+        invalid.setFont(basic);
         invalid.setBounds(240, 330, 400, 20);
         panel.add(invalid);
 

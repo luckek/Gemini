@@ -5,7 +5,12 @@ import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 // TODO: make sure exiting w/all fields filled out does NOT make a new acct / transaction
 // TODO: Update balance label upon filtering transactions
@@ -18,6 +23,8 @@ public class InitialScreen extends JFrame {
     private ButtonGroup radioGroup;
     private String[] columnNames = {"Name", "Date", "Gross Amt", "Type", "Code", "Dr / Cr", "Net Amt"};
     private Account[] acctArray = new Account[10];
+    
+    private static int numAccounts = 0;
 
     public InitialScreen(String title) {
 
@@ -267,6 +274,8 @@ public class InitialScreen extends JFrame {
             String[] names = getAccountNames();
             int position = names.length - 1;
             acctArray[position] = new Account(newAcctName, newAcctAmnt, newAcctEmail, newAcctDesc);
+            
+            numAccounts++;
         }
 
         // create new account object / update necessary data structures
@@ -498,14 +507,88 @@ public class InitialScreen extends JFrame {
 
     class saveListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            // Save routine here
+         // Set up FileWriter
+            FileWriter writer = null;
+            try 
+            {
+                writer = new FileWriter("Transactions.txt");
+              
+                // Write out info for each account
+                for(int i = 0; i < numAccounts; i++)
+                {
+                    
+                    // Write basic info to file.
+                    writer.write(acctArray[i].getName() + "," + acctArray[i].getBalance() + "," + acctArray[i].getEmail() + "," + acctArray[i].getDescription() + ",\n");
+                  
+                    // Still need transactions and number of transactions
+                }
+            } 
+            catch (IOException e1) 
+            {
+
+            }
+            finally
+            {
+                try
+                {
+                    writer.close();
+                }
+                catch(IOException e1)
+                {
+                    
+                }
+            }
         }
     }
 
     class loadListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
 
-            // Load routine here
+         // Set up file
+            File transactionsFile = new File("Transactions.txt");
+            
+            // Create a scanner
+            Scanner fileScan;
+            try 
+            { 
+              fileScan = new Scanner(transactionsFile);
+              
+              // Use comma as delimiter
+              fileScan.useDelimiter(",");
+              
+              // Keep track of number of accounts
+              int currentAccount = 0;
+              
+              // Read in information for each account
+              while(fileScan.hasNext())
+              {  
+                  // Read in name
+                  String name = fileScan.next();
+                  
+                  // Read in balance
+                  String balance = fileScan.next();
+                  
+                  // Read in email
+                  String email = fileScan.next();
+                  
+                  // Read in description
+                  String description = fileScan.next();
+                  
+                  // Create new Account and add it to the array
+                  Account newAccount = new Account(name, balance, email, description);
+                  acctArray[currentAccount] = newAccount;
+                  
+                  // Add the accounts to list for user to view
+                  accountList.addItem(acctArray[currentAccount].getName());
+                  
+                  // Increment numAccounts
+                  currentAccount++;
+              }
+            } 
+            catch (FileNotFoundException e1) 
+            {
+                
+            }
         }
     }
 
