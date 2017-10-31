@@ -24,7 +24,7 @@ public class InitialScreen extends JFrame {
   private static JTable transactionTable;
   private static JLabel balanceLabel;
   private ButtonGroup radioGroup;
-  private static String[] columnNames = {"Name", "Date", " Gross Amount", "Type", "Code", "Dr / Cr",  "Net Amount"};
+  private static String[] columnNames = {"Name", "Date", "Gross Amt", "Type", "Code", "Dr / Cr",  "Net Amt"};
   private Account[] acctArray = new Account[10];
 
   public InitialScreen(String title) {
@@ -36,7 +36,7 @@ public class InitialScreen extends JFrame {
     setSize(1000,700);
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-    // Inistaniating components
+    // Instantiating components
     JPanel mainPanel = new JPanel(new BorderLayout());
     JPanel buttonPanel = new JPanel(new GridLayout(12, 0, 20, 35));
     JPanel leftPanel = new JPanel();
@@ -67,7 +67,7 @@ public class InitialScreen extends JFrame {
     JRadioButton debitButton = new JRadioButton("Debit");
     JRadioButton creditButton = new JRadioButton("Credit");
 
-    accountList = new JComboBox<>(); // This shold be populated by a list of all accounts
+    accountList = new JComboBox<>(); // This should be populated by a list of all accounts
     transactionTable = new JTable(new DefaultTableModel(columnNames, 0));
 
     // More components
@@ -144,11 +144,7 @@ public class InitialScreen extends JFrame {
     radioGroup.add(debitButton);
     radioGroup.add(creditButton);
 
-    Box vertBox = Box.createVerticalBox();
-//    vertBox.setMaximumSize(new Dimension(10, 700));
-
     wrapperPanel.add(radioPanel);
-//    wrapperPanel.add(vertBox);
 
     radioPanel.add(Box.createRigidArea(new Dimension(30, 250)));
     radioPanel.add(bothButton);
@@ -157,6 +153,7 @@ public class InitialScreen extends JFrame {
     radioPanel.add(Box.createRigidArea(new Dimension(30, 20)));
     radioPanel.add(creditButton);
 
+    // Setting up action listeners
     addAcctButton.addActionListener(new addAction());
     calcBttn.addActionListener(new calcAction());
     deleteButton.addActionListener(new deleteAction());
@@ -168,12 +165,22 @@ public class InitialScreen extends JFrame {
     bothButton.addActionListener(new accountListener());
     debitButton.addActionListener(new accountListener());
     creditButton.addActionListener(new accountListener());
+
   }
 
   public void initComboBox(String[] accountNames) {
     for(int i = 0; i < accountNames.length; i++) {
       accountList.addItem(accountNames[i]);
     }
+  }
+
+  void initTranscationTable(String[][] data) {
+
+    for(String[] row : data) {
+      addTableRow(row);
+    }
+
+    setCellsAlignment(transactionTable, SwingConstants.CENTER);
   }
 
   public void updateBalance(double newBalance) {
@@ -184,15 +191,6 @@ public class InitialScreen extends JFrame {
       newBalanceStr += "0";
     }
     balanceLabel.setText("Current Balance: " + newBalanceStr);
-  }
-
-  void initTranscationTable(String[][] data) {
-
-    for(String[] row : data) {
-      addTableRow(row);
-    }
-
-    setCellsAlignment(transactionTable, SwingConstants.CENTER);
   }
 
   private void setCellsAlignment(JTable table, int alignment) {
@@ -206,14 +204,6 @@ public class InitialScreen extends JFrame {
     {
       table.getColumnModel().getColumn(columnIndex).setCellRenderer(rightRenderer);
     }
-  }
-
-  // Creates popup warning
-
-  public int showWarning() {
-    return JOptionPane.showOptionDialog(this, "Are you sure you want to delete this account?",
-            "Warning!", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
-
   }
 
   // Returns array of available Accounts.
@@ -241,22 +231,6 @@ public class InitialScreen extends JFrame {
             this, optionMessage,
             FRAME_STRING, JOptionPane.PLAIN_MESSAGE,
             null, possibilities, possibilities[0]);
-  }
-
-  // Displays all the account information for acctToView
-  public void viewAcct(String acctToView) {
-
-    Account currAccount = new Account("", "0", "", "This should not be here");
-    for(int i = 0; i < acctArray.length; i++) {
-
-        if((acctArray[i] != null) && (acctArray[i].getName().equalsIgnoreCase(acctToView))){
-          currAccount.setName(acctArray[i].getName());
-          currAccount.setBalance(acctArray[i].getBalance());
-          currAccount.setEmail(acctArray[i].getEmail());
-          currAccount.setDesc(acctArray[i].getDescription());
-        }
-    }
-    AcctInfoForm viewAcctDlg = new AcctInfoForm(this, FRAME_STRING, true, currAccount);
   }
 
   public void createAccount() {
@@ -296,7 +270,7 @@ public class InitialScreen extends JFrame {
     transactionData[4] = tForm.getDescription();
     transactionData[5] = tForm.getIsDebit();
 
-    // Update / calculate balance
+    // TODO: Update / calculate balance
 
     return transactionData;
   }
@@ -313,6 +287,22 @@ public class InitialScreen extends JFrame {
     // TODO: error checking (make sure row index is valid)
     DefaultTableModel tmpModel = (DefaultTableModel)transactionTable.getModel();
     tmpModel.removeRow(rowIndex);
+  }
+
+  // Displays all the account information for acctToView
+  public void viewAcct(String acctToView) {
+
+    Account currAccount = new Account("", "0", "", "This should not be here");
+    for(int i = 0; i < acctArray.length; i++) {
+
+      if((acctArray[i] != null) && (acctArray[i].getName().equalsIgnoreCase(acctToView))){
+        currAccount.setName(acctArray[i].getName());
+        currAccount.setBalance(acctArray[i].getBalance());
+        currAccount.setEmail(acctArray[i].getEmail());
+        currAccount.setDesc(acctArray[i].getDescription());
+      }
+    }
+    AcctInfoForm viewAcctDlg = new AcctInfoForm(this, FRAME_STRING, true, currAccount);
   }
 
   private int getTransactionIndex() {
@@ -355,6 +345,13 @@ public class InitialScreen extends JFrame {
       }
     }
     return rowIndex;
+  }
+
+  // Creates popup warning
+  public int showWarning() {
+    return JOptionPane.showOptionDialog(this, "Are you sure you want to delete this account?",
+            "Warning!", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+
   }
 
   class addAction implements ActionListener {
