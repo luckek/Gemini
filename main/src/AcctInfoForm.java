@@ -4,73 +4,73 @@ import java.awt.event.*;
 
 public class AcctInfoForm extends JDialog {
 
-  public AcctInfoForm(JFrame frame, String titleString, boolean modality, Account currAccount) {
 
-    super(frame, titleString, modality);
+    public AcctInfoForm(JFrame frame, String titleString, boolean modality, Account currAccount) {
 
-    String name = currAccount.getName();
-    String balance = currAccount.getBalance();
-    String description = currAccount.getDescription();
-    String email = currAccount.getEmail();
 
-    setPreferredSize(new Dimension(300, 300));
+        super(frame, titleString, modality);
 
-    JLabel nameLabel  = new JLabel("Name: ");
-    nameLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-    JLabel nameLabel2 = new JLabel(name);
-    JLabel amntLabel = new JLabel("Account Balance: ");
-    amntLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-    JLabel balanceLabel = new JLabel(balance);
-    JLabel descriptionLabel = new JLabel("Description: ");
-    JLabel descriptionLabel2 = new JLabel(description);
-    JLabel emailLabel = new JLabel("E-mail: ");
-    JLabel emailLabel2 = new JLabel(email);
-    JButton okButton = new JButton("Ok");
+        String name = currAccount.getName();
+        String balance = currAccount.getBalance();
+        String description = currAccount.getDescription();
+        String email = currAccount.getEmail();
 
-    okButton.addActionListener(new okAction());
+        setPreferredSize(new Dimension(300, 300));
 
-    JPanel mainPanel = new JPanel();
-    JPanel namePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-    JPanel balancePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-    JPanel descriptionPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-    JPanel emailPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-    JPanel centerPanel = new JPanel();
+        JLabel nameLabel  = new JLabel("Name: ");
+        nameLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        JLabel nameLabel2 = new JLabel(name);
+        JLabel amntLabel = new JLabel("Account Balance: ");
+        amntLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        JLabel balanceLabel = new JLabel(balance);
+        JLabel descriptionLabel = new JLabel("Description: ");
+        JLabel descriptionLabel2 = new JLabel(description);
+        JLabel emailLabel = new JLabel("E-mail: ");
+        JLabel emailLabel2 = new JLabel(email);
+        JButton okButton = new JButton("Ok");
 
-    centerPanel.setLayout(new GridLayout(4, 0, 90, 0));
-    mainPanel.setPreferredSize(new Dimension(500, 500));
-    mainPanel.setLayout(new BorderLayout());
+        okButton.addActionListener(new okAction());
 
-    add(mainPanel);
+        JPanel mainPanel = new JPanel();
+        JPanel namePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel balancePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel descriptionPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel emailPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel centerPanel = new JPanel();
 
-    mainPanel.add(okButton, BorderLayout.PAGE_END);
-    mainPanel.add(centerPanel,BorderLayout.CENTER);
+        centerPanel.setLayout(new GridLayout(4, 0, 90, 0));
+        mainPanel.setPreferredSize(new Dimension(500, 500));
+        mainPanel.setLayout(new BorderLayout());
 
-    centerPanel.add(namePanel);
-    centerPanel.add(balancePanel);
-    centerPanel.add(descriptionPanel);
-    centerPanel.add(emailPanel);
+        add(mainPanel);
 
-    namePanel.add(nameLabel);
-    namePanel.add(nameLabel2);
+        mainPanel.add(okButton, BorderLayout.PAGE_END);
+        mainPanel.add(centerPanel,BorderLayout.CENTER);
 
-    balancePanel.add(amntLabel);
-    balancePanel.add(balanceLabel);
+        centerPanel.add(namePanel);
+        centerPanel.add(balancePanel);
+        centerPanel.add(descriptionPanel);
+        centerPanel.add(emailPanel);
 
-    descriptionPanel.add(descriptionLabel);
-    descriptionPanel.add(descriptionLabel2);
+        namePanel.add(nameLabel);
+        namePanel.add(nameLabel2);
 
-    emailPanel.add(emailLabel);
-    emailPanel.add(emailLabel2);
+        balancePanel.add(amntLabel);
+        balancePanel.add(balanceLabel);
 
-    pack();
-    setVisible(true);
-  }
+        descriptionPanel.add(descriptionLabel);
+        descriptionPanel.add(descriptionLabel2);
 
-  public void close() { this.dispose(); }
+        emailPanel.add(emailLabel);
+        emailPanel.add(emailLabel2);
 
-   class okAction implements ActionListener {
-    public void actionPerformed (ActionEvent e) {
-      close();
+        pack();
+        setVisible(true);
     }
-  }
+
+    private void close() { this.dispose(); }
+
+    class okAction implements ActionListener {
+        public void actionPerformed (ActionEvent e) { close(); }
+    }
 }

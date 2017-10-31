@@ -11,27 +11,22 @@ import java.awt.event.*;
 
 public class LoginPanel
 {
+
     // Components and variables
-    private static JTextField usernameTF;
-    private static JPasswordField passwordPF;
-    private static JLabel invalid;
+    private JTextField usernameTF;
+    private JPasswordField passwordPF;
+    private JLabel invalid;
+    private InitialScreen initialScreen;
+    private JFrame frame;
 
-    private static String VERSION = "0.0.1";
-    private static String SOFTWARE_NAME = "Astro Account Management Software";
-    private static String COMPANY_NAME = "Gemini Corp.";
-    private static String FRAME_STRING = SOFTWARE_NAME + " Version: " + VERSION;
-    private static String DEV_STRING = "Developed By: " + COMPANY_NAME;
-    private static InitialScreen initialScreen;
-    private static JFrame frame;
-
-    public static void startPanel()
+    void startPanel()
     {
         // Create frame
         frame = new JFrame("Login");
         frame.pack();
         frame.setVisible(true);
         frame.setSize(700, 700);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         // Create panel
         JPanel panel = new JPanel();
@@ -71,7 +66,7 @@ public class LoginPanel
         passwordPF = new JPasswordField();
         passwordPF.setBounds(250, 270, 250, 40);
         panel.add(passwordPF);
-        passwordPF.addActionListener(new LoginAction());
+        passwordPF.addActionListener(new LoginAction()); // Why is this needed?
 
         // Create login button
         JButton login = new JButton("Login");
@@ -88,7 +83,7 @@ public class LoginPanel
         panel.add(invalid);
 
         // Create Developed by Label
-        JLabel develop = new JLabel("Devloped by Gemini Corp.");
+        JLabel develop = new JLabel(Main.DEV_STRING);
         develop.setBounds(50,600, 200, 20);
         panel.add(develop);
 
@@ -99,7 +94,7 @@ public class LoginPanel
     }
 
     // When login button is pushed
-    static class LoginAction implements ActionListener
+    class LoginAction implements ActionListener
     {
         public void actionPerformed (ActionEvent e)
         {
@@ -107,7 +102,8 @@ public class LoginPanel
             boolean usernameCheck;
             boolean passwordCheck;
             String username = usernameTF.getText();
-            String password = passwordPF.getText();
+            char[] password = passwordPF.getPassword(); // getText has been depreciated
+            String passStr = new String(password); // convert char[] to string
 
             // Check if the username is right
             if(username.equals("csadmin"))
@@ -120,7 +116,7 @@ public class LoginPanel
             }
 
             // Check if the password is right
-            if(password.equals("csci323"))
+            if(passStr.equals("csci323"))
             {
                 passwordCheck = true;
             }
