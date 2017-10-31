@@ -1,5 +1,3 @@
-import com.intellij.ui.components.panels.FlowLayoutWrapper;
-
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
