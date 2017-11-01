@@ -521,18 +521,23 @@ public class InitialScreen extends JFrame {
                 writer = new FileWriter("Transactions.txt");
               
                 // Write out info for each account
-                for(int i = 0; i < numAccounts; i++)
+                for(int i = 0; i < getAccountNames().length; i++)
                 {
-                    
-                    // Write basic info to file.
-                    writer.write(acctArray[i].getName() + "," + acctArray[i].getBalance() + "," + acctArray[i].getEmail() + "," + acctArray[i].getDescription() + ",\n");
-                  
+                    // Don't want to access / write null accounts
+                    if (acctArray[i] != null) {
+
+                        // Write basic info to file.
+                        writer.write(acctArray[i].getName() + "," + acctArray[i].getBalance() + "," + acctArray[i].getEmail() + "," + acctArray[i].getDescription() + ",\n");
+                    }
                     // Still need transactions and number of transactions
+                    // TODO: Popup message when save is complete
                 }
             } 
             catch (IOException e1) 
             {
-
+                // TODO: Put messages into popup
+                System.out.println("Trouble writing file...");
+                System.out.println("Error: " + e1.getMessage());
             }
             finally
             {
@@ -582,19 +587,22 @@ public class InitialScreen extends JFrame {
                   String description = fileScan.next();
                   
                   // Create new Account and add it to the array
-                  Account newAccount = new Account(name, balance, email, description);
-                  acctArray[currentAccount] = newAccount;
+                  acctArray[currentAccount] = new Account(name, balance, email, description);
                   
                   // Add the accounts to list for user to view
-                  accountList.addItem(acctArray[currentAccount].getName());
+                  accountList.addItem(name);
                   
                   // Increment numAccounts
                   currentAccount++;
               }
-            } 
+
+              // TODO: Popup when successfully loaded
+            }
             catch (FileNotFoundException e1) 
             {
-                
+                // TODO: Put error string into a popup
+                System.out.println("Error: File not found");
+                System.out.println(e1.getMessage());
             }
         }
     }
