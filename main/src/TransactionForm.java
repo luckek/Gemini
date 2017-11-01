@@ -1,18 +1,25 @@
 import javax.swing.*;
+import javax.swing.text.MaskFormatter;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 public class TransactionForm extends JDialog {
 
     private JComboBox<String> nameBox;
-    private JTextField dateField;
+    private JFormattedTextField dateField;
     private JTextField amntField;
     private JTextField descriptionField;
     private JComboBox<String> typeBox;
     private JComboBox<String> debitCreditBox;
     private String[] transactionTypes = new String[] {"Check", "Credit Card", "Cash"}; // Make enum class / constant of transaction class?
 
+    private final DateFormat dateFormatter = new SimpleDateFormat("mm/dd/yyyy");
+    
     public TransactionForm(Frame frame, String title, boolean modality, String[] accountNames) {
 
         super(frame, title, modality);
@@ -24,7 +31,8 @@ public class TransactionForm extends JDialog {
         nameLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
         nameBox = new JComboBox<>(accountNames);
         JLabel dateLabel = new JLabel("Date: ");
-        dateField = new JTextField(10);
+        dateField = new JFormattedTextField(dateFormatter);
+        dateField.setColumns(10);
         JLabel amntLabel = new JLabel("Amount: ");
         amntLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
         amntField = new JTextField(10);
@@ -35,6 +43,12 @@ public class TransactionForm extends JDialog {
         JButton okButton = new JButton("Ok");
         JLabel debitCreditLabel = new JLabel("Dr / Cr");
         debitCreditBox = new JComboBox<>(new String[] {"Credit", "Debit"});
+        
+        try {
+        	MaskFormatter dateMask = new MaskFormatter("##/##/####");
+        	dateMask.setPlaceholderCharacter('_');
+        	dateMask.install(dateField);
+        } catch (ParseException e) { }
 
         okButton.addActionListener(new okAction());
 
@@ -113,10 +127,16 @@ public class TransactionForm extends JDialog {
     // Closes dialog
     private void close() { this.dispose(); }
 
-    // Creates popup warning
+    // Creates popup warning - Empty Fields
     private void showWarning() {
         JOptionPane.showMessageDialog(this, "Please fill out all fields",
                 "Warning!", JOptionPane.WARNING_MESSAGE);
+    }
+    
+ // Creates popup warning - Incorrect Amount Format
+    private void inputWarning() {
+    	JOptionPane.showMessageDialog(this,  "Transaction amount must contain a numerical decimal value",
+    			                      "Warning!", JOptionPane.WARNING_MESSAGE);
     }
 
     class okAction implements ActionListener {
@@ -124,6 +144,11 @@ public class TransactionForm extends JDialog {
             if(dateField.getText().isEmpty() || amntField.getText().isEmpty() || descriptionField.getText().isEmpty() ){
                 showWarning();
                 return;
+            }
+            
+            if(!amntField.getText().matches("^[0-9]*\\.[0-9]*$")) {
+            	inputWarning();
+            	return;
             }
             close();
         }

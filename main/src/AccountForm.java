@@ -96,6 +96,11 @@ public class AccountForm extends JDialog {
         JOptionPane.showMessageDialog(this, "Please fill out all fields",
                                       "Warning!", JOptionPane.WARNING_MESSAGE);
     }
+    
+    private void inputWarning() {
+    	JOptionPane.showMessageDialog(this,  "Initial amount must contain a numerical decimal value",
+    			                      "Warning!", JOptionPane.WARNING_MESSAGE);
+    }
 
     class okAction implements ActionListener {
         public void actionPerformed (ActionEvent e) {
@@ -105,6 +110,11 @@ public class AccountForm extends JDialog {
 
                 showWarning();
                 return;
+            }
+            
+            if(!amntField.getText().matches("^[0-9]*\\.[0-9]*$")) {
+            	inputWarning();
+            	return;
             }
             close();
         }

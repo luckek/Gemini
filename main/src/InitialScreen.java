@@ -257,6 +257,12 @@ public class InitialScreen extends JFrame {
                 null, possibilities, possibilities[0]);
     }
 
+    // Opens user guide panel
+    public void openGuide() { GuidePanel guidePanel = new GuidePanel(this, Main.FRAME_STRING, true); }
+    
+    // Opens benefits calculator dialog
+    public void openCalc() { CalcPanel calcPanel = new CalcPanel(this, Main.FRAME_STRING, true); }
+    
     public void createAccount() {
 
         // Opens dialog / form to get information about new account
@@ -385,8 +391,9 @@ public class InitialScreen extends JFrame {
         }
     }
 
-    static class calcAction implements ActionListener {
+    class calcAction implements ActionListener {
         public void actionPerformed(ActionEvent e) {
+        	openCalc();
         }
     }
 
@@ -596,6 +603,7 @@ public class InitialScreen extends JFrame {
         public void actionPerformed(ActionEvent e) {
 
             // User guide routine here
+        	openGuide();
         }
     }
 }
