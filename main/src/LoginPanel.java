@@ -8,6 +8,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.FileNotFoundException;
 
 public class LoginPanel
 {
@@ -18,6 +19,7 @@ public class LoginPanel
     private JLabel invalid;
     private InitialScreen initialScreen;
     private JFrame frame;
+    private Controller controller = new Controller();
 
     void startPanel()
     {
@@ -136,12 +138,29 @@ public class LoginPanel
                 // Reset username and password fields
                 usernameTF.setText("");
                 passwordPF.setText("");
-
-                String[] accountNames = {"All"}; // This should be replaced with all acct names
-                double accountBalance = 0.00; // This may stay hardcoded for now.
+                String[] accountNames = null;
+				try {
+					accountNames = controller.loadAccounts();
+				} catch (FileNotFoundException e2) {
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
+				}
+                double accountBalance = 0;
+				try {
+					accountBalance = controller.loadBalances();
+				} catch (FileNotFoundException e2) {
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
+				} // This may stay hardcoded for now.
 
                 // This should be populated by all of the transaction data.
-                String data [][] = {};
+                String data[][] = null;
+				try {
+					data = controller.loadData();
+				} catch (FileNotFoundException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 
                 // Creates new InitialScreen frame on successful login
                 frame.dispose();

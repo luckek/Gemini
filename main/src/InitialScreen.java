@@ -22,7 +22,7 @@ public class InitialScreen extends JFrame {
     private JLabel balanceLabel;
     private ButtonGroup radioGroup;
     private String[] columnNames = {"Name", "Date", "Gross Amt", "Type", "Code", "Dr / Cr", "Net Amt"};
-    private Account[] acctArray = new Account[10];
+    private Model_MgmtAccount[] acctArray = new Model_MgmtAccount[10];
     
     private static int numAccounts = 0;
 
@@ -279,7 +279,7 @@ public class InitialScreen extends JFrame {
 
             String[] names = getAccountNames();
             int position = names.length - 1;
-            acctArray[position] = new Account(newAcctName, newAcctAmnt, newAcctEmail, newAcctDesc);
+            acctArray[position] = new Model_MgmtAccount(newAcctName, newAcctAmnt, newAcctEmail, newAcctDesc);
             
             numAccounts++;
         }
@@ -323,7 +323,9 @@ public class InitialScreen extends JFrame {
     // Displays all the account information for acctToView
     public void viewAcct(String acctToView) {
 
-        Account currAccount = new Account("", "0", "", "This should not be here");
+    	Controller account = new Controller();
+    	//why is this this way? We need to fix this; next time
+        Model_MgmtAccount currAccount = account.newAccount("", "0", "", "This should not be here");
         for (int i = 0; i < acctArray.length; i++) {
 
             if ((acctArray[i] != null) && (acctArray[i].getName().equalsIgnoreCase(acctToView))) {
@@ -333,7 +335,7 @@ public class InitialScreen extends JFrame {
                 currAccount.setDesc(acctArray[i].getDescription());
             }
         }
-        AcctInfoForm viewAcctDlg = new AcctInfoForm(this, Main.FRAME_STRING, true, currAccount);
+        AcctInfoForm viewAcctDlg = new AcctInfoForm(this, Main.FRAME_STRING, true, account);
     }
 
     private int getTransactionIndex() {
@@ -587,7 +589,7 @@ public class InitialScreen extends JFrame {
                   String description = fileScan.next();
                   
                   // Create new Account and add it to the array
-                  acctArray[currentAccount] = new Account(name, balance, email, description);
+                  acctArray[currentAccount] = new Model_MgmtAccount(name, balance, email, description);
                   
                   // Add the accounts to list for user to view
                   accountList.addItem(name);
