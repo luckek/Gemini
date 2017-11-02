@@ -1,0 +1,8 @@
+AJ,10/10/2017,12.09,Cash,a,-
+Kyle,10/31/2017,103.76,Credit,b,Credit
+Jared,11/01/2017,92.01,Debit,c,Debit
+Jared,11/02/2017,100.00,Debit,d,Debit
+Trish,11/02/2017,15.99,Credit,e,Credit
+Michael,12/07/2017,17.00,Check,f,-
+Travis,01/01/2018,504.90,Credit,g,Credit
+Trish,02/01/2018,241.00,Debit,h,Debit
