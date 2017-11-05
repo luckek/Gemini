@@ -28,7 +28,7 @@ public class Controller {
     //this is garbage
 	public String[] loadAccounts() throws FileNotFoundException {
 		String[] accounts = new String[7];
-		Scanner inFile = new Scanner(new File("src/Accounts.txt")).useDelimiter("\n");
+		Scanner inFile = new Scanner(new File("main/resources/Accounts.txt")).useDelimiter("\n");
 		int i = 0;
 		while (inFile.hasNext()) {
 		    String temp = inFile.nextLine();
@@ -41,7 +41,7 @@ public class Controller {
 
 	public double loadBalances() throws FileNotFoundException {
 		double[] balances = new double[7];
-		Scanner inFile = new Scanner(new File("src/Accounts.txt")).useDelimiter("\n");
+		Scanner inFile = new Scanner(new File("main/resources/Accounts.txt")).useDelimiter("\n");
 		int i = 0;
 		while (inFile.hasNext()) {
 		    String temp = inFile.nextLine();
@@ -58,7 +58,7 @@ public class Controller {
 	public String[][] loadData() throws FileNotFoundException {
 		//need to not hard-code string array/array size...i'll fix later
 		String[][] data = new String[8][8];
-		Scanner inFile = new Scanner(new File("src/Transactions.txt")).useDelimiter("\n");
+		Scanner inFile = new Scanner(new File("main/resources/Transactions.txt")).useDelimiter("\n");
 		int i = 0;
 		while (inFile.hasNext()) {
 		    String temp = inFile.nextLine();
