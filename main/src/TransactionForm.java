@@ -38,7 +38,7 @@ public class TransactionForm extends JDialog {
         amntField = new JTextField(10);
         JLabel typeLabel = new JLabel("Type: ");
         typeBox = new JComboBox<>(transactionTypes);
-        JLabel descriptionLabel = new JLabel("Description: ");
+        JLabel descriptionLabel = new JLabel("Code: ");
         descriptionField = new JTextField(10);
         JButton okButton = new JButton("Ok");
         JLabel debitCreditLabel = new JLabel("Exp / Dep");
