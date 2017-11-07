@@ -1,3 +1,4 @@
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -9,6 +10,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -51,7 +53,7 @@ public class InitialScreen extends JFrame {
         JLabel acctLabel = new JLabel("Account: ");
         JLabel transactionLabel = new JLabel("Transactions: ");
         JLabel devLabel = new JLabel(Main.DEV_STRING);
-        balanceLabel = new JLabel("Current Balance: ");
+        balanceLabel = new JLabel();
 
         JButton addAcctButton = new JButton("Add Account");
         JButton calcBttn = new JButton("Benefits Calculator");
@@ -98,6 +100,7 @@ public class InitialScreen extends JFrame {
         wrapperPanel.setPreferredSize(new Dimension(150, 700));
         wrapperPanel.setMaximumSize(new Dimension(150, 700));
         radioPanel.setMaximumSize(new Dimension(150, 700));
+        balanceLabel.setPreferredSize(new Dimension(150, 20));
 
         bothButton.setActionCommand("Both");
         creditButton.setActionCommand("Credit");
@@ -160,6 +163,7 @@ public class InitialScreen extends JFrame {
         outterBalancePanel.add(balancePanel);
         outterBalancePanel.add(Box.createRigidArea(new Dimension(0, 25)));
 
+        balancePanel.add(new JLabel("Current Balance:"));
         balancePanel.add(balanceLabel);
 
         radioGroup.add(bothButton);
@@ -208,14 +212,28 @@ public class InitialScreen extends JFrame {
         setCellsAlignment(transactionTable, SwingConstants.CENTER);
     }
 
-    public void updateBalance(double newBalance) {
-        String newBalanceStr = Double.toString(newBalance);
+    void updateBalance(double newBalance) {
 
-        // This ensures that account balances with 0 cents display properly.
-        if (newBalanceStr.substring(newBalanceStr.length() - 2).equalsIgnoreCase(".0")) {
-            newBalanceStr += "0";
+        NumberFormat formatter = NumberFormat.getCurrencyInstance();
+        String newBalanceStr = formatter.format(newBalance);
+
+        balanceLabel.setText(newBalanceStr);
+    }
+
+    private void updateBalance() {
+
+        double balance = 0;
+
+        for(int i = 0; i < transactionTable.getRowCount(); i++) {
+
+            String valueStr = (String)transactionTable.getValueAt(i, 2);
+
+            if(valueStr.substring(valueStr.length() - 2).equalsIgnoreCase("00")) {
+                valueStr = valueStr.substring(0, valueStr.length() - 2);
+            }
+            balance += Double.valueOf(valueStr);
         }
-        balanceLabel.setText("Current Balance: " + newBalanceStr);
+        updateBalance(balance);
     }
 
     private void setCellsAlignment(JTable table, int alignment) {
@@ -511,6 +529,7 @@ public class InitialScreen extends JFrame {
             }
 
             // Update / calculate balance
+            updateBalance();
         }
     }
 
