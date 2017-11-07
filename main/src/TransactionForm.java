@@ -41,8 +41,8 @@ public class TransactionForm extends JDialog {
         JLabel descriptionLabel = new JLabel("Description: ");
         descriptionField = new JTextField(10);
         JButton okButton = new JButton("Ok");
-        JLabel debitCreditLabel = new JLabel("Dr / Cr");
-        debitCreditBox = new JComboBox<>(new String[] {"Credit", "Debit"});
+        JLabel debitCreditLabel = new JLabel("Exp / Dep");
+        debitCreditBox = new JComboBox<>(new String[] {"Expense", "Deposit"});
         
         try {
         	MaskFormatter dateMask = new MaskFormatter("##/##/####");

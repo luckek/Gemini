@@ -21,7 +21,7 @@ public class InitialScreen extends JFrame {
     private JTable transactionTable;
     private JLabel balanceLabel;
     private ButtonGroup radioGroup;
-    private String[] columnNames = {"Name", "Date", "Gross Amt", "Type", "Code", "Dr / Cr", "Net Amt"};
+    private String[] columnNames = {"Name", "Date", "Gross Amt", "Type", "Code", "Exp / Dep", "Net Amt"};
     private Model_MgmtAccount[] acctArray = new Model_MgmtAccount[10];
     
     private static int numAccounts = 0;
