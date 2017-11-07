@@ -5,17 +5,15 @@ import java.awt.event.*;
 public class AcctInfoForm extends JDialog {
 
 
-    public AcctInfoForm(JFrame frame, String titleString, boolean modality, Controller currAccount) {
+    public AcctInfoForm(JFrame frame, String titleString, boolean modality, Account currAccount) {
 
 
         super(frame, titleString, modality);
 
-        String [] info = new String[3];
-        info = currAccount.getAccountInfo();
-        String name = info[0];
-        String balance = info[1];
-        String description = info[2];
-        String email = info[3];
+        String name = currAccount.getName();
+        String balance = currAccount.getBalance();
+        String description = currAccount.getDescription();
+        String email = currAccount.getEmail();
         setPreferredSize(new Dimension(300, 300));
 
         JLabel nameLabel  = new JLabel("Name: ");

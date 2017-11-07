@@ -139,6 +139,8 @@ public class LoginPanel
                 usernameTF.setText("");
                 passwordPF.setText("");
                 String[] accountNames = null;
+
+                // Load Accounts
 				try {
 					accountNames = controller.loadAccounts();
 				} catch (FileNotFoundException e2) {
@@ -153,8 +155,14 @@ public class LoginPanel
 					e2.printStackTrace();
 				} // This may stay hardcoded for now.
 
-                // This should be populated by all of the transaction data.
+                try {
+				    controller.loadAcctInfo();
+                } catch (FileNotFoundException e1) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                }
                 String data[][] = null;
+				// Load Transaction data
 				try {
 					data = controller.loadData();
 				} catch (FileNotFoundException e1) {
@@ -167,6 +175,7 @@ public class LoginPanel
 
                 initialScreen = new InitialScreen(Main.FRAME_STRING);
 
+                initialScreen.setController(controller);
                 initialScreen.initComboBox(accountNames);
                 initialScreen.updateBalance(accountBalance);
                 initialScreen.initTranscationTable(data);
