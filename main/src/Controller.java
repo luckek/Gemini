@@ -6,14 +6,6 @@ import java.util.Scanner;
 
 public class Controller {
 
-
-	
-    private static String VERSION = "0.0.1";
-    private static String SOFTWARE_NAME = "Astro Account Management Software";
-    private static String COMPANY_NAME = "Gemini Corp.";
-    private static String FRAME_STRING = SOFTWARE_NAME + " Version: " + VERSION;
-    private static String DEV_STRING = "Developed By: " + COMPANY_NAME;
-    private static InitialScreen initialScreen;
     private static LoginPanel mypanel;
 	  
     void initializeScreen() {
