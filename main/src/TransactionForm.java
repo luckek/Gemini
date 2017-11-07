@@ -38,11 +38,11 @@ public class TransactionForm extends JDialog {
         amntField = new JTextField(10);
         JLabel typeLabel = new JLabel("Type: ");
         typeBox = new JComboBox<>(transactionTypes);
-        JLabel descriptionLabel = new JLabel("Description: ");
+        JLabel descriptionLabel = new JLabel("Code: ");
         descriptionField = new JTextField(10);
         JButton okButton = new JButton("Ok");
-        JLabel debitCreditLabel = new JLabel("Dr / Cr");
-        debitCreditBox = new JComboBox<>(new String[] {"Credit", "Debit"});
+        JLabel debitCreditLabel = new JLabel("Exp / Dep");
+        debitCreditBox = new JComboBox<>(new String[] {"Expense", "Deposit"});
         
         try {
         	MaskFormatter dateMask = new MaskFormatter("##/##/####");

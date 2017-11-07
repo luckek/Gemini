@@ -6,7 +6,6 @@ import java.util.Scanner;
 
 public class Controller {
 
-    private static InitialScreen initialScreen;
     private static LoginPanel mypanel;
     private Model_Read_Files readFile =  new Model_Read_Files();
     private Model_MgmtAccount account = new Model_MgmtAccount();
