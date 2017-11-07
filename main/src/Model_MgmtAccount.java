@@ -1,55 +1,67 @@
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Model_MgmtAccount {
 
-	  private String acctName;
-	  private String balance;
-	  private String email;
-	  private String description;
 
-	  public Model_MgmtAccount (String name, String balance, String email, String description) {
+    private String username;
+    private String password;
 
-	    this.acctName = name;
-	    this.balance = balance;
-	    this.email = email;
-	    this.description = description;
-	  }
+    private HashMap<String, Account> subAccounts;
+    private ArrayList<Model_Transaction> transactions;
 
-	  public String getName() {
-	    return this.acctName;
-	  }
+    public Model_MgmtAccount(HashMap<String, Account> subAccounts, ArrayList<Model_Transaction> transactions) {
+        this.subAccounts = subAccounts;
+        this.transactions = transactions;
+    }
 
-	  public String getBalance() {
-	    return this.balance;
-	  }
-	  public String getEmail() {
-	    return this.email;
-	  }
-	  public String getDescription() {
-	    return this.description;
-	  }
+    public Model_MgmtAccount() {
+        this.subAccounts = new HashMap<>();
+        this.transactions = new ArrayList<>();
+    }
 
-	  public void setName(String name) {
+    public String getAccountBalance(String acctName) {
+        return subAccounts.get(acctName).getBalance();
+    }
 
-	    this.acctName = name;
-	  }
-	  public void setBalance(String balance) {
+    public String getEmail(String acctName) {
+        return subAccounts.get(acctName).getEmail();
+    }
 
-	    this.balance = balance;
-	  }
-	  public void setEmail(String email) {
+    public String getDescription(String acctName) {
+        return subAccounts.get(acctName).getDescription();
+    }
 
-	    this.email = email;
-	  }
-	  public void setDesc(String desc) {
+    public Account getAccountInfo(String acctName) {
+        return subAccounts.get(acctName);
+    }
 
-	    this.description = desc;
-	  }
-	  public String [] getAll(String name, String balance, String email, String desc) {
-		  String [] info = new String[3];
-		  info[0] = name;
-		  info[1] = balance;
-		  info[2] = email;
-		  info[3] = desc;
-		  return info;
-	  }
+    public void setAccountBalance(String acctName, String newBalance) {
+
+        subAccounts.get(acctName).setBalance(newBalance);
+    }
+
+    public void setEmail(String acctName, String newEmail) {
+
+        subAccounts.get(acctName).setEmail(newEmail);
+    }
+
+    public void setDesc(String acctName, String desc) {
+
+        subAccounts.get(acctName).setDesc(desc);
+    }
+
+    // TODO: test this method
+    public void addAccount(String[] info) {
+
+        String newName = info[0];
+        Account acct = new Account(info[0], info[1], info[2], info[3]);
+
+        subAccounts.put(newName, acct);
+    }
+
+    public void addTransaction(Model_Transaction transaction) {
+
+        transactions.add(transaction);
+    }
 }

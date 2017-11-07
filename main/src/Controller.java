@@ -6,15 +6,10 @@ import java.util.Scanner;
 
 public class Controller {
 
-
-	
-    private static String VERSION = "0.0.1";
-    private static String SOFTWARE_NAME = "Astro Account Management Software";
-    private static String COMPANY_NAME = "Gemini Corp.";
-    private static String FRAME_STRING = SOFTWARE_NAME + " Version: " + VERSION;
-    private static String DEV_STRING = "Developed By: " + COMPANY_NAME;
     private static InitialScreen initialScreen;
     private static LoginPanel mypanel;
+    private Model_Read_Files readFile =  new Model_Read_Files();
+    private Model_MgmtAccount account = new Model_MgmtAccount();
 	  
     void initializeScreen() {
         mypanel = new LoginPanel();
@@ -24,20 +19,6 @@ public class Controller {
     public void accountAccess(String username, String pass) {
     
     }
-    //the following methods need to be routed into classes (didn't have time :P)
-    //this is garbage
-	public String[] loadAccounts() throws FileNotFoundException {
-		String[] accounts = new String[7];
-		Scanner inFile = new Scanner(new File("main/resources/Accounts.txt")).useDelimiter("\n");
-		int i = 0;
-		while (inFile.hasNext()) {
-		    String temp = inFile.nextLine();
-		    String[] temp2 = temp.split(",");
-		    accounts[i] = temp2[0];
-		    i+=1;
-		}
-		return accounts;
-	}
 
 	public double loadBalances() throws FileNotFoundException {
 		double[] balances = new double[7];
@@ -55,28 +36,36 @@ public class Controller {
 		return result;
 	}
 
-	public String[][] loadData() throws FileNotFoundException {
-		//need to not hard-code string array/array size...i'll fix later
-		String[][] data = new String[8][8];
-		Scanner inFile = new Scanner(new File("main/resources/Transactions.txt")).useDelimiter("\n");
-		int i = 0;
-		while (inFile.hasNext()) {
-		    String temp = inFile.nextLine();
-		    String[] temp2 = temp.split(",");
-		    data[i] = temp2;
-		    i+=1;
-		}
-		return data;
+	public void addTransaction(Model_Transaction transaction) {
+
+    	account.addTransaction(transaction);
 	}
 
-	public String[] getAccountInfo() {
-		String [] info = new String[3];
-		Model_MgmtAccount account = new Model_MgmtAccount(info[0], info[1], info[2], info[3]);
-		return account.getAll(info[0], info[1], info[2], info[3]);
+	String[][] loadData() throws FileNotFoundException {
+
+    	return readFile.loadData();
+	}
+
+	String[] loadAccounts() throws FileNotFoundException {
+
+    	return readFile.loadAccounts();
+	}
+
+	void loadAcctInfo() throws FileNotFoundException {
+
+    	ArrayList<String[]> infoArray = readFile.loadAcctInfo();
+
+    	for(String[] acct : infoArray) {
+    		System.out.println("Adding " + acct[0] + "'s information");
+    		account.addAccount(acct);
+		}
+	}
+
+	public Account getAccountInfo(String acctName) {
+    	return account.getAccountInfo(acctName);
 	}
 	
-	public Model_MgmtAccount newAccount(String name, String balance, String email, String description) {
-		Model_MgmtAccount account = new Model_MgmtAccount(name, balance, email, description);
-		return account;
+	public void newAccount(String name, String balance, String email, String description) {
+		account.addAccount(new String[] {name, balance, email, description});
 	}
 }

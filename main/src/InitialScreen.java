@@ -22,9 +22,7 @@ public class InitialScreen extends JFrame {
     private JLabel balanceLabel;
     private ButtonGroup radioGroup;
     private String[] columnNames = {"Name", "Date", "Gross Amt", "Type", "Code", "Dr / Cr", "Net Amt"};
-    private Model_MgmtAccount[] acctArray = new Model_MgmtAccount[10];
-    
-    private static int numAccounts = 0;
+    private Controller controller;
 
     public InitialScreen(String title) {
 
@@ -187,8 +185,8 @@ public class InitialScreen extends JFrame {
         bothButton.addActionListener(new accountListener());
         debitButton.addActionListener(new accountListener());
         creditButton.addActionListener(new accountListener());
-        save.addActionListener(new saveListener());
-        load.addActionListener(new loadListener());
+//        save.addActionListener(new saveListener());
+//        load.addActionListener(new loadListener());
         userGuide.addActionListener(new guideListener());
 
     }
@@ -276,12 +274,7 @@ public class InitialScreen extends JFrame {
 
         if ((!newAcctName.isEmpty()) && (!newAcctAmnt.isEmpty()) && (!newAcctEmail.isEmpty()) && (!newAcctDesc.isEmpty())) {
             accountList.addItem(newAcctName);
-
-            String[] names = getAccountNames();
-            int position = names.length - 1;
-            acctArray[position] = new Model_MgmtAccount(newAcctName, newAcctAmnt, newAcctEmail, newAcctDesc);
-            
-            numAccounts++;
+            controller.newAccount(newAcctName, newAcctAmnt, newAcctEmail, newAcctDesc);
         }
 
         // create new account object / update necessary data structures
@@ -323,19 +316,8 @@ public class InitialScreen extends JFrame {
     // Displays all the account information for acctToView
     public void viewAcct(String acctToView) {
 
-    	Controller account = new Controller();
-    	//why is this this way? We need to fix this; next time
-        Model_MgmtAccount currAccount = account.newAccount("", "0", "", "This should not be here");
-        for (int i = 0; i < acctArray.length; i++) {
-
-            if ((acctArray[i] != null) && (acctArray[i].getName().equalsIgnoreCase(acctToView))) {
-                currAccount.setName(acctArray[i].getName());
-                currAccount.setBalance(acctArray[i].getBalance());
-                currAccount.setEmail(acctArray[i].getEmail());
-                currAccount.setDesc(acctArray[i].getDescription());
-            }
-        }
-        AcctInfoForm viewAcctDlg = new AcctInfoForm(this, Main.FRAME_STRING, true, account);
+        Account acct = controller.getAccountInfo(acctToView);
+        AcctInfoForm viewAcctDlg = new AcctInfoForm(this, Main.FRAME_STRING, true, acct);
     }
 
     private int getTransactionIndex() {
@@ -385,6 +367,10 @@ public class InitialScreen extends JFrame {
         return JOptionPane.showOptionDialog(this, "Are you sure you want to delete this account?",
                 "Warning!", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
 
+    }
+
+    public void setController(Controller controller) {
+        this.controller = controller;
     }
 
     class addAction implements ActionListener {
@@ -514,100 +500,100 @@ public class InitialScreen extends JFrame {
         }
     }
 
-    class saveListener implements ActionListener {
-        public void actionPerformed(ActionEvent e) {
-         // Set up FileWriter
-            FileWriter writer = null;
-            try 
-            {
-                writer = new FileWriter("Transactions.txt");
-              
-                // Write out info for each account
-                for(int i = 0; i < getAccountNames().length; i++)
-                {
-                    // Don't want to access / write null accounts
-                    if (acctArray[i] != null) {
+//    class saveListener implements ActionListener {
+//        public void actionPerformed(ActionEvent e) {
+//         // Set up FileWriter
+//            FileWriter writer = null;
+//            try
+//            {
+//                writer = new FileWriter("Transactions.txt");
+//
+//                // Write out info for each account
+//                for(int i = 0; i < getAccountNames().length; i++)
+//                {
+//                    // Don't want to access / write null accounts
+//                    if (acctArray[i] != null) {
+//
+//                        // Write basic info to file.
+//                        writer.write(acctArray[i].getName() + "," + acctArray[i].getBalance() + "," + acctArray[i].getEmail() + "," + acctArray[i].getDescription() + ",\n");
+//                    }
+//                    // Still need transactions and number of transactions
+//                    // TODO: Popup message when save is complete
+//                }
+//            }
+//            catch (IOException e1)
+//            {
+//                // TODO: Put messages into popup
+//                System.out.println("Trouble writing file...");
+//                System.out.println("Error: " + e1.getMessage());
+//            }
+//            finally
+//            {
+//                try
+//                {
+//                    writer.close();
+//                }
+//                catch(IOException e1)
+//                {
+//
+//                }
+//            }
+//        }
+//    }
 
-                        // Write basic info to file.
-                        writer.write(acctArray[i].getName() + "," + acctArray[i].getBalance() + "," + acctArray[i].getEmail() + "," + acctArray[i].getDescription() + ",\n");
-                    }
-                    // Still need transactions and number of transactions
-                    // TODO: Popup message when save is complete
-                }
-            } 
-            catch (IOException e1) 
-            {
-                // TODO: Put messages into popup
-                System.out.println("Trouble writing file...");
-                System.out.println("Error: " + e1.getMessage());
-            }
-            finally
-            {
-                try
-                {
-                    writer.close();
-                }
-                catch(IOException e1)
-                {
-                    
-                }
-            }
-        }
-    }
-
-    class loadListener implements ActionListener {
-        public void actionPerformed(ActionEvent e) {
-
-         // Set up file
-            File transactionsFile = new File("Transactions.txt");
-            
-            // Create a scanner
-            Scanner fileScan;
-            try 
-            { 
-              fileScan = new Scanner(transactionsFile);
-              
-              // Use comma as delimiter
-              fileScan.useDelimiter(",");
-              
-              // Keep track of number of accounts
-              int currentAccount = 0;
-              
-              // Read in information for each account
-              while(fileScan.hasNext())
-              {  
-                  // Read in name
-                  String name = fileScan.next();
-                  
-                  // Read in balance
-                  String balance = fileScan.next();
-                  
-                  // Read in email
-                  String email = fileScan.next();
-                  
-                  // Read in description
-                  String description = fileScan.next();
-                  
-                  // Create new Account and add it to the array
-                  acctArray[currentAccount] = new Model_MgmtAccount(name, balance, email, description);
-                  
-                  // Add the accounts to list for user to view
-                  accountList.addItem(name);
-                  
-                  // Increment numAccounts
-                  currentAccount++;
-              }
-
-              // TODO: Popup when successfully loaded
-            }
-            catch (FileNotFoundException e1) 
-            {
-                // TODO: Put error string into a popup
-                System.out.println("Error: File not found");
-                System.out.println(e1.getMessage());
-            }
-        }
-    }
+//    class loadListener implements ActionListener {
+//        public void actionPerformed(ActionEvent e) {
+//
+//         // Set up file
+//            File transactionsFile = new File("Transactions.txt");
+//
+//            // Create a scanner
+//            Scanner fileScan;
+//            try
+//            {
+//              fileScan = new Scanner(transactionsFile);
+//
+//              // Use comma as delimiter
+//              fileScan.useDelimiter(",");
+//
+//              // Keep track of number of accounts
+//              int currentAccount = 0;
+//
+//              // Read in information for each account
+//              while(fileScan.hasNext())
+//              {
+//                  // Read in name
+//                  String name = fileScan.next();
+//
+//                  // Read in balance
+//                  String balance = fileScan.next();
+//
+//                  // Read in email
+//                  String email = fileScan.next();
+//
+//                  // Read in description
+//                  String description = fileScan.next();
+//
+//                  // Create new Account and add it to the array
+//                  acctArray[currentAccount] = new Model_MgmtAccount(name, balance, email, description);
+//
+//                  // Add the accounts to list for user to view
+//                  accountList.addItem(name);
+//
+//                  // Increment numAccounts
+//                  currentAccount++;
+//              }
+//
+//              // TODO: Popup when successfully loaded
+//            }
+//            catch (FileNotFoundException e1)
+//            {
+//                // TODO: Put error string into a popup
+//                System.out.println("Error: File not found");
+//                System.out.println(e1.getMessage());
+//            }
+//        }
+//    }
 
     class guideListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
