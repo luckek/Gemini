@@ -307,7 +307,7 @@ public class InitialScreen extends JFrame {
         transactionData[2] = tForm.getAmnt();
         transactionData[3] = tForm.getTransactionType();
         transactionData[4] = tForm.getDescription();
-        transactionData[5] = tForm.getIsDebit();
+        transactionData[5] = tForm.isDeposit();
 
         updateBalance();
 

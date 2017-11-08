@@ -15,7 +15,7 @@ public class TransactionForm extends JDialog {
     private JTextField amntField;
     private JTextField descriptionField;
     private JComboBox<String> typeBox;
-    private JComboBox<String> debitCreditBox;
+    private JComboBox<String> depositExpenseBox;
     private String[] transactionTypes = new String[] {"Check", "Credit Card", "Cash"}; // Make enum class / constant of transaction class?
 
     private final DateFormat dateFormatter = new SimpleDateFormat("mm/dd/yyyy");
@@ -42,7 +42,7 @@ public class TransactionForm extends JDialog {
         descriptionField = new JTextField(10);
         JButton okButton = new JButton("Ok");
         JLabel debitCreditLabel = new JLabel("Exp / Dep");
-        debitCreditBox = new JComboBox<>(new String[] {"Expense", "Deposit"});
+        depositExpenseBox = new JComboBox<>(new String[] {"Expense", "Deposit"});
         
         try {
         	MaskFormatter dateMask = new MaskFormatter("##/##/####");
@@ -67,7 +67,7 @@ public class TransactionForm extends JDialog {
         mainPanel.setPreferredSize(new Dimension(300, 400));
         nameBox.setPreferredSize(new Dimension(112, 20));
         typeBox.setPreferredSize(new Dimension(112, 20));
-        debitCreditBox.setPreferredSize(new Dimension(112, 20));
+        depositExpenseBox.setPreferredSize(new Dimension(112, 20));
         mainPanel.setLayout(new BorderLayout());
 
         // Adding components
@@ -111,7 +111,7 @@ public class TransactionForm extends JDialog {
 
         debitCreditPanel.add(debitCreditLabel);
         debitCreditPanel.add(Box.createRigidArea(new Dimension(35, 10)));
-        debitCreditPanel.add(debitCreditBox);
+        debitCreditPanel.add(depositExpenseBox);
 
         pack();
         setVisible(true);
@@ -121,7 +121,7 @@ public class TransactionForm extends JDialog {
     public String getDate() { return dateField.getText(); }
     public String getAmnt() { return amntField.getText(); }
     public String getTransactionType() { return (String)typeBox.getSelectedItem(); }
-    public String getIsDebit() { return (String)debitCreditBox.getSelectedItem(); }
+    public String isDeposit() { return (String) depositExpenseBox.getSelectedItem(); }
     public String getDescription() { return descriptionField.getText(); }
 
     // Closes dialog
@@ -133,7 +133,7 @@ public class TransactionForm extends JDialog {
                 "Warning!", JOptionPane.WARNING_MESSAGE);
     }
     
- // Creates popup warning - Incorrect Amount Format
+    // Creates popup warning - Incorrect Amount Format
     private void inputWarning() {
     	JOptionPane.showMessageDialog(this,  "Transaction amount must contain a numerical decimal value",
     			                      "Warning!", JOptionPane.WARNING_MESSAGE);
