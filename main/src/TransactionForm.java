@@ -13,7 +13,7 @@ public class TransactionForm extends JDialog {
     private JComboBox<String> nameBox;
     private JFormattedTextField dateField;
     private JTextField amntField;
-    private JTextField descriptionField;
+    private JTextField codeField;
     private JComboBox<String> typeBox;
     private JComboBox<String> depositExpenseBox;
     private String[] transactionTypes = new String[] {"Check", "Credit Card", "Cash"}; // Make enum class / constant of transaction class?
@@ -38,8 +38,8 @@ public class TransactionForm extends JDialog {
         amntField = new JTextField(10);
         JLabel typeLabel = new JLabel("Type: ");
         typeBox = new JComboBox<>(transactionTypes);
-        JLabel descriptionLabel = new JLabel("Code: ");
-        descriptionField = new JTextField(10);
+        JLabel codeLabel = new JLabel("Code: ");
+        codeField = new JTextField(10);
         JButton okButton = new JButton("Ok");
         JLabel debitCreditLabel = new JLabel("Exp / Dep");
         depositExpenseBox = new JComboBox<>(new String[] {"Expense", "Deposit"});
@@ -57,7 +57,7 @@ public class TransactionForm extends JDialog {
         JPanel datePanel = new JPanel();
         JPanel amntPanel = new JPanel();
         JPanel infoPanel = new JPanel();
-        JPanel descriptionPanel = new JPanel();
+        JPanel codePanel = new JPanel();
         JPanel typePanel = new JPanel();
         JPanel centerPanel = new JPanel();
         JPanel debitCreditPanel = new JPanel();
@@ -81,7 +81,7 @@ public class TransactionForm extends JDialog {
         centerPanel.add(datePanel);
         centerPanel.add(amntPanel);
         centerPanel.add(typePanel);
-        centerPanel.add(descriptionPanel);
+        centerPanel.add(codePanel);
         centerPanel.add(debitCreditPanel);
 
         infoPanel.add(Box.createRigidArea(new Dimension(10, 50)));
@@ -105,12 +105,12 @@ public class TransactionForm extends JDialog {
         typePanel.add(Box.createRigidArea(new Dimension(45, 10)));
         typePanel.add(typeBox);
 
-        descriptionPanel.add(descriptionLabel);
-        descriptionPanel.add(Box.createRigidArea(new Dimension(8, 10)));
-        descriptionPanel.add(descriptionField);
+        codePanel.add(codeLabel);
+        codePanel.add(Box.createRigidArea(new Dimension(46, 10)));
+        codePanel.add(codeField);
 
         debitCreditPanel.add(debitCreditLabel);
-        debitCreditPanel.add(Box.createRigidArea(new Dimension(35, 10)));
+        debitCreditPanel.add(Box.createRigidArea(new Dimension(27, 10)));
         debitCreditPanel.add(depositExpenseBox);
 
         pack();
@@ -122,7 +122,7 @@ public class TransactionForm extends JDialog {
     public String getAmnt() { return amntField.getText(); }
     public String getTransactionType() { return (String)typeBox.getSelectedItem(); }
     public String isDeposit() { return (String) depositExpenseBox.getSelectedItem(); }
-    public String getDescription() { return descriptionField.getText(); }
+    public String getDescription() { return codeField.getText(); }
 
     // Closes dialog
     private void close() { this.dispose(); }
@@ -141,7 +141,7 @@ public class TransactionForm extends JDialog {
 
     class okAction implements ActionListener {
         public void actionPerformed (ActionEvent e) {
-            if(dateField.getText().isEmpty() || amntField.getText().isEmpty() || descriptionField.getText().isEmpty() ){
+            if(dateField.getText().isEmpty() || amntField.getText().isEmpty() || codeField.getText().isEmpty() ){
                 showWarning();
                 return;
             }
