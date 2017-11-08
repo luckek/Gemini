@@ -6,13 +6,8 @@ import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 // TODO: make sure exiting w/all fields filled out does NOT make a new acct / transaction
 // TODO: Update balance label upon filtering transactions
@@ -196,8 +191,8 @@ public class InitialScreen extends JFrame {
     }
 
     public void initComboBox(String[] accountNames) {
-        for (int i = 0; i < accountNames.length; i++) {
-            accountList.addItem(accountNames[i]);
+        for (String name : accountNames) {
+            accountList.addItem(name);
         }
     }
 
@@ -208,6 +203,7 @@ public class InitialScreen extends JFrame {
         }
 
         setCellsAlignment(transactionTable, SwingConstants.CENTER);
+        updateBalance();
     }
 
     void updateBalance(double newBalance) {
@@ -313,7 +309,7 @@ public class InitialScreen extends JFrame {
         transactionData[4] = tForm.getDescription();
         transactionData[5] = tForm.getIsDebit();
 
-        // TODO: Update / calculate balance
+        updateBalance();
 
         return transactionData;
     }
@@ -447,6 +443,7 @@ public class InitialScreen extends JFrame {
                 }
             }
             addTableRow(newRowData);
+            updateBalance();
         }
     }
 

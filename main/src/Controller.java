@@ -19,22 +19,6 @@ public class Controller {
     
     }
 
-	public double loadBalances() throws FileNotFoundException {
-		double[] balances = new double[7];
-		Scanner inFile = new Scanner(new File("main/resources/Accounts.txt")).useDelimiter("\n");
-		int i = 0;
-		while (inFile.hasNext()) {
-		    String temp = inFile.nextLine();
-		    String[] temp2 = temp.split(",");
-		    balances[i] = Double.parseDouble(temp2[1]);
-		    i+=1;
-		}
-		double result = 0;
-		   for (int j = 0; j < balances.length; j++)
-		     result += balances[j];
-		return result;
-	}
-
 	public void addTransaction(Model_Transaction transaction) {
 
     	account.addTransaction(transaction);

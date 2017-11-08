@@ -147,13 +147,6 @@ public class LoginPanel
 					// TODO Auto-generated catch block
 					e2.printStackTrace();
 				}
-                double accountBalance = 0;
-				try {
-					accountBalance = controller.loadBalances();
-				} catch (FileNotFoundException e2) {
-					// TODO Auto-generated catch block
-					e2.printStackTrace();
-				} // This may stay hardcoded for now.
 
                 try {
 				    controller.loadAcctInfo();
@@ -177,7 +170,6 @@ public class LoginPanel
 
                 initialScreen.setController(controller);
                 initialScreen.initComboBox(accountNames);
-                initialScreen.updateBalance(accountBalance);
                 initialScreen.initTranscationTable(data);
 
             }
