@@ -4,7 +4,6 @@ import java.awt.event.*;
 
 public class AcctInfoForm extends JDialog {
 
-
     public AcctInfoForm(JFrame frame, String titleString, boolean modality, Account currAccount) {
 
 

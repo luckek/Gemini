@@ -63,5 +63,9 @@ public class Model_MgmtAccount {
     public void addTransaction(Model_Transaction transaction) {
 
         transactions.add(transaction);
+
+        subAccounts.keySet().toArray();
     }
+
+
 }

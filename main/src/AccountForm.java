@@ -4,7 +4,6 @@ import java.awt.event.*;
 
 public class AccountForm extends JDialog {
 
-
     private JTextField nameField;
     private JTextField amntField;
     private JTextField emailField;

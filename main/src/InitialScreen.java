@@ -10,7 +10,6 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 
 // TODO: make sure exiting w/all fields filled out does NOT make a new acct / transaction
-// TODO: Update balance label upon filtering transactions
 
 public class InitialScreen extends JFrame {
 
@@ -206,7 +205,7 @@ public class InitialScreen extends JFrame {
         updateBalance();
     }
 
-    void updateBalance(double newBalance) {
+    private void updateBalance(double newBalance) {
 
         NumberFormat formatter = NumberFormat.getCurrencyInstance();
         String newBalanceStr = formatter.format(newBalance);
