@@ -57,8 +57,8 @@ public class InitialScreen extends JFrame {
 
         radioGroup = new ButtonGroup();
         JRadioButton bothButton = new JRadioButton("Both", true);
-        JRadioButton debitButton = new JRadioButton("Debit");
-        JRadioButton creditButton = new JRadioButton("Credit");
+        JRadioButton debitButton = new JRadioButton("Expense");
+        JRadioButton creditButton = new JRadioButton("Deposit");
 
         JMenuBar menuBar = new JMenuBar();
 
@@ -94,8 +94,8 @@ public class InitialScreen extends JFrame {
         balanceLabel.setPreferredSize(new Dimension(150, 20));
 
         bothButton.setActionCommand("Both");
-        creditButton.setActionCommand("Credit");
-        debitButton.setActionCommand("Debit");
+        creditButton.setActionCommand("Deposit");
+        debitButton.setActionCommand("Expense");
 
 
         // Setting up Menu
@@ -323,7 +323,7 @@ public class InitialScreen extends JFrame {
         transactionData[1] = tForm.getDate();
         transactionData[2] = tForm.getAmnt();
         transactionData[3] = tForm.getTransactionType();
-        transactionData[4] = tForm.getDescription();
+        transactionData[4] = tForm.getCode();
         transactionData[5] = tForm.isDeposit();
 
         updateBalance();
