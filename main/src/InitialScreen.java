@@ -230,11 +230,13 @@ public class InitialScreen extends JFrame {
     }
 
     private void increaseBalance(double amount) {
+        double balance = new Double(balanceLabel.getText());
+        updateBalance(balance + amount);
+    }
 
-        String balanceStr = balanceLabel.getText();
-
-        double newBalance = new Double(balanceStr) + amount;
-        updateBalance(newBalance);
+    private void decreaseBalance(double amount) {
+        double balance = new Double(balanceLabel.getText());
+        updateBalance(balance - amount);
     }
 
     private void setCellsAlignment(JTable table, int alignment) {
@@ -462,6 +464,8 @@ public class InitialScreen extends JFrame {
             // If index IS MIN_VALUE nothing was selected, so we should not remove a transaction
             if (index != Integer.MIN_VALUE) {
                 removeTableRow(index);
+                String amountStr = (String)transactionTable.getValueAt(index, 2);
+                decreaseBalance(new Double(amountStr));
             }
         }
     }
