@@ -206,7 +206,6 @@ public class InitialScreen extends JFrame {
 
         NumberFormat formatter = NumberFormat.getCurrencyInstance();
         String newBalanceStr = formatter.format(newBalance);
-
         balanceLabel.setText(newBalanceStr);
     }
 
@@ -218,12 +217,33 @@ public class InitialScreen extends JFrame {
 
             String valueStr = (String)transactionTable.getValueAt(i, 2);
 
+            // Removes trailing zero
             if(valueStr.substring(valueStr.length() - 2).equalsIgnoreCase("00")) {
                 valueStr = valueStr.substring(0, valueStr.length() - 2);
             }
-            balance += Double.valueOf(valueStr);
+
+            String isExpense = (String)transactionTable.getValueAt(i, 5);
+            double currentValue = Double.valueOf(valueStr);
+
+            // Convert to negative value if expense
+            if(isExpense.equalsIgnoreCase("Expense")) {
+                currentValue = -currentValue;
+            }
+            balance += currentValue;
         }
         updateBalance(balance);
+    }
+
+    private void increaseBalance(double amount) {
+
+        String balanceStr = balanceLabel.getText();
+
+        if(balanceStr.substring(balanceStr.length() - 2).equalsIgnoreCase("00")) {
+            balanceStr = balanceStr.substring(0, balanceStr.length() - 2);
+        }
+
+        double newBalance = Double.parseDouble(balanceStr) + amount;
+        updateBalance(newBalance);
     }
 
     private void setCellsAlignment(JTable table, int alignment) {
@@ -311,7 +331,6 @@ public class InitialScreen extends JFrame {
     }
 
     private void addTableRow(String[] rowData) {
-
 
         DefaultTableModel tmpModel = (DefaultTableModel) transactionTable.getModel();
         tmpModel.addRow(rowData); // This is the method call that will add information to the table.
@@ -439,7 +458,14 @@ public class InitialScreen extends JFrame {
                 }
             }
             addTableRow(newRowData);
-            updateBalance();
+
+            String balanceStr = newRowData[2];
+
+            if(balanceStr.substring(balanceStr.length() - 2).equalsIgnoreCase("00")) {
+                balanceStr = balanceStr.substring(0, balanceStr.length() - 2);
+            }
+
+            increaseBalance(Double.valueOf(balanceStr));
         }
     }
 
