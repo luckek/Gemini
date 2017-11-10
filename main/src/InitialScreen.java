@@ -206,6 +206,12 @@ public class InitialScreen extends JFrame {
 
         NumberFormat formatter = NumberFormat.getCurrencyInstance();
         String newBalanceStr = formatter.format(newBalance);
+
+        if(newBalanceStr.substring(newBalanceStr.length() - 1).equalsIgnoreCase(")")){
+            newBalanceStr = newBalanceStr.replace("(", "");
+            newBalanceStr = newBalanceStr.replace(")", "");
+            newBalanceStr = "-" + newBalanceStr;
+        }
         balanceLabel.setText(newBalanceStr);
     }
 
