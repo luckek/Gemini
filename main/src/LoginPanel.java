@@ -106,8 +106,8 @@ public class LoginPanel
         public void actionPerformed (ActionEvent e)
         {
             // Variables
-            boolean usernameCheck;
-            boolean passwordCheck;
+            boolean usernameCheck = false;
+            boolean passwordCheck = false;
             String username = usernameTF.getText();
             char[] password = passwordPF.getPassword(); // getText has been depreciated
             String passStr = new String(password); // convert char[] to string
@@ -117,23 +117,15 @@ public class LoginPanel
             {
                 usernameCheck = true;
             }
-            else
-            {
-                usernameCheck = false;
-            }
 
             // Check if the password is right
             if(passStr.equals("csci323"))
             {
                 passwordCheck = true;
             }
-            else
-            {
-                passwordCheck = false;
-            }
 
             // If both the username and password are correct, login
-            if((usernameCheck == true) && (passwordCheck == true))
+            if((usernameCheck) && (passwordCheck))
             {
                 // Reset username and password fields
                 usernameTF.setText("");
