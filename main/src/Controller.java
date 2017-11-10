@@ -26,17 +26,11 @@ public class Controller {
         return readFile.loadData();
     }
 
-    String[] loadAccounts() throws FileNotFoundException {
-
-        return readFile.loadAccounts();
-    }
-
     void loadAcctInfo() throws FileNotFoundException {
 
         ArrayList<String[]> infoArray = readFile.loadAcctInfo();
 
         for(String[] acct : infoArray) {
-            System.out.println("Adding " + acct[0] + "'s information");
             account.addAccount(acct);
         }
     }
@@ -47,5 +41,9 @@ public class Controller {
 
     public void newAccount(String name, String balance, String email, String description) {
         account.addAccount(new String[] {name, balance, email, description});
+    }
+
+    String[] getAcctNames() {
+        return account.getAcctNames();
     }
 }

@@ -18,32 +18,16 @@ public class Model_Read_Files {
             i+=1;
         }
         return data;
-
-    }
-
-    public String[] loadAccounts() throws FileNotFoundException {
-        String[] accounts = new String[7];
-        Scanner inFile = new Scanner(new File("main/resources/Accounts.txt")).useDelimiter("\n");
-        int i = 0;
-        while (inFile.hasNext()) {
-            String temp = inFile.nextLine();
-            String[] temp2 = temp.split(",");
-            accounts[i] = temp2[0];
-            i+=1;
-        }
-        return accounts;
     }
 
     public ArrayList<String[]> loadAcctInfo() throws FileNotFoundException {
 
         ArrayList<String[]> acctInfo = new ArrayList<>();
         Scanner inFile = new Scanner(new File("main/resources/Accounts.txt")).useDelimiter("\n");
-        int i = 0;
         while (inFile.hasNext()) {
             String temp = inFile.nextLine();
             acctInfo.add(temp.split(","));
         }
         return acctInfo;
-
     }
 }

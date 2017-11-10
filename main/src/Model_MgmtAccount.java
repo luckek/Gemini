@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 
 public class Model_MgmtAccount {
 
@@ -51,7 +52,6 @@ public class Model_MgmtAccount {
         subAccounts.get(acctName).setDesc(desc);
     }
 
-    // TODO: test this method
     public void addAccount(String[] info) {
 
         String newName = info[0];
@@ -61,11 +61,12 @@ public class Model_MgmtAccount {
     }
 
     public void addTransaction(Model_Transaction transaction) {
-
         transactions.add(transaction);
-
-        subAccounts.keySet().toArray();
     }
 
+    public String[] getAcctNames() {
 
+        Set<String> keys = subAccounts.keySet();
+        return keys.toArray(new String[keys.size()]);
+    }
 }

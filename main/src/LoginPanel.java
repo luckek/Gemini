@@ -26,7 +26,6 @@ public class LoginPanel
         // Create frame
         frame = new JFrame("Login");
         frame.pack();
-        frame.setVisible(true);
         frame.setSize(700, 700);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
@@ -73,7 +72,7 @@ public class LoginPanel
         passwordPF = new JPasswordField();
         passwordPF.setBounds(250, 270, 250, 40);
         panel.add(passwordPF);
-        passwordPF.addActionListener(new LoginAction()); // Why is this needed?
+        passwordPF.addActionListener(new LoginAction());
 
         // Create login button
         JButton login = new JButton("Login");
@@ -94,9 +93,7 @@ public class LoginPanel
         develop.setBounds(50,600, 200, 20);
         panel.add(develop);
 
-        // Should fix content update issue
-        frame.revalidate();
-        frame.repaint();
+        frame.setVisible(true);
 
     }
 
@@ -109,8 +106,8 @@ public class LoginPanel
             boolean usernameCheck = false;
             boolean passwordCheck = false;
             String username = usernameTF.getText();
-            char[] password = passwordPF.getPassword(); // getText has been depreciated
-            String passStr = new String(password); // convert char[] to string
+            char[] password = passwordPF.getPassword();
+            String passStr = new String(password);
 
             // Check if the username is right
             if(username.equals("csadmin"))
@@ -130,20 +127,13 @@ public class LoginPanel
                 // Reset username and password fields
                 usernameTF.setText("");
                 passwordPF.setText("");
-                String[] accountNames = null;
 
-                // Load Accounts
-				try {
-					accountNames = controller.loadAccounts();
-				} catch (FileNotFoundException e2) {
-					// TODO Auto-generated catch block
-					e2.printStackTrace();
-				}
-
+                // Load account information
                 try {
 				    controller.loadAcctInfo();
                 } catch (FileNotFoundException e1) {
                     // TODO Auto-generated catch block
+                    System.out.println("Cannot find Accounts.txt");
                     e1.printStackTrace();
                 }
                 String data[][] = null;
@@ -161,7 +151,7 @@ public class LoginPanel
                 initialScreen = new InitialScreen(Main.FRAME_STRING);
 
                 initialScreen.setController(controller);
-                initialScreen.initComboBox(accountNames);
+                initialScreen.initComboBox(controller.getAcctNames());
                 initialScreen.initTranscationTable(data);
 
             }
