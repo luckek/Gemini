@@ -217,13 +217,8 @@ public class InitialScreen extends JFrame {
 
             String valueStr = (String)transactionTable.getValueAt(i, 2);
 
-            // Removes trailing zero
-            if(valueStr.substring(valueStr.length() - 2).equalsIgnoreCase("00")) {
-                valueStr = valueStr.substring(0, valueStr.length() - 2);
-            }
-
             String isExpense = (String)transactionTable.getValueAt(i, 5);
-            double currentValue = Double.valueOf(valueStr);
+            double currentValue = new Double(valueStr);
 
             // Convert to negative value if expense
             if(isExpense.equalsIgnoreCase("Expense")) {
@@ -238,11 +233,7 @@ public class InitialScreen extends JFrame {
 
         String balanceStr = balanceLabel.getText();
 
-        if(balanceStr.substring(balanceStr.length() - 2).equalsIgnoreCase("00")) {
-            balanceStr = balanceStr.substring(0, balanceStr.length() - 2);
-        }
-
-        double newBalance = Double.parseDouble(balanceStr) + amount;
+        double newBalance = new Double(balanceStr) + amount;
         updateBalance(newBalance);
     }
 
@@ -460,12 +451,7 @@ public class InitialScreen extends JFrame {
             addTableRow(newRowData);
 
             String balanceStr = newRowData[2];
-
-            if(balanceStr.substring(balanceStr.length() - 2).equalsIgnoreCase("00")) {
-                balanceStr = balanceStr.substring(0, balanceStr.length() - 2);
-            }
-
-            increaseBalance(Double.valueOf(balanceStr));
+            increaseBalance(new Double(balanceStr));
         }
     }
 
