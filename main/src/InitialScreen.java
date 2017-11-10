@@ -230,12 +230,20 @@ public class InitialScreen extends JFrame {
     }
 
     private void increaseBalance(double amount) {
-        double balance = new Double(balanceLabel.getText());
+        double balance = new Double(balanceLabel.getText().substring(1));
         updateBalance(balance + amount);
     }
 
     private void decreaseBalance(double amount) {
-        double balance = new Double(balanceLabel.getText());
+
+        String balanceStr = balanceLabel.getText();
+
+        // If negative
+        if(balanceStr.substring(balanceStr.length() - 1 ).equalsIgnoreCase(")")) {
+            balanceStr = balanceStr.replaceAll("()", "");
+        }
+
+        double balance = new Double(balanceStr.substring(1));
         updateBalance(balance - amount);
     }
 
@@ -330,13 +338,12 @@ public class InitialScreen extends JFrame {
     }
 
     private void removeTableRow(int rowIndex) {
-        // TODO: error checking (make sure row index is valid)
         DefaultTableModel tmpModel = (DefaultTableModel) transactionTable.getModel();
         tmpModel.removeRow(rowIndex);
     }
 
     // Displays all the account information for acctToView
-    public void viewAcct(String acctToView) {
+    private void viewAcct(String acctToView) {
 
         Account acct = controller.getAccountInfo(acctToView);
         AcctInfoForm viewAcctDlg = new AcctInfoForm(this, Main.FRAME_STRING, true, acct);
@@ -360,7 +367,7 @@ public class InitialScreen extends JFrame {
 
         // If user enters something, parse the index
         if (rowStr != null) {
-            rowIndex = Integer.parseInt(rowStr) - 1;
+            rowIndex = Integer.parseInt(rowStr);
         }
 
         // If user actually entered something
@@ -375,13 +382,13 @@ public class InitialScreen extends JFrame {
                     rowIndex = Integer.MIN_VALUE;
                     return rowIndex;
 
-                    // else parse integer and make sure it is valid
+                // Else parse integer and make sure it is valid
                 } else {
-                    rowIndex = Integer.parseInt(rowStr) - 1;
+                    rowIndex = Integer.parseInt(rowStr);
                 }
             }
         }
-        return rowIndex;
+        return rowIndex - 1;
     }
 
     // Creates popup warning
@@ -463,9 +470,10 @@ public class InitialScreen extends JFrame {
 
             // If index IS MIN_VALUE nothing was selected, so we should not remove a transaction
             if (index != Integer.MIN_VALUE) {
-                removeTableRow(index);
+                System.out.println("index: " + Integer.toString(index));
                 String amountStr = (String)transactionTable.getValueAt(index, 2);
                 decreaseBalance(new Double(amountStr));
+                removeTableRow(index);
             }
         }
     }
