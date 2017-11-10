@@ -66,7 +66,6 @@ public class InitialScreen extends JFrame {
         JMenu helpMenu = new JMenu("Help");
 
         JMenuItem save = new JMenuItem("Save");
-        JMenuItem load = new JMenuItem("Load");
         JMenuItem userGuide = new JMenuItem("User Guide");
 
         accountList = new JComboBox<>(); // This should be populated by a list of all accounts
@@ -103,7 +102,6 @@ public class InitialScreen extends JFrame {
 
         // File Menu
         fileMenu.add(save);
-        fileMenu.add(load);
         menuBar.add(fileMenu);
 
         // Help Menu
@@ -184,7 +182,6 @@ public class InitialScreen extends JFrame {
         debitButton.addActionListener(new accountListener());
         creditButton.addActionListener(new accountListener());
 //        save.addActionListener(new saveListener());
-//        load.addActionListener(new loadListener());
         userGuide.addActionListener(new guideListener());
 
     }
@@ -552,60 +549,6 @@ public class InitialScreen extends JFrame {
 //                {
 //
 //                }
-//            }
-//        }
-//    }
-
-//    class loadListener implements ActionListener {
-//        public void actionPerformed(ActionEvent e) {
-//
-//         // Set up file
-//            File transactionsFile = new File("Transactions.txt");
-//
-//            // Create a scanner
-//            Scanner fileScan;
-//            try
-//            {
-//              fileScan = new Scanner(transactionsFile);
-//
-//              // Use comma as delimiter
-//              fileScan.useDelimiter(",");
-//
-//              // Keep track of number of accounts
-//              int currentAccount = 0;
-//
-//              // Read in information for each account
-//              while(fileScan.hasNext())
-//              {
-//                  // Read in name
-//                  String name = fileScan.next();
-//
-//                  // Read in balance
-//                  String balance = fileScan.next();
-//
-//                  // Read in email
-//                  String email = fileScan.next();
-//
-//                  // Read in description
-//                  String description = fileScan.next();
-//
-//                  // Create new Account and add it to the array
-//                  acctArray[currentAccount] = new Model_MgmtAccount(name, balance, email, description);
-//
-//                  // Add the accounts to list for user to view
-//                  accountList.addItem(name);
-//
-//                  // Increment numAccounts
-//                  currentAccount++;
-//              }
-//
-//              // TODO: Popup when successfully loaded
-//            }
-//            catch (FileNotFoundException e1)
-//            {
-//                // TODO: Put error string into a popup
-//                System.out.println("Error: File not found");
-//                System.out.println(e1.getMessage());
 //            }
 //        }
 //    }
