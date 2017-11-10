@@ -337,6 +337,24 @@ public class InitialScreen extends JFrame {
         return transactionData;
     }
 
+    private void removeTransactions(String acct) {
+
+        DefaultTableModel model = (DefaultTableModel)transactionTable.getModel();
+
+        for(int i = 0; i < model.getRowCount(); i++ ) {
+
+            if(model.getValueAt(i, 0).equals(acct)) {
+
+                // Decrease balance
+                String valueStr = (String)model.getValueAt(i, 2);
+                double value = new Double(valueStr);
+                decreaseBalance(value);
+
+                model.removeRow(i);
+            }
+        }
+    }
+
     private void addTableRow(String[] rowData) {
 
         DefaultTableModel tmpModel = (DefaultTableModel) transactionTable.getModel();
@@ -422,12 +440,14 @@ public class InitialScreen extends JFrame {
 
     class deleteAction implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            int option = -1;
+
+            int option;
             String acctToDelete = getAcct("Please select the account you want to delete");
             if ((acctToDelete != null) && (!acctToDelete.isEmpty())) {
                 option = showWarning();
                 if (option == 0) {
                     accountList.removeItem(acctToDelete);
+                    removeTransactions(acctToDelete);
                 }
             }
         }
