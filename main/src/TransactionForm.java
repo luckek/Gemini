@@ -13,10 +13,13 @@ public class TransactionForm extends JDialog {
     private JComboBox<String> nameBox;
     private JFormattedTextField dateField;
     private JTextField amntField;
-    private JTextField codeField;
+    private JComboBox<String> codeBox;
     private JComboBox<String> typeBox;
     private JComboBox<String> depositExpenseBox;
     private String[] transactionTypes = new String[] {"Check", "Credit Card", "Cash"}; // Make enum class / constant of transaction class?
+    private String[] checkCodes = new String[] {"1000", "2000"};
+    private String[] creditCodes = new String[] {"3000", "4000"};
+    private String[] cashCode = new String[] {"0000"};
 
     private final DateFormat dateFormatter = new SimpleDateFormat("mm/dd/yyyy");
     
@@ -39,7 +42,7 @@ public class TransactionForm extends JDialog {
         JLabel typeLabel = new JLabel("Type: ");
         typeBox = new JComboBox<>(transactionTypes);
         JLabel codeLabel = new JLabel("Code: ");
-        codeField = new JTextField(10);
+        codeBox = new JComboBox<>(checkCodes);
         JButton okButton = new JButton("Ok");
         JLabel debitCreditLabel = new JLabel("Exp / Dep");
         depositExpenseBox = new JComboBox<>(new String[] {"Expense", "Deposit"});
@@ -49,8 +52,6 @@ public class TransactionForm extends JDialog {
         	dateMask.setPlaceholderCharacter('_');
         	dateMask.install(dateField);
         } catch (ParseException e) { }
-
-        okButton.addActionListener(new okAction());
 
         JPanel mainPanel = new JPanel();
         JPanel namePanel = new JPanel();
@@ -62,12 +63,13 @@ public class TransactionForm extends JDialog {
         JPanel centerPanel = new JPanel();
         JPanel debitCreditPanel = new JPanel();
 
-        // Setting layouts
+        // Setting layouts / sizing
         centerPanel.setLayout(new GridLayout(7, 0, 90, 0));
         mainPanel.setPreferredSize(new Dimension(300, 400));
         nameBox.setPreferredSize(new Dimension(112, 20));
         typeBox.setPreferredSize(new Dimension(112, 20));
         depositExpenseBox.setPreferredSize(new Dimension(112, 20));
+        codeBox.setPreferredSize(new Dimension(112, 20));
         mainPanel.setLayout(new BorderLayout());
 
         // Adding components
@@ -107,11 +109,14 @@ public class TransactionForm extends JDialog {
 
         codePanel.add(codeLabel);
         codePanel.add(Box.createRigidArea(new Dimension(46, 10)));
-        codePanel.add(codeField);
+        codePanel.add(codeBox);
 
         debitCreditPanel.add(debitCreditLabel);
         debitCreditPanel.add(Box.createRigidArea(new Dimension(27, 10)));
         debitCreditPanel.add(depositExpenseBox);
+
+        okButton.addActionListener(new okAction());
+        typeBox.addActionListener(new selectionAction());
 
         pack();
         setVisible(true);
@@ -122,7 +127,7 @@ public class TransactionForm extends JDialog {
     public String getAmnt() { return amntField.getText(); }
     public String getTransactionType() { return (String)typeBox.getSelectedItem(); }
     public String isDeposit() { return (String) depositExpenseBox.getSelectedItem(); }
-    public String getDescription() { return codeField.getText(); }
+    public String getCode() { return (String)codeBox.getSelectedItem(); }
 
     // Closes dialog
     private void close() { this.dispose(); }
@@ -141,7 +146,7 @@ public class TransactionForm extends JDialog {
 
     class okAction implements ActionListener {
         public void actionPerformed (ActionEvent e) {
-            if(dateField.getText().isEmpty() || amntField.getText().isEmpty() || codeField.getText().isEmpty() ){
+            if(dateField.getText().isEmpty() || amntField.getText().isEmpty()){
                 showWarning();
                 return;
             }
@@ -151,6 +156,29 @@ public class TransactionForm extends JDialog {
             	return;
             }
             close();
+        }
+    }
+
+    class selectionAction implements ActionListener {
+
+        public void actionPerformed(ActionEvent e) {
+
+           String typeStr = (String)typeBox.getSelectedItem();
+
+           if(typeStr.equalsIgnoreCase("Check")) {
+
+               ComboBoxModel<String> model = new DefaultComboBoxModel<>(checkCodes);
+               codeBox.setModel(model);
+           }
+           else if(typeStr.equalsIgnoreCase("Credit Card")) {
+
+               ComboBoxModel<String> model = new DefaultComboBoxModel<>(creditCodes);
+               codeBox.setModel(model);
+           } else {
+
+               ComboBoxModel<String> model = new DefaultComboBoxModel<>(cashCode);
+               codeBox.setModel(model);
+           }
         }
     }
 }
