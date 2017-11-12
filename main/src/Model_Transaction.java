@@ -2,15 +2,15 @@ import java.util.ArrayList;
 
 public class Model_Transaction {
 
-    public String type;
+    private String type;
     public String name;
-    public double code;
-    public float netAmt;
-    public boolean creditDebit;
-    public float grossAmt;
-    public String date;
-    public ArrayList<String> myList = new ArrayList<>();
-    public double percentage;
+    private int code;
+    private double netAmt;
+    private boolean isDeposit;
+    private double grossAmt;
+    private String date;
+    private ArrayList<String> myList = new ArrayList<>();
+    private double percentage;
     //might need to change data types
 
     public void setName(String name) {
@@ -21,19 +21,19 @@ public class Model_Transaction {
         this.type = type;
     }
 
-    public void setCode(double code) {
+    public void setCode(int code) {
         this.code = code;
     }
 
-    public void setNet(float netAmt) {
+    public void setNet(double netAmt) {
         this.netAmt = netAmt;
     }
 
-    public void setCD(boolean creditDebit) {
-        this.creditDebit = creditDebit;
+    public void setED(boolean creditDebit) {
+        this.isDeposit = creditDebit;
     }
 
-    public void setGross(float grossAmt) {
+    public void setGross(double grossAmt) {
         this.grossAmt = grossAmt;
     }
 
@@ -54,19 +54,19 @@ public class Model_Transaction {
         return type;
     }
 
-    public double getCode() {
+    public int getCode() {
         return code;
     }
 
-    public float getNet() {
+    public double getNet() {
         return netAmt;
     }
 
-    public boolean getCD() {
-        return creditDebit;
+    public boolean isDeposit() {
+        return isDeposit;
     }
 
-    public float getGross() {
+    public double getGross() {
         return grossAmt;
     }
 
@@ -84,6 +84,5 @@ public class Model_Transaction {
         myList.add(date);
         myList.add(String.valueOf(percentage));
         return myList;
-
     }
 }
