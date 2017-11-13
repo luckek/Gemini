@@ -64,6 +64,10 @@ public class Model_MgmtAccount {
         transactions.add(transaction);
     }
 
+    public void removeTransaction(int index) {
+        transactions.remove(index);
+    }
+
     public String[] getAcctNames() {
 
         Set<String> keys = subAccounts.keySet();

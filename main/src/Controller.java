@@ -21,6 +21,11 @@ public class Controller {
         account.addTransaction(transaction);
     }
 
+    void removeTransaction(int index) {
+
+        account.removeTransaction(index);
+    }
+
     void loadData() throws FileNotFoundException {
 
         ArrayList<String[]> transactionArray = readFile.loadData();

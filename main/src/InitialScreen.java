@@ -361,9 +361,13 @@ public class InitialScreen extends JFrame {
         tmpModel.addRow(rowData); // This is the method call that will add information to the table.
     }
 
-    private void removeTableRow(int rowIndex) {
+    private void removeTableRow(int viewIndex) {
+
+
         DefaultTableModel tmpModel = (DefaultTableModel) transactionTable.getModel();
-        tmpModel.removeRow(rowIndex);
+        int modelIndex = transactionTable.convertRowIndexToModel(viewIndex);
+
+        tmpModel.removeRow(modelIndex);
     }
 
     // Displays all the account information for acctToView
@@ -515,10 +519,11 @@ public class InitialScreen extends JFrame {
 
             // If index IS MIN_VALUE nothing was selected, so we should not remove a transaction
             if (index != Integer.MIN_VALUE) {
-                System.out.println("index: " + Integer.toString(index));
                 String amountStr = (String)transactionTable.getValueAt(index, 2);
+
                 decreaseBalance(new Double(amountStr));
                 removeTableRow(index);
+                controller.removeTransaction(index);
             }
         }
     }
