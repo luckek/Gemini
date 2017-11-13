@@ -1,4 +1,5 @@
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Controller {
@@ -20,6 +21,16 @@ public class Controller {
 
         account.addTransaction(transaction);
     }
+
+    public void saveAccounts() throws IOException
+    {
+        readFile.saveAccounts(account);
+    }
+
+//    public void saveData() throws IOException
+//    {
+//        readFile.saveData();
+//    }
 
     void removeTransaction(int index) {
 

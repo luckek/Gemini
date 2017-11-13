@@ -6,6 +6,7 @@ import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 
@@ -19,7 +20,8 @@ public class InitialScreen extends JFrame {
     private ButtonGroup radioGroup;
     private Controller controller;
     private String[] columnNames = {"Name", "Date", "Gross Amt", "Type", "Code", "Exp / Dep", "Net Amt"};
-  
+    private boolean changeCheck = false;
+
     public InitialScreen(String title) {
 
         super(title);
@@ -181,7 +183,7 @@ public class InitialScreen extends JFrame {
         bothButton.addActionListener(new accountListener());
         debitButton.addActionListener(new accountListener());
         creditButton.addActionListener(new accountListener());
-//        save.addActionListener(new saveListener());
+        save.addActionListener(new saveListener());
         userGuide.addActionListener(new guideListener());
 
     }
@@ -323,6 +325,8 @@ public class InitialScreen extends JFrame {
         if ((!newAcctName.isEmpty()) && (!newAcctAmnt.isEmpty()) && (!newAcctEmail.isEmpty()) && (!newAcctDesc.isEmpty())) {
             accountList.addItem(newAcctName);
             controller.newAccount(newAcctName, newAcctAmnt, newAcctEmail, newAcctDesc);
+            // note that a change has been made
+            changeCheck = true;
         }
     }
 
@@ -368,6 +372,10 @@ public class InitialScreen extends JFrame {
 
         DefaultTableModel tmpModel = (DefaultTableModel) transactionTable.getModel();
         tmpModel.addRow(rowData); // This is the method call that will add information to the table.
+
+        // note that a change has been made
+        changeCheck = true;
+
     }
 
     private void removeTableRow(int viewIndex) {
@@ -375,8 +383,9 @@ public class InitialScreen extends JFrame {
 
         DefaultTableModel tmpModel = (DefaultTableModel) transactionTable.getModel();
         int modelIndex = transactionTable.convertRowIndexToModel(viewIndex);
-
         tmpModel.removeRow(modelIndex);
+        // note that a change has been made
+        changeCheck = true;
     }
 
     // Displays all the account information for acctToView
@@ -435,6 +444,18 @@ public class InitialScreen extends JFrame {
 
     }
 
+    // Create dialog box when there is a successful save
+    public void saveDialog()
+    {
+        JOptionPane.showMessageDialog(this, "Save successful");
+    }
+
+    // Create dialog box when user attempts to logout without saving
+    public int saveCheckDialog() {
+        return JOptionPane.showOptionDialog(this, "Changes have been made, would you like to save?",
+                "Warning!", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+    }
+
     public void setController(Controller controller) {
         this.controller = controller;
     }
@@ -461,6 +482,7 @@ public class InitialScreen extends JFrame {
                 if (option == 0) {
                     accountList.removeItem(acctToDelete);
                     removeTransactions(acctToDelete);
+                    changeCheck = true;
                 }
             }
         }
@@ -478,6 +500,17 @@ public class InitialScreen extends JFrame {
 
     class logoutAction implements ActionListener {
         public void actionPerformed(ActionEvent e) {
+            // TODO: ensure changeCheck works properly
+            // Note: this just saves everything for now.
+
+            try {
+               controller.saveAccounts();
+               // Controller.saveData();
+
+            } catch (IOException e1) {
+                System.out.println("Error saving");
+            }
+
             // Closes current frame and opens LoginPanel when logout button is pressed
             dispose();
             LoginPanel loginPanel = new LoginPanel();
@@ -595,46 +628,17 @@ public class InitialScreen extends JFrame {
         }
     }
 
-//    class saveListener implements ActionListener {
-//        public void actionPerformed(ActionEvent e) {
-//         // Set up FileWriter
-//            FileWriter writer = null;
-//            try
-//            {
-//                writer = new FileWriter("Transactions.txt");
-//
-//                // Write out info for each account
-//                for(int i = 0; i < getAccountNames().length; i++)
-//                {
-//                    // Don't want to access / write null accounts
-//                    if (acctArray[i] != null) {
-//
-//                        // Write basic info to file.
-//                        writer.write(acctArray[i].getName() + "," + acctArray[i].getBalance() + "," + acctArray[i].getEmail() + "," + acctArray[i].getDescription() + ",\n");
-//                    }
-//                    // Still need transactions and number of transactions
-//                    // TODO: Popup message when save is complete
-//                }
-//            }
-//            catch (IOException e1)
-//            {
-//                // TODO: Put messages into popup
-//                System.out.println("Trouble writing file...");
-//                System.out.println("Error: " + e1.getMessage());
-//            }
-//            finally
-//            {
-//                try
-//                {
-//                    writer.close();
-//                }
-//                catch(IOException e1)
-//                {
-//
-//                }
-//            }
-//        }
-//    }
+    class saveListener implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+
+            try {
+                controller.saveAccounts();
+            } catch(IOException e1) {
+                System.out.println("Error saving file...");
+                e1.printStackTrace();
+            }
+        }
+    }
 
     class guideListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
