@@ -245,14 +245,23 @@ public class InitialScreen extends JFrame {
     private void decreaseBalance(double amount) {
 
         String balanceStr = balanceLabel.getText();
+        balanceStr = balanceStr.replace("$", "");
 
         // If negative
         if(balanceStr.substring(balanceStr.length() - 1 ).equalsIgnoreCase(")")) {
             balanceStr = balanceStr.replaceAll("()", "");
         }
 
-        double balance = new Double(balanceStr.substring(1));
-        updateBalance(balance - amount);
+        double balance = new Double(balanceStr);
+
+        if(balance < 0) {
+            // If negative, we want to add the amount back
+            updateBalance(balance + amount);
+
+        } else {
+            // Else subtract amount as normal
+            updateBalance(balance - amount);
+        }
     }
 
     private void setCellsAlignment(JTable table, int alignment) {
