@@ -21,9 +21,36 @@ public class Controller {
         account.addTransaction(transaction);
     }
 
-    String[][] loadData() throws FileNotFoundException {
+    void loadData() throws FileNotFoundException {
 
-        return readFile.loadData();
+        ArrayList<String[]> transactionArray = readFile.loadData();
+
+        for(String[] transaction : transactionArray) {
+
+            Model_Transaction newTransaction;
+            int code = new Integer(transaction[4]);
+            double amount = new Double(transaction[2]);
+
+            // Decide type of transaction
+            if(transaction[3].equalsIgnoreCase("Cash")) {
+
+                newTransaction = new Model_Cash(transaction[3], transaction[1], code, transaction[5], amount, transaction[1]);
+            }
+
+            else if(transaction[3].equalsIgnoreCase("Credit Card")) {
+
+                newTransaction = new Model_Credit(transaction[3], transaction[1], code, transaction[5], amount, transaction[1]);
+
+
+            } else { // Check
+
+                newTransaction = new Model_Check(transaction[3], transaction[1], code, transaction[5], amount, transaction[1]);
+
+            }
+
+            // Add transaction to model class
+            addTransaction(newTransaction);
+        }
     }
 
     void loadAcctInfo() throws FileNotFoundException {
