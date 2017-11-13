@@ -6,14 +6,14 @@ public class Model_Transaction {
     protected String type;
     protected int code;
     protected double grossAmt;
-    protected boolean isDeposit;
+    protected String isDeposit;
     protected String date;
     protected double netAmt;
     protected double percentage;
     protected ArrayList<String> myList = new ArrayList<>();
     //might need to change data types
 
-    public Model_Transaction(String name, String type, int code, double grossAmt, boolean isDeposit, String date) {
+    public Model_Transaction(String name, String type, int code, double grossAmt, String isDeposit, String date) {
 
         this.name = name;
         this.type = type;
@@ -39,8 +39,8 @@ public class Model_Transaction {
         this.netAmt = netAmt;
     }
 
-    public void setED(boolean creditDebit) {
-        this.isDeposit = creditDebit;
+    public void setED(String isDeposit) {
+        this.isDeposit = isDeposit;
     }
 
     public void setGross(double grossAmt) {
@@ -67,7 +67,7 @@ public class Model_Transaction {
         return netAmt;
     }
 
-    public boolean isDeposit() {
+    public String isDeposit() {
         return isDeposit;
     }
 
