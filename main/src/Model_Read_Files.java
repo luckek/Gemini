@@ -51,17 +51,14 @@ public class Model_Read_Files {
 //        writer.close();
 //    }
 
-    public String[][] loadData() throws FileNotFoundException {
-
+        public ArrayList<String[]> loadData() throws FileNotFoundException {
         //need to not hard-code string array/array size...i'll fix later
-        String[][] data = new String[8][8];
+        ArrayList<String[]> data = new ArrayList<>();
         Scanner inFile = new Scanner(new File("main/resources/Transactions.txt")).useDelimiter("\n");
-        int i = 0;
+
         while (inFile.hasNext()) {
             String temp = inFile.nextLine();
-            String[] temp2 = temp.split(",");
-            data[i] = temp2;
-            i+=1;
+            data.add(temp.split(","));
         }
         return data;
     }

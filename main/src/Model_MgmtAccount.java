@@ -64,9 +64,23 @@ public class Model_MgmtAccount {
         transactions.add(transaction);
     }
 
+    public void removeTransaction(int index) {
+        transactions.remove(index);
+    }
+
     public String[] getAcctNames() {
 
         Set<String> keys = subAccounts.keySet();
         return keys.toArray(new String[keys.size()]);
+    }
+
+    public String[][] getTransactions() {
+
+        String[][] tmp = new String[transactions.size()][7];
+
+        for(int i = 0; i < transactions.size(); i++) {
+            tmp[i] = transactions.get(i).getAll();
+        }
+        return tmp;
     }
 }
