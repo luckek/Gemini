@@ -136,12 +136,12 @@ public class LoginPanel
                     System.out.println("Cannot find Accounts.txt");
                     e1.printStackTrace();
                 }
-                String data[][] = null;
 				// Load Transaction data
 				try {
-					data = controller.loadData();
+					controller.loadData();
 				} catch (FileNotFoundException e1) {
 					// TODO Auto-generated catch block
+                    System.out.println("Cannot find Transactions.txt");
 					e1.printStackTrace();
 				}
 
@@ -152,7 +152,7 @@ public class LoginPanel
 
                 initialScreen.setController(controller);
                 initialScreen.initComboBox(controller.getAcctNames());
-                initialScreen.initTranscationTable(data);
+                initialScreen.initTranscationTable(controller.getTransactions());
 
             }
             // If one of them is wrong, that tell user that they have an invalid username or password

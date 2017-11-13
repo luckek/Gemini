@@ -34,17 +34,17 @@ public class Controller {
             // Decide type of transaction
             if(transaction[3].equalsIgnoreCase("Cash")) {
 
-                newTransaction = new Model_Cash(transaction[3], transaction[1], code, transaction[5], amount, transaction[1]);
+                newTransaction = new Model_Cash(transaction[3], transaction[0], code, transaction[5], amount, transaction[1]);
             }
 
             else if(transaction[3].equalsIgnoreCase("Credit Card")) {
 
-                newTransaction = new Model_Credit(transaction[3], transaction[1], code, transaction[5], amount, transaction[1]);
+                newTransaction = new Model_Credit(transaction[3], transaction[0], code, transaction[5], amount, transaction[1]);
 
 
             } else { // Check
 
-                newTransaction = new Model_Check(transaction[3], transaction[1], code, transaction[5], amount, transaction[1]);
+                newTransaction = new Model_Check(transaction[3], transaction[0], code, transaction[5], amount, transaction[1]);
 
             }
 
@@ -72,5 +72,9 @@ public class Controller {
 
     String[] getAcctNames() {
         return account.getAcctNames();
+    }
+
+    String[][] getTransactions() {
+        return account.getTransactions();
     }
 }

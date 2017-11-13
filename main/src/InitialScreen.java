@@ -223,6 +223,8 @@ public class InitialScreen extends JFrame {
 
             String valueStr = (String)transactionTable.getValueAt(i, 2);
 
+            if(valueStr == null) { continue; } // Just in case row is empty
+
             String isExpense = (String)transactionTable.getValueAt(i, 5);
             double currentValue = new Double(valueStr);
 

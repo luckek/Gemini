@@ -69,4 +69,22 @@ public class Model_MgmtAccount {
         Set<String> keys = subAccounts.keySet();
         return keys.toArray(new String[keys.size()]);
     }
+
+    public String[][] getTransactions() {
+
+        String[][] tmp = new String[transactions.size()][7];
+
+        for(int i = 0; i < transactions.size(); i++) {
+
+            tmp[i][0] = transactions.get(i).getName();
+            tmp[i][1] = transactions.get(i).getDate();
+            tmp[i][2] = Double.toString(transactions.get(i).getGross());
+            tmp[i][3] = transactions.get(i).getType();
+            tmp[i][4] = Integer.toString(transactions.get(i).getCode());
+            tmp[i][5] = transactions.get(i).isDeposit();
+            tmp[i][6] = Double.toString(transactions.get(i).getNet());
+        }
+
+        return tmp;
+    }
 }
