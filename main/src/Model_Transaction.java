@@ -1,3 +1,5 @@
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 
 public class Model_Transaction {
@@ -6,14 +8,13 @@ public class Model_Transaction {
     protected String type;
     protected int code;
     protected double grossAmt;
-    protected boolean isDeposit;
+    protected String isDeposit;
     protected String date;
     protected double netAmt;
     protected double percentage;
-    protected ArrayList<String> myList = new ArrayList<>();
     //might need to change data types
 
-    public Model_Transaction(String name, String type, int code, double grossAmt, boolean isDeposit, String date) {
+    public Model_Transaction(String name, String type, int code, double grossAmt, String isDeposit, String date) {
 
         this.name = name;
         this.type = type;
@@ -39,13 +40,19 @@ public class Model_Transaction {
         this.netAmt = netAmt;
     }
 
-    public void setED(boolean creditDebit) {
-        this.isDeposit = creditDebit;
+    public void setED(String isDeposit) {
+        this.isDeposit = isDeposit;
     }
 
     public void setGross(double grossAmt) {
         this.grossAmt = grossAmt;
-        netAmt = grossAmt - (grossAmt * percentage);
+
+        double tmpAmt = grossAmt - (grossAmt * percentage);
+
+        String amt = Double.toString(tmpAmt);
+
+        // This Converts the sting amt to a large decimal, rounds it with banker's rounding, and returns a double.
+        netAmt = new BigDecimal(amt).setScale(2, RoundingMode.HALF_EVEN).doubleValue();
     }
 
     public void setDate(String date) {
@@ -67,7 +74,7 @@ public class Model_Transaction {
         return netAmt;
     }
 
-    public boolean isDeposit() {
+    public String isDeposit() {
         return isDeposit;
     }
 
@@ -79,15 +86,18 @@ public class Model_Transaction {
         return date;
     }
 
-    public ArrayList<String> getAll(String type, String name, double code, float netAmt, boolean creditDebit, float grossAmt, String date, double percentage){
-        myList.add(type);
-        myList.add(name);
-        myList.add(String.valueOf(code));
-        myList.add(String.valueOf(netAmt));
-        myList.add(String.valueOf(creditDebit));
-        myList.add(String.valueOf(grossAmt));
-        myList.add(date);
-        myList.add(String.valueOf(percentage));
-        return myList;
+    public String[] getAll() {
+
+        String[] info = new String[7];
+
+        info[0] = name;
+        info[1] = date;
+        info[2] = Double.toString(grossAmt);
+        info[3] = type;
+        info[4] = Integer.toString(code);
+        info[5] = isDeposit;
+        info[6] = Double.toString(netAmt);
+
+        return info;
     }
 }

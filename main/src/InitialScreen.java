@@ -225,6 +225,8 @@ public class InitialScreen extends JFrame {
 
             String valueStr = (String)transactionTable.getValueAt(i, 2);
 
+            if(valueStr == null) { continue; } // Just in case row is empty
+
             String isExpense = (String)transactionTable.getValueAt(i, 5);
             double currentValue = new Double(valueStr);
 
@@ -245,14 +247,23 @@ public class InitialScreen extends JFrame {
     private void decreaseBalance(double amount) {
 
         String balanceStr = balanceLabel.getText();
+        balanceStr = balanceStr.replace("$", "");
 
         // If negative
         if(balanceStr.substring(balanceStr.length() - 1 ).equalsIgnoreCase(")")) {
             balanceStr = balanceStr.replaceAll("()", "");
         }
 
-        double balance = new Double(balanceStr.substring(1));
-        updateBalance(balance - amount);
+        double balance = new Double(balanceStr);
+
+        if(balance < 0) {
+            // If negative, we want to add the amount back
+            updateBalance(balance + amount);
+
+        } else {
+            // Else subtract amount as normal
+            updateBalance(balance - amount);
+        }
     }
 
     private void setCellsAlignment(JTable table, int alignment) {
@@ -314,7 +325,6 @@ public class InitialScreen extends JFrame {
         if ((!newAcctName.isEmpty()) && (!newAcctAmnt.isEmpty()) && (!newAcctEmail.isEmpty()) && (!newAcctDesc.isEmpty())) {
             accountList.addItem(newAcctName);
             controller.newAccount(newAcctName, newAcctAmnt, newAcctEmail, newAcctDesc);
-
             // note that a change has been made
             changeCheck = true;
         }
@@ -368,10 +378,12 @@ public class InitialScreen extends JFrame {
 
     }
 
-    private void removeTableRow(int rowIndex) {
-        DefaultTableModel tmpModel = (DefaultTableModel) transactionTable.getModel();
-        tmpModel.removeRow(rowIndex);
+    private void removeTableRow(int viewIndex) {
 
+
+        DefaultTableModel tmpModel = (DefaultTableModel) transactionTable.getModel();
+        int modelIndex = transactionTable.convertRowIndexToModel(viewIndex);
+        tmpModel.removeRow(modelIndex);
         // note that a change has been made
         changeCheck = true;
     }
@@ -517,10 +529,29 @@ public class InitialScreen extends JFrame {
                     return;
                 }
             }
-            addTableRow(newRowData);
 
-            String balanceStr = newRowData[2];
-            increaseBalance(new Double(balanceStr));
+            Model_Transaction transaction;
+
+            // Decide type of transaction
+            if(newRowData[3].equalsIgnoreCase("Cash")) {
+
+                transaction = new Model_Cash(newRowData[3], newRowData[0], new Integer(newRowData[4]), newRowData[5], new Double(newRowData[2]), newRowData[1]);
+
+            } else if(newRowData[3].equalsIgnoreCase("Credit Card")) {
+
+                transaction = new Model_Credit(newRowData[3], newRowData[0], new Integer(newRowData[4]), newRowData[5], new Double(newRowData[2]), newRowData[1]);
+
+            } else {
+
+                transaction = new Model_Check(newRowData[3], newRowData[0], new Integer(newRowData[4]), newRowData[5], new Double(newRowData[2]), newRowData[1]);
+            }
+
+            // Add transaction to table
+            addTableRow(transaction.getAll());
+            increaseBalance(transaction.getGross());
+
+            // Update model
+            controller.addTransaction(transaction);
         }
     }
 
@@ -530,10 +561,11 @@ public class InitialScreen extends JFrame {
 
             // If index IS MIN_VALUE nothing was selected, so we should not remove a transaction
             if (index != Integer.MIN_VALUE) {
-                System.out.println("index: " + Integer.toString(index));
                 String amountStr = (String)transactionTable.getValueAt(index, 2);
+
                 decreaseBalance(new Double(amountStr));
                 removeTableRow(index);
+                controller.removeTransaction(index);
             }
         }
     }
