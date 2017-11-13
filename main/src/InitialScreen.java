@@ -315,8 +315,6 @@ public class InitialScreen extends JFrame {
             accountList.addItem(newAcctName);
             controller.newAccount(newAcctName, newAcctAmnt, newAcctEmail, newAcctDesc);
         }
-
-        // create new account object / update necessary data structures
     }
 
     private String[] createTransaction() {
@@ -485,10 +483,29 @@ public class InitialScreen extends JFrame {
                     return;
                 }
             }
-            addTableRow(newRowData);
 
-            String balanceStr = newRowData[2];
-            increaseBalance(new Double(balanceStr));
+            Model_Transaction transaction;
+
+            // Decide type of transaction
+            if(newRowData[3].equalsIgnoreCase("Cash")) {
+
+                transaction = new Model_Cash(newRowData[3], newRowData[0], new Integer(newRowData[4]), newRowData[5], new Double(newRowData[2]), newRowData[1]);
+
+            } else if(newRowData[3].equalsIgnoreCase("Credit Card")) {
+
+                transaction = new Model_Credit(newRowData[3], newRowData[0], new Integer(newRowData[4]), newRowData[5], new Double(newRowData[2]), newRowData[1]);
+
+            } else {
+
+                transaction = new Model_Check(newRowData[3], newRowData[0], new Integer(newRowData[4]), newRowData[5], new Double(newRowData[2]), newRowData[1]);
+            }
+
+            // Add transaction to table
+            addTableRow(transaction.getAll());
+            increaseBalance(transaction.getGross());
+
+            // Update model
+            controller.addTransaction(transaction);
         }
     }
 

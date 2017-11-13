@@ -12,7 +12,6 @@ public class Model_Transaction {
     protected String date;
     protected double netAmt;
     protected double percentage;
-    protected ArrayList<String> myList = new ArrayList<>();
     //might need to change data types
 
     public Model_Transaction(String name, String type, int code, double grossAmt, String isDeposit, String date) {
@@ -87,15 +86,18 @@ public class Model_Transaction {
         return date;
     }
 
-    public ArrayList<String> getAll(String type, String name, double code, float netAmt, boolean creditDebit, float grossAmt, String date, double percentage){
-        myList.add(type);
-        myList.add(name);
-        myList.add(String.valueOf(code));
-        myList.add(String.valueOf(netAmt));
-        myList.add(String.valueOf(creditDebit));
-        myList.add(String.valueOf(grossAmt));
-        myList.add(date);
-        myList.add(String.valueOf(percentage));
-        return myList;
+    public String[] getAll() {
+
+        String[] info = new String[7];
+
+        info[0] = name;
+        info[1] = date;
+        info[2] = Double.toString(grossAmt);
+        info[3] = type;
+        info[4] = Integer.toString(code);
+        info[5] = isDeposit;
+        info[6] = Double.toString(netAmt);
+
+        return info;
     }
 }

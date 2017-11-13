@@ -48,7 +48,7 @@ public class Controller {
 
             }
 
-            // Add transaction to model class
+            // Add transaction to model
             addTransaction(newTransaction);
         }
     }
