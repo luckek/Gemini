@@ -1,4 +1,5 @@
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Controller {
@@ -21,9 +22,51 @@ public class Controller {
         account.addTransaction(transaction);
     }
 
-    String[][] loadData() throws FileNotFoundException {
+    public void saveAccounts() throws IOException
+    {
+        readFile.saveAccounts(account);
+    }
 
-        return readFile.loadData();
+//    public void saveData() throws IOException
+//    {
+//        readFile.saveData();
+//    }
+
+    void removeTransaction(int index) {
+
+        account.removeTransaction(index);
+    }
+
+    void loadData() throws FileNotFoundException {
+
+        ArrayList<String[]> transactionArray = readFile.loadData();
+
+        for(String[] transaction : transactionArray) {
+
+            Model_Transaction newTransaction;
+            int code = new Integer(transaction[4]);
+            double amount = new Double(transaction[2]);
+
+            // Decide type of transaction
+            if(transaction[3].equalsIgnoreCase("Cash")) {
+
+                newTransaction = new Model_Cash(transaction[3], transaction[0], code, transaction[5], amount, transaction[1]);
+            }
+
+            else if(transaction[3].equalsIgnoreCase("Credit Card")) {
+
+                newTransaction = new Model_Credit(transaction[3], transaction[0], code, transaction[5], amount, transaction[1]);
+
+
+            } else { // Check
+
+                newTransaction = new Model_Check(transaction[3], transaction[0], code, transaction[5], amount, transaction[1]);
+
+            }
+
+            // Add transaction to model
+            addTransaction(newTransaction);
+        }
     }
 
     void loadAcctInfo() throws FileNotFoundException {
@@ -33,11 +76,6 @@ public class Controller {
         for(String[] acct : infoArray) {
             account.addAccount(acct);
         }
-    }
-    
-    public ArrayList<String> loadCustomCodes() throws FileNotFoundException {
-    	
-    	return readFile.loadCustomCodes();
     }
 
     public Account getAccountInfo(String acctName) {
@@ -50,5 +88,9 @@ public class Controller {
 
     String[] getAcctNames() {
         return account.getAcctNames();
+    }
+
+    String[][] getTransactions() {
+        return account.getTransactions();
     }
 }

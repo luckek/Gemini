@@ -16,7 +16,8 @@ public class LoginPanel
     // Components and variables
     private JTextField usernameTF;
     private JPasswordField passwordPF;
-    private JLabel invalid;
+    private JLabel invalid, logoLabel;
+    private String logoPath = "main/resources/logo1.png";
     private InitialScreen initialScreen;
     private JFrame frame;
     private Controller controller = new Controller();
@@ -37,7 +38,7 @@ public class LoginPanel
         // Create fonts
         Font basic = new Font("Arial", Font.PLAIN, 20);
         Font title = new Font("Arial", Font.BOLD, 25);
-
+        
         // Create Software name label
         JLabel loginTitle1 = new JLabel("Astro Account");
         loginTitle1.setBounds(300, 40, 500, 40);
@@ -89,6 +90,10 @@ public class LoginPanel
         panel.add(invalid);
 
         // Create Developed by Label
+        // Create logo
+        logoLabel = new JLabel (new ImageIcon(logoPath));
+        logoLabel.setBounds(80, -70, 150, 300);
+        panel.add(logoLabel);
         JLabel develop = new JLabel(Main.DEV_STRING);
         develop.setBounds(50,600, 200, 20);
         panel.add(develop);
@@ -136,12 +141,12 @@ public class LoginPanel
                     System.out.println("Cannot find Accounts.txt");
                     e1.printStackTrace();
                 }
-                String data[][] = null;
 				// Load Transaction data
 				try {
-					data = controller.loadData();
+					controller.loadData();
 				} catch (FileNotFoundException e1) {
 					// TODO Auto-generated catch block
+                    System.out.println("Cannot find Transactions.txt");
 					e1.printStackTrace();
 				}
 
@@ -152,7 +157,7 @@ public class LoginPanel
 
                 initialScreen.setController(controller);
                 initialScreen.initComboBox(controller.getAcctNames());
-                initialScreen.initTranscationTable(data);
+                initialScreen.initTranscationTable(controller.getTransactions());
 
             }
             // If one of them is wrong, that tell user that they have an invalid username or password

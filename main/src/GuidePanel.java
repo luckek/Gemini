@@ -8,7 +8,7 @@ public class GuidePanel extends JDialog {
 		
 		super(frame, title, modality);
 		
-		setPreferredSize(new Dimension(700, 700));
+		setPreferredSize(new Dimension(700, 740));
 		
 		// Create components
 		JLabel guideLabel = new JLabel("<html><center><u><p>User Guide</p></u></center>"
@@ -26,19 +26,22 @@ public class GuidePanel extends JDialog {
 						+ "<li>Transaction date"
 						+ "<li>Transaction amount"
 						+ "<li>Transaction type (check, credit card, or cash)"
-						+ "<li>Transaction description"
+						+ "<li>Transaction code"
 						+ "<li>Credit or debit amount</ul>"
 					+ "<p>Created transactions will be viewable in the transaction list and available for deletion once added.</p>"
 					+ "<br><p>Delete Transaction: Select the 'Delete' option listed beneath Transactions and choose the transaction to be removed</p>"
 					+ "<p>from the drop down list.</p>"
+					+ "<br><p>Add New Code: Select the 'Add New Code' option listed beneath Transactions and supply a custom 6-digit transaction</p>"
+					+ "<p>code to be used when adding transactions.</p>"
 				+ "<br><p><u>Benefits Calculator:</u></p>"
 					+ "<p>Select 'Benefits Calculator' option and supply amount and percentage to be calculated.</p>"
 					+ "<p>Select the 'Calculate' option to calculate and view the result.</p>"
-				+ "<br><p><u>Save/Load Functions: </u></p>"
-					+ "<p>Save: Manually saves all user created accounts and associated transactions.</p>"
+				+ "<br><p><u>Save Function: </u></p>"
+					+ "<p>Manually saves all user created accounts and associated transactions.</p>"
 					+ "<p>Choose 'File -> Save' from the menu bar to use this function.</p>"
-					+ "<p><br>Load: Manually loads all previously saved user created accounts and associated transactions.</p>"
-					+ "<p>Choose 'File -> Load' from the menu bar to use this function.</p></html>");
+				+ "<br><p><u>Table Filtering: </u></p>"
+					+ "<p>The transaction table located in the main window can be filtered by specific accounts (left drop-down box) and their</p>"
+					+ "<p> respective transaction types (right radio buttons)</html>");
 		guideLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
 		
 		JPanel mainPanel = new JPanel();

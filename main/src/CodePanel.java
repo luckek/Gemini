@@ -1,31 +1,24 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.text.DecimalFormat;
-import java.util.ArrayList;
 
 public class CodePanel extends JDialog {
-	
+
 	private JTextField codeField;
 	private JLabel infoLabel, codeLabel;
 	private String userCode;
-	private Controller controller;
-	private ArrayList<String> customCodes;
 	
 	public CodePanel(Frame frame, String title, boolean modality) {
 		
-		super (frame, title, modality);
+		super(frame, title, modality);
 		
 		setPreferredSize(new Dimension(300, 250));
 		
 		// Creating components
-		JLabel infoLabel = new JLabel ("Please enter the transaction code below: ");
+		JLabel infoLabel = new JLabel("Please enter the transaction code below: ");
 		infoLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
-		JLabel codeLabel = new JLabel ("Code: ");
+		JLabel codeLabel = new JLabel("Transaction Code: ");
 		codeLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
 		
 		codeField = new JTextField(10);
@@ -63,47 +56,6 @@ public class CodePanel extends JDialog {
 		
 	}
 	
-	private void addCode() throws FileNotFoundException {
-		loadCodes();
-		userCode = getCode();
-		
-		for(String code : customCodes) {
-			if (userCode.equals(code)) {
-				duplicateCodeWarning();
-				return;
-			}
-		}
-		
-		saveCode();
-		
-	}
-	
-	private void loadCodes() throws FileNotFoundException {
-		customCodes = controller.loadCustomCodes();
-	}
-	
-	private void saveCode() throws FileNotFoundException {
-		FileWriter writer = null;
-		try {
-			writer = new FileWriter("Codes.txt");
-			writer.write(userCode + "\n");
-		}
-		catch (IOException e) {
-			System.out.println("IO Exception: ");
-			e.printStackTrace();
-		}
-		finally {
-			try {
-				writer.close();
-			}
-			catch(IOException e) {
-				System.out.println("IO Exception: ");
-				e.printStackTrace();
-			}
-		}
-		addConfirmation();
-	}
-	
 	public String getCode() { return codeField.getText(); }
 	
 	private void emptyWarning() {
@@ -114,7 +66,7 @@ public class CodePanel extends JDialog {
 	
 	private void invalidCodeWarning() {
 		
-		JOptionPane.showMessageDialog(this, "Please enter a 6-digit transaction code",
+		JOptionPane.showMessageDialog(this, "Please enter a 4-digit transaction code",
 				"Warning!", JOptionPane.WARNING_MESSAGE);
 	}
 	
@@ -138,19 +90,11 @@ public class CodePanel extends JDialog {
 				return;
 			}
 			
-			if(!codeField.getText().matches("[0-9]{6}")) {
+			if(!codeField.getText().matches("[0-9]{4}")) {
 				
 				invalidCodeWarning();
 				return;
 			}
-			
-			try {
-				addCode();
-			} catch (FileNotFoundException e1) {
-				System.out.println("FileNotFound Exception: ");
-				e1.printStackTrace();
-			}
 		}
 	}
-
 }

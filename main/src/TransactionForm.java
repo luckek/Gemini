@@ -4,11 +4,11 @@ import javax.swing.text.MaskFormatter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.FileNotFoundException;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 
 public class TransactionForm extends JDialog {
 
@@ -18,12 +18,10 @@ public class TransactionForm extends JDialog {
     private JComboBox<String> codeBox;
     private JComboBox<String> typeBox;
     private JComboBox<String> depositExpenseBox;
-    private String[] transactionTypes = new String[] {"Check", "Credit Card", "Cash", "Custom"}; // Make enum class / constant of transaction class?
+    private String[] transactionTypes = new String[] {"Check", "Credit Card", "Cash"}; // Make enum class / constant of transaction class?
     private String[] checkCodes = new String[] {"1000", "2000"};
     private String[] creditCodes = new String[] {"3000", "4000"};
     private String[] cashCode = new String[] {"0000"};
-    private ArrayList<String> customCodes = new ArrayList<>();
-    private Controller controller;
 
     private final DateFormat dateFormatter = new SimpleDateFormat("mm/dd/yyyy");
     
@@ -31,12 +29,6 @@ public class TransactionForm extends JDialog {
 
         super(frame, title, modality);
 
-        try {
-			customCodes =  controller.loadCustomCodes();
-		} catch (FileNotFoundException e1) {
-			System.out.println("FileNotFound Exception: ");
-			e1.printStackTrace();
-		}
         setPreferredSize(new Dimension(300, 400));
 
         // Creating components
@@ -46,6 +38,7 @@ public class TransactionForm extends JDialog {
         JLabel dateLabel = new JLabel("Date: ");
         dateField = new JFormattedTextField(dateFormatter);
         dateField.setColumns(10);
+        dateField.setFocusLostBehavior(EXIT_ON_CLOSE);
         JLabel amntLabel = new JLabel("Amount: ");
         amntLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
         amntField = new JTextField(10);
@@ -61,8 +54,7 @@ public class TransactionForm extends JDialog {
         	MaskFormatter dateMask = new MaskFormatter("##/##/####");
         	dateMask.setPlaceholderCharacter('_');
         	dateMask.install(dateField);
-        	
-        } catch (ParseException e) { 
+        } catch (ParseException e) {
         	System.out.println("Parse Exception: ");
         	e.printStackTrace();
         }
@@ -188,12 +180,7 @@ public class TransactionForm extends JDialog {
 
                ComboBoxModel<String> model = new DefaultComboBoxModel<>(creditCodes);
                codeBox.setModel(model);
-           } 
-           else if(typeStr.equalsIgnoreCase("Custom")) {
-        	   ComboBoxModel<String> model = new DefaultComboBoxModel<>(customCodes.toArray(new String[customCodes.size()]));
-        	   codeBox.setModel(model);
-           }
-           else {
+           } else {
 
                ComboBoxModel<String> model = new DefaultComboBoxModel<>(cashCode);
                codeBox.setModel(model);
