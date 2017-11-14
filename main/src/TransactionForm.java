@@ -4,6 +4,8 @@ import javax.swing.text.MaskFormatter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -36,6 +38,7 @@ public class TransactionForm extends JDialog {
         JLabel dateLabel = new JLabel("Date: ");
         dateField = new JFormattedTextField(dateFormatter);
         dateField.setColumns(10);
+        dateField.setFocusLostBehavior(EXIT_ON_CLOSE);
         JLabel amntLabel = new JLabel("Amount: ");
         amntLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
         amntField = new JTextField(10);
@@ -51,7 +54,10 @@ public class TransactionForm extends JDialog {
         	MaskFormatter dateMask = new MaskFormatter("##/##/####");
         	dateMask.setPlaceholderCharacter('_');
         	dateMask.install(dateField);
-        } catch (ParseException e) { }
+        } catch (ParseException e) {
+        	System.out.println("Parse Exception: ");
+        	e.printStackTrace();
+        }
 
         JPanel mainPanel = new JPanel();
         JPanel namePanel = new JPanel();
@@ -140,7 +146,7 @@ public class TransactionForm extends JDialog {
     
     // Creates popup warning - Incorrect Amount Format
     private void inputWarning() {
-    	JOptionPane.showMessageDialog(this,  "Transaction amount must contain a numerical decimal value",
+    	JOptionPane.showMessageDialog(this,  "Transaction amount must contain a valid numerical value",
     			                      "Warning!", JOptionPane.WARNING_MESSAGE);
     }
 
@@ -151,7 +157,7 @@ public class TransactionForm extends JDialog {
                 return;
             }
             
-            if(!amntField.getText().matches("^[0-9]*\\.[0-9]*$")) {
+            if(!amntField.getText().matches("^[0-9]*(\\.\\d+)?$")) {
             	inputWarning();
             	return;
             }

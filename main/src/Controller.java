@@ -50,6 +50,7 @@ public class Controller {
             // Decide type of transaction
             if(transaction[3].equalsIgnoreCase("Cash")) {
 
+
                 newTransaction = new Model_Cash(transaction[3], transaction[0], code, transaction[5], amount, transaction[1]);
             }
 

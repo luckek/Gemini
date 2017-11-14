@@ -16,7 +16,8 @@ public class InitialScreen extends JFrame {
 
     private JComboBox<String> accountList;
     private JTable transactionTable;
-    private JLabel balanceLabel;
+    private JLabel balanceLabel, logoLabel;
+    private String logoPath = "main/resources/logo1.png";
     private ButtonGroup radioGroup;
     private Controller controller;
     private String[] columnNames = {"Name", "Date", "Gross Amt", "Type", "Code", "Exp / Dep", "Net Amt"};
@@ -56,6 +57,7 @@ public class InitialScreen extends JFrame {
         JButton logoutBttn = new JButton("Logout");
         JButton addButton = new JButton("Add");
         JButton removeButton = new JButton("Remove");
+        JButton codeButton = new JButton("Add New Code");
 
         radioGroup = new ButtonGroup();
         JRadioButton bothButton = new JRadioButton("Both", true);
@@ -90,6 +92,7 @@ public class InitialScreen extends JFrame {
         outterBalancePanel.setPreferredSize(new Dimension(100, 100));
         addButton.setPreferredSize(new Dimension(100, 22));
         removeButton.setPreferredSize(new Dimension(100, 22));
+        codeButton.setPreferredSize(new Dimension(150, 22));
         wrapperPanel.setPreferredSize(new Dimension(150, 700));
         wrapperPanel.setMaximumSize(new Dimension(150, 700));
         radioPanel.setMaximumSize(new Dimension(150, 700));
@@ -124,6 +127,7 @@ public class InitialScreen extends JFrame {
         leftPanel.add(buttonPanel);
         leftPanel.add(Box.createVerticalBox());
 
+
         buttonPanel.add(Box.createRigidArea(new Dimension(0, 50)));
         buttonPanel.add(Box.createRigidArea(new Dimension(0, 50)));
         buttonPanel.add(Box.createRigidArea(new Dimension(0, 50)));
@@ -149,6 +153,8 @@ public class InitialScreen extends JFrame {
         addRemovePanel.add(addButton);
         addRemovePanel.add(Box.createRigidArea(new Dimension(15, 0)));
         addRemovePanel.add(removeButton);
+        addRemovePanel.add(Box.createRigidArea(new Dimension(15, 0)));
+        addRemovePanel.add(codeButton);
 
         headerPanel.add(transactionLabel);
 
@@ -175,6 +181,7 @@ public class InitialScreen extends JFrame {
         addAcctButton.addActionListener(new addAction());
         calcBttn.addActionListener(new calcAction());
         deleteButton.addActionListener(new deleteAction());
+        codeButton.addActionListener(new codeAction());
         acctInfoButton.addActionListener(new acctInfoAction());
         logoutBttn.addActionListener(new logoutAction());
         addButton.addActionListener(new addTransaction());
@@ -310,6 +317,8 @@ public class InitialScreen extends JFrame {
     
     // Opens benefits calculator dialog
     public void openCalc() { CalcPanel calcPanel = new CalcPanel(this, Main.FRAME_STRING, true); }
+    
+    public void openCode() { CodePanel codePanel = new CodePanel(this, Main.FRAME_STRING, true); }
     
     public void createAccount() {
 
@@ -477,6 +486,12 @@ public class InitialScreen extends JFrame {
             openCalc();
         }
     }
+    
+    class codeAction implements ActionListener {
+    	public void actionPerformed(ActionEvent e) {
+    		openCode();
+    	}
+    }
 
     class deleteAction implements ActionListener {
         public void actionPerformed(ActionEvent e) {
@@ -510,6 +525,7 @@ public class InitialScreen extends JFrame {
 
             try {
                controller.saveAccounts();
+              
             } catch (IOException e1) {
                 System.out.println("Error saving accounts");
                 e1.printStackTrace();
@@ -655,13 +671,13 @@ public class InitialScreen extends JFrame {
             try {
                 controller.saveAccounts();
                 saveAccountCheck = true;
+              
             } catch(IOException e1) {
                 System.out.println("Error saving file...");
                 e1.printStackTrace();
             }
             
-            try
-            {
+            try {
                 controller.saveData();
                 saveDataCheck = true;
             }
