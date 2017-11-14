@@ -60,6 +60,10 @@ public class Model_MgmtAccount {
         subAccounts.put(newName, acct);
     }
 
+    void removeAccount (String acctName) {
+        subAccounts.remove(acctName);
+    }
+
     public void addTransaction(Model_Transaction transaction) {
         transactions.add(transaction);
     }
