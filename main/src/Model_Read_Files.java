@@ -30,4 +30,13 @@ public class Model_Read_Files {
         }
         return acctInfo;
     }
+    
+    public ArrayList<String> loadCustomCodes() throws FileNotFoundException {
+    	ArrayList<String> customCodes = new ArrayList<>();
+    	Scanner inFile = new Scanner(new File("main/resources/Codes.txt"));
+    	while (inFile.hasNextLine()) {
+    		customCodes.add(inFile.next());
+    	}
+    	return customCodes;
+    }
 }

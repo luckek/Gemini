@@ -97,7 +97,7 @@ public class AccountForm extends JDialog {
     }
     
     private void inputWarning() {
-    	JOptionPane.showMessageDialog(this,  "Initial amount must contain a numerical decimal value",
+    	JOptionPane.showMessageDialog(this,  "Initial amount must contain a valid numerical value",
     			                      "Warning!", JOptionPane.WARNING_MESSAGE);
     }
 
@@ -111,7 +111,7 @@ public class AccountForm extends JDialog {
                 return;
             }
             
-            if(!amntField.getText().matches("^[0-9]*\\.[0-9]*$")) {
+            if(!amntField.getText().matches("^[0-9]*(\\.\\d+)?$")) {
             	inputWarning();
             	return;
             }

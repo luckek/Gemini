@@ -4,9 +4,11 @@ import javax.swing.text.MaskFormatter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 
 public class TransactionForm extends JDialog {
 
@@ -16,10 +18,12 @@ public class TransactionForm extends JDialog {
     private JComboBox<String> codeBox;
     private JComboBox<String> typeBox;
     private JComboBox<String> depositExpenseBox;
-    private String[] transactionTypes = new String[] {"Check", "Credit Card", "Cash"}; // Make enum class / constant of transaction class?
+    private String[] transactionTypes = new String[] {"Check", "Credit Card", "Cash", "Custom"}; // Make enum class / constant of transaction class?
     private String[] checkCodes = new String[] {"1000", "2000"};
     private String[] creditCodes = new String[] {"3000", "4000"};
     private String[] cashCode = new String[] {"0000"};
+    private ArrayList<String> customCodes = new ArrayList<>();
+    private Controller controller;
 
     private final DateFormat dateFormatter = new SimpleDateFormat("mm/dd/yyyy");
     
@@ -27,6 +31,12 @@ public class TransactionForm extends JDialog {
 
         super(frame, title, modality);
 
+        try {
+			customCodes =  controller.loadCustomCodes();
+		} catch (FileNotFoundException e1) {
+			System.out.println("FileNotFound Exception: ");
+			e1.printStackTrace();
+		}
         setPreferredSize(new Dimension(300, 400));
 
         // Creating components
@@ -51,7 +61,11 @@ public class TransactionForm extends JDialog {
         	MaskFormatter dateMask = new MaskFormatter("##/##/####");
         	dateMask.setPlaceholderCharacter('_');
         	dateMask.install(dateField);
-        } catch (ParseException e) { }
+        	
+        } catch (ParseException e) { 
+        	System.out.println("Parse Exception: ");
+        	e.printStackTrace();
+        }
 
         JPanel mainPanel = new JPanel();
         JPanel namePanel = new JPanel();
@@ -140,7 +154,7 @@ public class TransactionForm extends JDialog {
     
     // Creates popup warning - Incorrect Amount Format
     private void inputWarning() {
-    	JOptionPane.showMessageDialog(this,  "Transaction amount must contain a numerical decimal value",
+    	JOptionPane.showMessageDialog(this,  "Transaction amount must contain a valid numerical value",
     			                      "Warning!", JOptionPane.WARNING_MESSAGE);
     }
 
@@ -151,7 +165,7 @@ public class TransactionForm extends JDialog {
                 return;
             }
             
-            if(!amntField.getText().matches("^[0-9]*\\.[0-9]*$")) {
+            if(!amntField.getText().matches("^[0-9]*(\\.\\d+)?$")) {
             	inputWarning();
             	return;
             }
@@ -174,7 +188,12 @@ public class TransactionForm extends JDialog {
 
                ComboBoxModel<String> model = new DefaultComboBoxModel<>(creditCodes);
                codeBox.setModel(model);
-           } else {
+           } 
+           else if(typeStr.equalsIgnoreCase("Custom")) {
+        	   ComboBoxModel<String> model = new DefaultComboBoxModel<>(customCodes.toArray(new String[customCodes.size()]));
+        	   codeBox.setModel(model);
+           }
+           else {
 
                ComboBoxModel<String> model = new DefaultComboBoxModel<>(cashCode);
                codeBox.setModel(model);

@@ -34,6 +34,11 @@ public class Controller {
             account.addAccount(acct);
         }
     }
+    
+    public ArrayList<String> loadCustomCodes() throws FileNotFoundException {
+    	
+    	return readFile.loadCustomCodes();
+    }
 
     public Account getAccountInfo(String acctName) {
         return account.getAccountInfo(acctName);

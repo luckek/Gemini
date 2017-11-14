@@ -54,6 +54,7 @@ public class InitialScreen extends JFrame {
         JButton logoutBttn = new JButton("Logout");
         JButton addButton = new JButton("Add");
         JButton removeButton = new JButton("Remove");
+        JButton codeButton = new JButton ("Add New Code");
 
         radioGroup = new ButtonGroup();
         JRadioButton bothButton = new JRadioButton("Both", true);
@@ -88,6 +89,7 @@ public class InitialScreen extends JFrame {
         outterBalancePanel.setPreferredSize(new Dimension(100, 100));
         addButton.setPreferredSize(new Dimension(100, 22));
         removeButton.setPreferredSize(new Dimension(100, 22));
+        codeButton.setPreferredSize(new Dimension(150, 22));
         wrapperPanel.setPreferredSize(new Dimension(150, 700));
         wrapperPanel.setMaximumSize(new Dimension(150, 700));
         radioPanel.setMaximumSize(new Dimension(150, 700));
@@ -147,6 +149,8 @@ public class InitialScreen extends JFrame {
         addRemovePanel.add(addButton);
         addRemovePanel.add(Box.createRigidArea(new Dimension(15, 0)));
         addRemovePanel.add(removeButton);
+        addRemovePanel.add(Box.createRigidArea(new Dimension(15,0)));
+        addRemovePanel.add(codeButton);
 
         headerPanel.add(transactionLabel);
 
@@ -172,6 +176,7 @@ public class InitialScreen extends JFrame {
         // Setting up action listeners
         addAcctButton.addActionListener(new addAction());
         calcBttn.addActionListener(new calcAction());
+        codeButton.addActionListener(new codeAction());
         deleteButton.addActionListener(new deleteAction());
         acctInfoButton.addActionListener(new acctInfoAction());
         logoutBttn.addActionListener(new logoutAction());
@@ -297,6 +302,9 @@ public class InitialScreen extends JFrame {
     
     // Opens benefits calculator dialog
     public void openCalc() { CalcPanel calcPanel = new CalcPanel(this, Main.FRAME_STRING, true); }
+    
+    //Opens code dialog
+    public void codePanel() { CodePanel codePanel = new CodePanel(this, Main.FRAME_STRING, true); }
     
     public void createAccount() {
 
@@ -436,6 +444,12 @@ public class InitialScreen extends JFrame {
         public void actionPerformed(ActionEvent e) {
         	openCalc();
         }
+    }
+    
+    class codeAction implements ActionListener {
+    	public void actionPerformed(ActionEvent e) {
+    		codePanel();
+    	}
     }
 
     class deleteAction implements ActionListener {
