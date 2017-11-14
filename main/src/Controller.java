@@ -29,7 +29,7 @@ public class Controller {
 
     public void saveData() throws IOException
     {
-        readFile.saveData(account.transactions);
+        readFile.saveData(account.getTransactionsList());
     }
 
     void removeTransaction(int index) {

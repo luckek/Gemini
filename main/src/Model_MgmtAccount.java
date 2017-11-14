@@ -9,7 +9,7 @@ public class Model_MgmtAccount {
     private String password;
 
     private HashMap<String, Account> subAccounts;
-    protected ArrayList<Model_Transaction> transactions;
+    private ArrayList<Model_Transaction> transactions;
 
     public Model_MgmtAccount(HashMap<String, Account> subAccounts, ArrayList<Model_Transaction> transactions) {
         this.subAccounts = subAccounts;
@@ -82,5 +82,9 @@ public class Model_MgmtAccount {
             tmp[i] = transactions.get(i).getAll();
         }
         return tmp;
+    }
+
+    public ArrayList<Model_Transaction> getTransactionsList() {
+        return transactions;
     }
 }
