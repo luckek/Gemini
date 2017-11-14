@@ -58,7 +58,7 @@ public class Model_Read_Files {
         writer.close();
     }
 
-        public ArrayList<String[]> loadData() throws FileNotFoundException {
+    public ArrayList<String[]> loadData() throws FileNotFoundException {
         //need to not hard-code string array/array size...i'll fix later
         ArrayList<String[]> data = new ArrayList<>();
         // Added a filepath for eclipse for future use

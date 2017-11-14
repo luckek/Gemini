@@ -551,9 +551,15 @@ public class InitialScreen extends JFrame {
                 transaction = new Model_Check(newRowData[3], newRowData[0], new Integer(newRowData[4]), newRowData[5], new Double(newRowData[2]), newRowData[1]);
             }
 
+            double amount = transaction.getGross();
             // Add transaction to table
             addTableRow(transaction.getAll());
-            increaseBalance(transaction.getGross());
+
+            if(transaction.isDeposit().equalsIgnoreCase("Expense")) {
+                amount = -amount;
+            }
+
+            increaseBalance(amount);
 
             // Update model
             controller.addTransaction(transaction);
