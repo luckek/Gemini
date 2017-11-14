@@ -66,7 +66,7 @@ public class CodePanel extends JDialog {
 
 	private void invalidCodeWarning() {
 
-		JOptionPane.showMessageDialog(this, "Please enter a 4-digit transaction code",
+		JOptionPane.showMessageDialog(this, "Please enter a 5-digit transaction code",
 				"Warning!", JOptionPane.WARNING_MESSAGE);
 	}
 
@@ -90,7 +90,7 @@ public class CodePanel extends JDialog {
 				return;
 			}
 
-			if(!codeField.getText().matches("[0-9]{4}")) {
+			if(!codeField.getText().matches("[0-9]{5}")) {
 
 				invalidCodeWarning();
 				return;
