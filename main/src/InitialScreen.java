@@ -397,6 +397,12 @@ public class InitialScreen extends JFrame {
         changeCheck = true;
     }
 
+    private void removeAcct(String acctToRemove) {
+        accountList.removeItem(acctToRemove);
+        removeTransactions(acctToRemove);
+        controller.removeAccount(acctToRemove);
+    }
+
     // Displays all the account information for acctToView
     private void viewAcct(String acctToView) {
 
@@ -477,7 +483,7 @@ public class InitialScreen extends JFrame {
 
     class calcAction implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-        	openCalc();
+            openCalc();
         }
     }
     
@@ -495,8 +501,7 @@ public class InitialScreen extends JFrame {
             if ((acctToDelete != null) && (!acctToDelete.isEmpty())) {
                 option = showWarning();
                 if (option == 0) {
-                    accountList.removeItem(acctToDelete);
-                    removeTransactions(acctToDelete);
+                    removeAcct(acctToDelete);
                     changeCheck = true;
                 }
             }
@@ -520,10 +525,18 @@ public class InitialScreen extends JFrame {
 
             try {
                controller.saveAccounts();
-               // Controller.saveData();
-
+              
             } catch (IOException e1) {
-                System.out.println("Error saving");
+                System.out.println("Error saving accounts");
+                e1.printStackTrace();
+            }
+
+            try {
+                controller.saveData();
+            } catch (IOException e1) {
+
+                System.out.println("Error saving transactions");
+                e1.printStackTrace();
             }
 
             // Closes current frame and opens LoginPanel when logout button is pressed
@@ -561,9 +574,15 @@ public class InitialScreen extends JFrame {
                 transaction = new Model_Check(newRowData[3], newRowData[0], new Integer(newRowData[4]), newRowData[5], new Double(newRowData[2]), newRowData[1]);
             }
 
+            double amount = transaction.getGross();
             // Add transaction to table
             addTableRow(transaction.getAll());
-            increaseBalance(transaction.getGross());
+
+            if(transaction.isDeposit().equalsIgnoreCase("Expense")) {
+                amount = -amount;
+            }
+
+            increaseBalance(amount);
 
             // Update model
             controller.addTransaction(transaction);
@@ -646,11 +665,31 @@ public class InitialScreen extends JFrame {
     class saveListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
 
+            boolean saveAccountCheck = false;
+            boolean saveDataCheck = false;
+            
             try {
                 controller.saveAccounts();
+                saveAccountCheck = true;
+              
             } catch(IOException e1) {
                 System.out.println("Error saving file...");
                 e1.printStackTrace();
+            }
+            
+            try {
+                controller.saveData();
+                saveDataCheck = true;
+            }
+            catch(IOException e2)
+            {
+                System.out.println("Error saving file...");
+                e2.printStackTrace();
+            }
+            
+            if(saveAccountCheck && saveDataCheck)
+            {
+                saveDialog();
             }
         }
     }
@@ -659,7 +698,7 @@ public class InitialScreen extends JFrame {
         public void actionPerformed(ActionEvent e) {
 
             // User guide routine here
-        	openGuide();
+            openGuide();
         }
     }
 }

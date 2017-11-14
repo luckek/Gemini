@@ -27,10 +27,10 @@ public class Controller {
         readFile.saveAccounts(account);
     }
 
-//    public void saveData() throws IOException
-//    {
-//        readFile.saveData();
-//    }
+    public void saveData() throws IOException
+    {
+        readFile.saveData(account.getTransactionsList());
+    }
 
     void removeTransaction(int index) {
 
@@ -49,6 +49,7 @@ public class Controller {
 
             // Decide type of transaction
             if(transaction[3].equalsIgnoreCase("Cash")) {
+
 
                 newTransaction = new Model_Cash(transaction[3], transaction[0], code, transaction[5], amount, transaction[1]);
             }
@@ -92,5 +93,10 @@ public class Controller {
 
     String[][] getTransactions() {
         return account.getTransactions();
+    }
+
+    void removeAccount(String acctName) {
+
+        account.removeAccount(acctName);
     }
 }
