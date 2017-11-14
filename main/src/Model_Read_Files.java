@@ -48,7 +48,7 @@ public class Model_Read_Files {
             // Write transaction info to file.
             // TODO: Hash out what exactly should be saved and in what order
             Model_Transaction currTransaction = transactions.get(i);
-            writer.write(currTransaction.getName() + "," + currTransaction.getDate()+ "," + currTransaction.getNet() + ","
+            writer.write(currTransaction.getName() + "," + currTransaction.getDate()+ "," + currTransaction.getGross() + ","
                     + currTransaction.getType() + "," + currTransaction.getCode() + "," +currTransaction.isDeposit() + "\n");
 
             // TODO: Popup message when save is complete
