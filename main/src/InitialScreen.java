@@ -510,10 +510,17 @@ public class InitialScreen extends JFrame {
 
             try {
                controller.saveAccounts();
-               // Controller.saveData();
-
             } catch (IOException e1) {
-                System.out.println("Error saving");
+                System.out.println("Error saving accounts");
+                e1.printStackTrace();
+            }
+
+            try {
+                controller.saveData();
+            } catch (IOException e1) {
+
+                System.out.println("Error saving transactions");
+                e1.printStackTrace();
             }
 
             // Closes current frame and opens LoginPanel when logout button is pressed
