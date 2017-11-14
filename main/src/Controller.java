@@ -27,14 +27,46 @@ public class Controller {
         readFile.saveAccounts(account);
     }
 
-//    public void saveData() throws IOException
-//    {
-//        readFile.saveData();
-//    }
+    public void saveData() throws IOException
+    {
+        readFile.saveData(account.transactions);
+    }
 
-    String[][] loadData() throws FileNotFoundException {
+    void removeTransaction(int index) {
 
-        return readFile.loadData();
+        account.removeTransaction(index);
+    }
+
+    void loadData() throws FileNotFoundException {
+
+        ArrayList<String[]> transactionArray = readFile.loadData();
+
+        for(String[] transaction : transactionArray) {
+
+            Model_Transaction newTransaction;
+            int code = new Integer(transaction[4]);
+            double amount = new Double(transaction[2]);
+
+            // Decide type of transaction
+            if(transaction[3].equalsIgnoreCase("Cash")) {
+
+                newTransaction = new Model_Cash(transaction[3], transaction[0], code, transaction[5], amount, transaction[1]);
+            }
+
+            else if(transaction[3].equalsIgnoreCase("Credit Card")) {
+
+                newTransaction = new Model_Credit(transaction[3], transaction[0], code, transaction[5], amount, transaction[1]);
+
+
+            } else { // Check
+
+                newTransaction = new Model_Check(transaction[3], transaction[0], code, transaction[5], amount, transaction[1]);
+
+            }
+
+            // Add transaction to model
+            addTransaction(newTransaction);
+        }
     }
 
     void loadAcctInfo() throws FileNotFoundException {
@@ -56,5 +88,9 @@ public class Controller {
 
     String[] getAcctNames() {
         return account.getAcctNames();
+    }
+
+    String[][] getTransactions() {
+        return account.getTransactions();
     }
 }
