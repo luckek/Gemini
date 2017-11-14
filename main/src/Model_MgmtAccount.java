@@ -9,7 +9,7 @@ public class Model_MgmtAccount {
     private String password;
 
     private HashMap<String, Account> subAccounts;
-    private ArrayList<Model_Transaction> transactions;
+    protected ArrayList<Model_Transaction> transactions;
 
     public Model_MgmtAccount(HashMap<String, Account> subAccounts, ArrayList<Model_Transaction> transactions) {
         this.subAccounts = subAccounts;
@@ -64,9 +64,23 @@ public class Model_MgmtAccount {
         transactions.add(transaction);
     }
 
+    public void removeTransaction(int index) {
+        transactions.remove(index);
+    }
+
     public String[] getAcctNames() {
 
         Set<String> keys = subAccounts.keySet();
         return keys.toArray(new String[keys.size()]);
+    }
+
+    public String[][] getTransactions() {
+
+        String[][] tmp = new String[transactions.size()][7];
+
+        for(int i = 0; i < transactions.size(); i++) {
+            tmp[i] = transactions.get(i).getAll();
+        }
+        return tmp;
     }
 }
