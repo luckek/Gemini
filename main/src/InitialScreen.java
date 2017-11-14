@@ -388,6 +388,12 @@ public class InitialScreen extends JFrame {
         changeCheck = true;
     }
 
+    private void removeAcct(String acctToRemove) {
+        accountList.removeItem(acctToRemove);
+        removeTransactions(acctToRemove);
+        controller.removeAccount(acctToRemove);
+    }
+
     // Displays all the account information for acctToView
     private void viewAcct(String acctToView) {
 
@@ -480,8 +486,7 @@ public class InitialScreen extends JFrame {
             if ((acctToDelete != null) && (!acctToDelete.isEmpty())) {
                 option = showWarning();
                 if (option == 0) {
-                    accountList.removeItem(acctToDelete);
-                    removeTransactions(acctToDelete);
+                    removeAcct(acctToDelete);
                     changeCheck = true;
                 }
             }

@@ -93,4 +93,9 @@ public class Controller {
     String[][] getTransactions() {
         return account.getTransactions();
     }
+
+    void removeAccount(String acctName) {
+
+        account.removeAccount(acctName);
+    }
 }
