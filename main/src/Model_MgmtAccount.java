@@ -87,4 +87,8 @@ public class Model_MgmtAccount {
         }
         return tmp;
     }
+
+    public ArrayList<Model_Transaction> getTransactionsList() {
+        return transactions;
+    }
 }

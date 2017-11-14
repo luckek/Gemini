@@ -27,10 +27,10 @@ public class Controller {
         readFile.saveAccounts(account);
     }
 
-//    public void saveData() throws IOException
-//    {
-//        readFile.saveData();
-//    }
+    public void saveData() throws IOException
+    {
+        readFile.saveData(account.getTransactionsList());
+    }
 
     void removeTransaction(int index) {
 

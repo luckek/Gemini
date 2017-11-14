@@ -474,7 +474,7 @@ public class InitialScreen extends JFrame {
 
     class calcAction implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-        	openCalc();
+            openCalc();
         }
     }
 
@@ -636,11 +636,31 @@ public class InitialScreen extends JFrame {
     class saveListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
 
+            boolean saveAccountCheck = false;
+            boolean saveDataCheck = false;
+            
             try {
                 controller.saveAccounts();
+                saveAccountCheck = true;
             } catch(IOException e1) {
                 System.out.println("Error saving file...");
                 e1.printStackTrace();
+            }
+            
+            try
+            {
+                controller.saveData();
+                saveDataCheck = true;
+            }
+            catch(IOException e2)
+            {
+                System.out.println("Error saving file...");
+                e2.printStackTrace();
+            }
+            
+            if(saveAccountCheck && saveDataCheck)
+            {
+                saveDialog();
             }
         }
     }
@@ -649,7 +669,7 @@ public class InitialScreen extends JFrame {
         public void actionPerformed(ActionEvent e) {
 
             // User guide routine here
-        	openGuide();
+            openGuide();
         }
     }
 }
