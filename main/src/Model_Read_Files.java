@@ -26,8 +26,6 @@ public class Model_Read_Files {
         {
             // Write Account info to file.
             writer.write(names[i] + "," + accounts.getAccountBalance(names[i]) + "," + accounts.getEmail(names[i]) + "," + accounts.getDescription(names[i]) + "\n");
-
-            // TODO: Popup message when save is complete
         }
         writer.close();
     }
@@ -46,19 +44,16 @@ public class Model_Read_Files {
         for(int i = 0; i < transactions.size() ; i++)
         {
             // Write transaction info to file.
-            // TODO: Hash out what exactly should be saved and in what order
             Model_Transaction currTransaction = transactions.get(i);
-            writer.write(currTransaction.getName() + "," + currTransaction.getDate()+ "," + currTransaction.getNet() + ","
-                    + currTransaction.getType() + "," + currTransaction.getCode() + "," +currTransaction.isDeposit() + ",\n");
-
-            // TODO: Popup message when save is complete
+            writer.write(currTransaction.getName() + "," + currTransaction.getDate()+ "," + currTransaction.getGross() + ","
+                    + currTransaction.getType() + "," + currTransaction.getCode() + "," +currTransaction.isDeposit() + "\n");
 
         }
 
         writer.close();
     }
 
-        public ArrayList<String[]> loadData() throws FileNotFoundException {
+    public ArrayList<String[]> loadData() throws FileNotFoundException {
         //need to not hard-code string array/array size...i'll fix later
         ArrayList<String[]> data = new ArrayList<>();
         // Added a filepath for eclipse for future use
