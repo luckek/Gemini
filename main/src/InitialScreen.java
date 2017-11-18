@@ -34,7 +34,7 @@ public class InitialScreen extends JFrame {
 
         // Instantiating components
         JPanel mainPanel = new JPanel(new BorderLayout());
-        JPanel buttonPanel = new JPanel(new GridLayout(12, 0, 20, 35));
+        JPanel buttonPanel = new JPanel(new GridLayout(13, 0, 20, 31));
         JPanel leftPanel = new JPanel();
         JPanel wrapperPanel = new JPanel();
         JPanel transactionPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
@@ -55,6 +55,7 @@ public class InitialScreen extends JFrame {
         JButton acctInfoButton = new JButton("View Account Info");
         JButton deleteButton = new JButton("Delete Account");
         JButton logoutBttn = new JButton("Logout");
+        JButton retireBttn = new JButton("Retire Account");
         JButton addButton = new JButton("Add");
         JButton removeButton = new JButton("Remove");
         JButton codeButton = new JButton("Add New Code");
@@ -136,6 +137,7 @@ public class InitialScreen extends JFrame {
         buttonPanel.add(addAcctButton);
         buttonPanel.add(calcBttn);
         buttonPanel.add(deleteButton);
+        buttonPanel.add(retireBttn);
         buttonPanel.add(logoutBttn);
         buttonPanel.add(acctInfoButton);
         buttonPanel.add(Box.createRigidArea(new Dimension(0, 50)));
@@ -181,6 +183,7 @@ public class InitialScreen extends JFrame {
         addAcctButton.addActionListener(new addAction());
         calcBttn.addActionListener(new calcAction());
         deleteButton.addActionListener(new deleteAction());
+        retireBttn.addActionListener(new retireAction());
         codeButton.addActionListener(new codeAction());
         acctInfoButton.addActionListener(new acctInfoAction());
         logoutBttn.addActionListener(new logoutAction());
@@ -285,31 +288,28 @@ public class InitialScreen extends JFrame {
         }
     }
 
-    // Returns array of available Accounts.
-    public String[] getAccountNames() {
-        int numberOfNames = accountList.getItemCount();
-        String[] names = new String[numberOfNames - 1];
-
-        for (int i = 1; i < numberOfNames; i++) {
-            names[i - 1] = accountList.getItemAt(i);
-        }
-        return names;
-    }
-
     // Uses JOptionPane to get user selected account
-    public String getAcct(String optionMessage) {
+    private String getAcct(String optionMessage) {
 
-        Object[] possibilities = getAccountNames();
+        // Get all available accounts
+        String[] tmp = controller.getAvailableAccts();
 
-        if (possibilities.length == 0) {
-            possibilities = new Object[1];
-            possibilities[0] = "None";
+        // Get accounts
+        String[] accts = new String[tmp.length - 1];
+
+        // Remove 'All' option.
+        System.arraycopy(tmp, 1, accts, 0, accts.length);
+
+        // TODO: change this to a popup msg - "no accts available"
+        if (accts.length == 0) {
+            accts = new String[1];
+            accts[0] = "None";
         }
 
         return (String) JOptionPane.showInputDialog(
                 this, optionMessage,
                 Main.FRAME_STRING, JOptionPane.PLAIN_MESSAGE,
-                null, possibilities, possibilities[0]);
+                null, accts, accts[0]);
     }
 
     // Opens user guide panel
@@ -341,8 +341,16 @@ public class InitialScreen extends JFrame {
 
     private String[] createTransaction() {
 
+        // Get accounts
+        String[] tmp = controller.getAvailableAccts();
+        String[] accts = new String[tmp.length - 1];
+
+        // Remove 'All' option.
+        System.arraycopy(tmp, 1, accts, 0, accts.length);
+
+
         // Open form and initialize it
-        TransactionForm tForm = new TransactionForm(this, Main.FRAME_STRING, true, getAccountNames());
+        TransactionForm tForm = new TransactionForm(this, Main.FRAME_STRING, true, accts);
 
         String[] transactionData = new String[6];
 
@@ -508,6 +516,14 @@ public class InitialScreen extends JFrame {
         }
     }
 
+    class retireAction implements ActionListener{
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+
+        }
+    }
+
     class acctInfoAction implements ActionListener {
         public void actionPerformed(ActionEvent e) {
 
@@ -534,7 +550,6 @@ public class InitialScreen extends JFrame {
             try {
                 controller.saveData();
             } catch (IOException e1) {
-
                 System.out.println("Error saving transactions");
                 e1.printStackTrace();
             }
