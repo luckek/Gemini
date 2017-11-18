@@ -17,24 +17,12 @@ public class Controller {
 
     }
 
-    public void addTransaction(Model_Transaction transaction) {
-
-        account.addTransaction(transaction);
-    }
-
-    public void saveAccounts() throws IOException
-    {
+    void saveAccounts() throws IOException {
         readFile.saveAccounts(account);
     }
 
-    public void saveData() throws IOException
-    {
+    void saveData() throws IOException {
         readFile.saveData(account.getTransactionsList());
-    }
-
-    void removeTransaction(int index) {
-
-        account.removeTransaction(index);
     }
 
     void loadData() throws FileNotFoundException {
@@ -50,7 +38,6 @@ public class Controller {
             // Decide type of transaction
             if(transaction[3].equalsIgnoreCase("Cash")) {
 
-
                 newTransaction = new Model_Cash(transaction[3], transaction[0], code, transaction[5], amount, transaction[1]);
             }
 
@@ -58,11 +45,9 @@ public class Controller {
 
                 newTransaction = new Model_Credit(transaction[3], transaction[0], code, transaction[5], amount, transaction[1]);
 
-
             } else { // Check
 
                 newTransaction = new Model_Check(transaction[3], transaction[0], code, transaction[5], amount, transaction[1]);
-
             }
 
             // Add transaction to model
@@ -79,24 +64,39 @@ public class Controller {
         }
     }
 
-    public Account getAccountInfo(String acctName) {
+    Account getAccountInfo(String acctName) {
         return account.getAccountInfo(acctName);
     }
 
-    public void newAccount(String name, String balance, String email, String description) {
-        account.addAccount(new String[] {name, balance, email, description});
+    String[] getAllAccounts() {
+        return account.getAcctNames();
     }
 
-    String[] getAcctNames() {
-        return account.getAcctNames();
+    String[] getAvailableAccts() {
+        return account.getAvailableAccts();
     }
 
     String[][] getTransactions() {
         return account.getTransactions();
     }
 
-    void removeAccount(String acctName) {
+    void newAccount(String name, String balance, String email, String description) {
+        account.addAccount(new String[] {name, balance, email, description, "False"});
+    }
 
+    void removeAccount(String acctName) {
         account.removeAccount(acctName);
+    }
+
+    void retireAccount(String acctToRetire) {
+        account.retireAccount(acctToRetire);
+    }
+
+    void addTransaction(Model_Transaction transaction) {
+        account.addTransaction(transaction);
+    }
+
+    void removeTransaction(int index) {
+        account.removeTransaction(index);
     }
 }
