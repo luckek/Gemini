@@ -468,6 +468,33 @@ public class InitialScreen extends JFrame {
                 "Warning!", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
 
     }
+  
+    // Method to save data
+    private void save() {
+
+        boolean saveAccountCheck = false;
+        boolean saveDataCheck = false;
+
+        try {
+            controller.saveAccounts();
+            saveAccountCheck = true;
+        } catch(IOException e1) {
+            System.out.println("Error saving file...");
+            e1.printStackTrace();
+        }
+
+        try {
+            controller.saveData();
+            saveDataCheck = true;
+        } catch(IOException e2) {
+            System.out.println("Error saving file...");
+            e2.printStackTrace();
+        }
+
+        if(saveAccountCheck && saveDataCheck) {
+            saveDialog();
+        }
+    }
 
     // Create dialog box when there is a successful save
     private void saveDialog()
@@ -544,24 +571,20 @@ public class InitialScreen extends JFrame {
 
     class logoutAction implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            // TODO: ensure changeCheck works properly
-            // Note: this just saves everything for now.
 
-            try {
-               controller.saveAccounts();
-              
-            } catch (IOException e1) {
-                System.out.println("Error saving accounts");
-                e1.printStackTrace();
-            }
-
-            try {
-                controller.saveData();
-            } catch (IOException e1) {
-                System.out.println("Error saving transactions");
-                e1.printStackTrace();
-            }
-
+        	// initialize save value
+        	int save = -1;
+        	
+        	// Ask user if they want to save changes
+        	if(changeCheck) {
+        		save = saveCheckDialog();
+        	}
+        	
+        	// If the user said yes, save before logging out
+        	if(save == 0) {
+        		save();
+        	}
+        	
             // Closes current frame and opens LoginPanel when logout button is pressed
             dispose();
             LoginPanel loginPanel = new LoginPanel();
@@ -688,32 +711,7 @@ public class InitialScreen extends JFrame {
     class saveListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
 
-            boolean saveAccountCheck = false;
-            boolean saveDataCheck = false;
-            
-            try {
-                controller.saveAccounts();
-                saveAccountCheck = true;
-              
-            } catch(IOException e1) {
-                System.out.println("Error saving file...");
-                e1.printStackTrace();
-            }
-            
-            try {
-                controller.saveData();
-                saveDataCheck = true;
-            }
-            catch(IOException e2)
-            {
-                System.out.println("Error saving file...");
-                e2.printStackTrace();
-            }
-            
-            if(saveAccountCheck && saveDataCheck)
-            {
-                saveDialog();
-            }
+            save()
         }
     }
 
