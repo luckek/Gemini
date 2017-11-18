@@ -11,12 +11,16 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 
 // TODO: make sure exiting w/all fields filled out does NOT make a new acct / transaction
+// TODO: Implement retire acct action listener..
+// TODO: Allow viewing of retired accounts...
+// Once acct retired, can't add new transactions - can still view acct - notify user
 
 public class InitialScreen extends JFrame {
 
     private JComboBox<String> accountList;
     private JTable transactionTable;
-    private JLabel balanceLabel, logoLabel;
+    private JLabel balanceLabel;
+    private JLabel logoLabel;
     private String logoPath = "main/resources/logo1.png";
     private ButtonGroup radioGroup;
     private Controller controller;
@@ -198,7 +202,7 @@ public class InitialScreen extends JFrame {
 
     }
 
-    public void initComboBox(String[] accountNames) {
+    void initComboBox(String[] accountNames) {
         for (String name : accountNames) {
             accountList.addItem(name);
         }
@@ -292,12 +296,10 @@ public class InitialScreen extends JFrame {
     private String getAcct(String optionMessage) {
 
         // Get all available accounts
-        String[] tmp = controller.getAvailableAccts();
+        String[] tmp = controller.getAllAcoounts();
 
-        // Get accounts
+        // Remove 'all' option
         String[] accts = new String[tmp.length - 1];
-
-        // Remove 'All' option.
         System.arraycopy(tmp, 1, accts, 0, accts.length);
 
         // TODO: change this to a popup msg - "no accts available"
@@ -468,7 +470,7 @@ public class InitialScreen extends JFrame {
     }
 
     // Create dialog box when there is a successful save
-    public void saveDialog()
+    private void saveDialog()
     {
         JOptionPane.showMessageDialog(this, "Save successful");
     }
@@ -479,7 +481,7 @@ public class InitialScreen extends JFrame {
                 "Warning!", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
     }
 
-    public void setController(Controller controller) {
+    void setController(Controller controller) {
         this.controller = controller;
     }
 
@@ -521,6 +523,12 @@ public class InitialScreen extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
 
+            String acct = getAcct("Please select the account you would like to retire");
+
+            if(acct != null) {
+                controller.retireAccount(acct);
+                accountList.removeItem(acct);
+            }
         }
     }
 
