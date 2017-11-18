@@ -87,8 +87,8 @@ public class Controller {
         account.addAccount(new String[] {name, balance, email, description});
     }
 
-    String[] getAcctNames() {
-        return account.getAcctNames();
+    String[] getAvailableAccts() {
+        return account.getAvailableAccts();
     }
 
     String[][] getTransactions() {

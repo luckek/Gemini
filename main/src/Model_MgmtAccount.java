@@ -78,6 +78,21 @@ public class Model_MgmtAccount {
         return keys.toArray(new String[keys.size()]);
     }
 
+    public String[] getAvailableAccts() {
+
+        Set<String> keys = subAccounts.keySet();
+        String[] names = keys.toArray(new String[keys.size()]);
+        ArrayList<String> availAccts = new ArrayList<>();
+
+        for(String name : names) {
+            if(!subAccounts.get(name).isRetired()) {
+                availAccts.add(name);
+            }
+        }
+        return availAccts.toArray(new String[availAccts.size()]);
+
+    }
+
     public String[][] getTransactions() {
 
         String[][] tmp = new String[transactions.size()][7];
