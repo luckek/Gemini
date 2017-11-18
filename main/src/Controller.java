@@ -104,4 +104,8 @@ public class Controller {
 
         account.retireAccount(acctToRetire);
     }
+
+    String[] getAllAcoounts() {
+        return account.getAcctNames();
+    }
 }
