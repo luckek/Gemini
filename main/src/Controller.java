@@ -38,7 +38,6 @@ public class Controller {
             // Decide type of transaction
             if(transaction[3].equalsIgnoreCase("Cash")) {
 
-
                 newTransaction = new Model_Cash(transaction[3], transaction[0], code, transaction[5], amount, transaction[1]);
             }
 
@@ -46,11 +45,9 @@ public class Controller {
 
                 newTransaction = new Model_Credit(transaction[3], transaction[0], code, transaction[5], amount, transaction[1]);
 
-
             } else { // Check
 
                 newTransaction = new Model_Check(transaction[3], transaction[0], code, transaction[5], amount, transaction[1]);
-
             }
 
             // Add transaction to model
@@ -96,12 +93,10 @@ public class Controller {
     }
 
     void addTransaction(Model_Transaction transaction) {
-
         account.addTransaction(transaction);
     }
 
     void removeTransaction(int index) {
-
         account.removeTransaction(index);
     }
 }
