@@ -2,12 +2,12 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Scanner;
 
 public class Model_Read_Files {
+
+     // TODO: Add isRetired to files.
 
     public void saveAccounts(Model_MgmtAccount accounts) throws IOException
     {
@@ -19,6 +19,7 @@ public class Model_Read_Files {
         
         writer = new FileWriter("main/resources/Accounts.txt");
 
+        // Get all accounts(not just retired ones)
         String[] names = accounts.getAcctNames();
 
         // Write out info for each account
@@ -26,8 +27,6 @@ public class Model_Read_Files {
         {
             // Write Account info to file.
             writer.write(names[i] + "," + accounts.getAccountBalance(names[i]) + "," + accounts.getEmail(names[i]) + "," + accounts.getDescription(names[i]) + "\n");
-
-            // TODO: Popup message when save is complete
         }
         writer.close();
     }
@@ -46,15 +45,11 @@ public class Model_Read_Files {
         for(int i = 0; i < transactions.size() ; i++)
         {
             // Write transaction info to file.
-            // TODO: Hash out what exactly should be saved and in what order
             Model_Transaction currTransaction = transactions.get(i);
             writer.write(currTransaction.getName() + "," + currTransaction.getDate()+ "," + currTransaction.getGross() + ","
                     + currTransaction.getType() + "," + currTransaction.getCode() + "," +currTransaction.isDeposit() + "\n");
 
-            // TODO: Popup message when save is complete
-
         }
-
         writer.close();
     }
 
