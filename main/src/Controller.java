@@ -99,4 +99,9 @@ public class Controller {
 
         account.removeAccount(acctName);
     }
+
+    void retireAccount(String acctToRetire) {
+
+        account.retireAccount(acctToRetire);
+    }
 }

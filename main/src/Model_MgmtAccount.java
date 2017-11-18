@@ -72,6 +72,10 @@ public class Model_MgmtAccount {
         transactions.remove(index);
     }
 
+    public void retireAccount(String acctToRetire) {
+        subAccounts.get(acctToRetire).setIsRetired(true);
+    }
+
     public String[] getAcctNames() {
 
         Set<String> keys = subAccounts.keySet();
