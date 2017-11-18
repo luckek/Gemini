@@ -304,8 +304,7 @@ public class InitialScreen extends JFrame {
 
         // TODO: change this to a popup msg - "no accts available"
         if (accts.length == 0) {
-            accts = new String[1];
-            accts[0] = "None";
+            JOptionPane.showMessageDialog(this, "There are no accounts to view");
         }
 
         return (String) JOptionPane.showInputDialog(
@@ -333,6 +332,7 @@ public class InitialScreen extends JFrame {
         String newAcctEmail = accountForm.getEmail();
         String newAcctDesc = accountForm.getDescription();
 
+        // Only create account if all information is present
         if ((!newAcctName.isEmpty()) && (!newAcctAmnt.isEmpty()) && (!newAcctEmail.isEmpty()) && (!newAcctDesc.isEmpty())) {
             accountList.addItem(newAcctName);
             controller.newAccount(newAcctName, newAcctAmnt, newAcctEmail, newAcctDesc);
