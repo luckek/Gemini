@@ -11,12 +11,16 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 
 // TODO: make sure exiting w/all fields filled out does NOT make a new acct / transaction
+// TODO: Implement retire acct action listener..
+// TODO: Allow viewing of retired accounts...
+// Once acct retired, can't add new transactions - can still view acct - notify user
 
 public class InitialScreen extends JFrame {
 
     private JComboBox<String> accountList;
     private JTable transactionTable;
-    private JLabel balanceLabel, logoLabel;
+    private JLabel balanceLabel;
+    private JLabel logoLabel;
     private String logoPath = "main/resources/logo1.png";
     private ButtonGroup radioGroup;
     private Controller controller;
@@ -34,7 +38,7 @@ public class InitialScreen extends JFrame {
 
         // Instantiating components
         JPanel mainPanel = new JPanel(new BorderLayout());
-        JPanel buttonPanel = new JPanel(new GridLayout(12, 0, 20, 35));
+        JPanel buttonPanel = new JPanel(new GridLayout(13, 0, 20, 31));
         JPanel leftPanel = new JPanel();
         JPanel wrapperPanel = new JPanel();
         JPanel transactionPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
@@ -55,6 +59,7 @@ public class InitialScreen extends JFrame {
         JButton acctInfoButton = new JButton("View Account Info");
         JButton deleteButton = new JButton("Delete Account");
         JButton logoutBttn = new JButton("Logout");
+        JButton retireBttn = new JButton("Retire Account");
         JButton addButton = new JButton("Add");
         JButton removeButton = new JButton("Remove");
         JButton codeButton = new JButton("Add New Code");
@@ -136,6 +141,7 @@ public class InitialScreen extends JFrame {
         buttonPanel.add(addAcctButton);
         buttonPanel.add(calcBttn);
         buttonPanel.add(deleteButton);
+        buttonPanel.add(retireBttn);
         buttonPanel.add(logoutBttn);
         buttonPanel.add(acctInfoButton);
         buttonPanel.add(Box.createRigidArea(new Dimension(0, 50)));
@@ -181,6 +187,7 @@ public class InitialScreen extends JFrame {
         addAcctButton.addActionListener(new addAction());
         calcBttn.addActionListener(new calcAction());
         deleteButton.addActionListener(new deleteAction());
+        retireBttn.addActionListener(new retireAction());
         codeButton.addActionListener(new codeAction());
         acctInfoButton.addActionListener(new acctInfoAction());
         logoutBttn.addActionListener(new logoutAction());
@@ -195,7 +202,7 @@ public class InitialScreen extends JFrame {
 
     }
 
-    public void initComboBox(String[] accountNames) {
+    void initComboBox(String[] accountNames) {
         for (String name : accountNames) {
             accountList.addItem(name);
         }
@@ -285,31 +292,25 @@ public class InitialScreen extends JFrame {
         }
     }
 
-    // Returns array of available Accounts.
-    public String[] getAccountNames() {
-        int numberOfNames = accountList.getItemCount();
-        String[] names = new String[numberOfNames - 1];
-
-        for (int i = 1; i < numberOfNames; i++) {
-            names[i - 1] = accountList.getItemAt(i);
-        }
-        return names;
-    }
-
     // Uses JOptionPane to get user selected account
-    public String getAcct(String optionMessage) {
+    private String getAcct(String optionMessage) {
 
-        Object[] possibilities = getAccountNames();
+        // Get all available accounts
+        String[] tmp = controller.getAllAccounts();
 
-        if (possibilities.length == 0) {
-            possibilities = new Object[1];
-            possibilities[0] = "None";
+        // Remove 'all' option
+        String[] accts = new String[tmp.length - 1];
+        System.arraycopy(tmp, 1, accts, 0, accts.length);
+
+        // TODO: change this to a popup msg - "no accts available"
+        if (accts.length == 0) {
+            JOptionPane.showMessageDialog(this, "There are no accounts to view");
         }
 
         return (String) JOptionPane.showInputDialog(
                 this, optionMessage,
                 Main.FRAME_STRING, JOptionPane.PLAIN_MESSAGE,
-                null, possibilities, possibilities[0]);
+                null, accts, accts[0]);
     }
 
     // Opens user guide panel
@@ -331,6 +332,7 @@ public class InitialScreen extends JFrame {
         String newAcctEmail = accountForm.getEmail();
         String newAcctDesc = accountForm.getDescription();
 
+        // Only create account if all information is present
         if ((!newAcctName.isEmpty()) && (!newAcctAmnt.isEmpty()) && (!newAcctEmail.isEmpty()) && (!newAcctDesc.isEmpty())) {
             accountList.addItem(newAcctName);
             controller.newAccount(newAcctName, newAcctAmnt, newAcctEmail, newAcctDesc);
@@ -341,8 +343,16 @@ public class InitialScreen extends JFrame {
 
     private String[] createTransaction() {
 
+        // Get accounts
+        String[] tmp = controller.getAvailableAccts();
+        String[] accts = new String[tmp.length - 1];
+
+        // Remove 'All' option.
+        System.arraycopy(tmp, 1, accts, 0, accts.length);
+
+
         // Open form and initialize it
-        TransactionForm tForm = new TransactionForm(this, Main.FRAME_STRING, true, getAccountNames());
+        TransactionForm tForm = new TransactionForm(this, Main.FRAME_STRING, true, accts);
 
         String[] transactionData = new String[6];
 
@@ -458,13 +468,7 @@ public class InitialScreen extends JFrame {
                 "Warning!", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
 
     }
-
-    // Create dialog box when there is a successful save
-    public void saveDialog()
-    {
-        JOptionPane.showMessageDialog(this, "Save successful");
-    }
-
+  
     // Method to save data
     private void save() {
 
@@ -492,13 +496,19 @@ public class InitialScreen extends JFrame {
         }
     }
 
+    // Create dialog box when there is a successful save
+    private void saveDialog()
+    {
+        JOptionPane.showMessageDialog(this, "Save successful");
+    }
+
     // Create dialog box when user attempts to logout without saving
     public int saveCheckDialog() {
         return JOptionPane.showOptionDialog(this, "Changes have been made, would you like to save?",
                 "Warning!", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
     }
 
-    public void setController(Controller controller) {
+    void setController(Controller controller) {
         this.controller = controller;
     }
 
@@ -531,6 +541,20 @@ public class InitialScreen extends JFrame {
                     removeAcct(acctToDelete);
                     changeCheck = true;
                 }
+            }
+        }
+    }
+
+    class retireAction implements ActionListener{
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+
+            String acct = getAcct("Please select the account you would like to retire");
+
+            if(acct != null) {
+                controller.retireAccount(acct);
+                accountList.removeItem(acct);
             }
         }
     }
@@ -686,7 +710,8 @@ public class InitialScreen extends JFrame {
 
     class saveListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            save();
+
+            save()
         }
     }
 

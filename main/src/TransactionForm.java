@@ -17,9 +17,8 @@ public class TransactionForm extends JDialog {
     private JComboBox<String> typeBox;
     private JComboBox<String> depositExpenseBox;
     private String[] transactionTypes = new String[] {"Check", "Credit Card", "Cash"}; // Make enum class / constant of transaction class?
-    private String[] checkCodes = new String[] {"1000", "2000"};
-    private String[] creditCodes = new String[] {"3000", "4000"};
-    private String[] cashCode = new String[] {"0000"};
+    private String[] depositCodes = new String[] {"50109", "50287"};
+    private String[] expenseCodes = new String[] {"61123", "61225", "62210", "62241", "62245"};
 
     private final DateFormat dateFormatter = new SimpleDateFormat("mm/dd/yyyy");
     
@@ -36,22 +35,26 @@ public class TransactionForm extends JDialog {
         JLabel dateLabel = new JLabel("Date: ");
         dateField = new JFormattedTextField(dateFormatter);
         dateField.setColumns(10);
+        dateField.setFocusLostBehavior(EXIT_ON_CLOSE);
         JLabel amntLabel = new JLabel("Amount: ");
         amntLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
         amntField = new JTextField(10);
         JLabel typeLabel = new JLabel("Type: ");
         typeBox = new JComboBox<>(transactionTypes);
         JLabel codeLabel = new JLabel("Code: ");
-        codeBox = new JComboBox<>(checkCodes);
+        codeBox = new JComboBox<>(expenseCodes);
         JButton okButton = new JButton("Ok");
-        JLabel debitCreditLabel = new JLabel("Exp / Dep");
+        JLabel expenseDepositLabel = new JLabel("Exp / Dep");
         depositExpenseBox = new JComboBox<>(new String[] {"Expense", "Deposit"});
         
         try {
         	MaskFormatter dateMask = new MaskFormatter("##/##/####");
         	dateMask.setPlaceholderCharacter('_');
         	dateMask.install(dateField);
-        } catch (ParseException e) { }
+        } catch (ParseException e) {
+        	System.out.println("Parse Exception: ");
+        	e.printStackTrace();
+        }
 
         JPanel mainPanel = new JPanel();
         JPanel namePanel = new JPanel();
@@ -61,7 +64,7 @@ public class TransactionForm extends JDialog {
         JPanel codePanel = new JPanel();
         JPanel typePanel = new JPanel();
         JPanel centerPanel = new JPanel();
-        JPanel debitCreditPanel = new JPanel();
+        JPanel expDepositPanel = new JPanel();
 
         // Setting layouts / sizing
         centerPanel.setLayout(new GridLayout(7, 0, 90, 0));
@@ -83,8 +86,8 @@ public class TransactionForm extends JDialog {
         centerPanel.add(datePanel);
         centerPanel.add(amntPanel);
         centerPanel.add(typePanel);
+        centerPanel.add(expDepositPanel);
         centerPanel.add(codePanel);
-        centerPanel.add(debitCreditPanel);
 
         infoPanel.add(Box.createRigidArea(new Dimension(10, 50)));
         infoPanel.add(new JLabel("<html><center><p>Please enter the name of the " +
@@ -111,12 +114,12 @@ public class TransactionForm extends JDialog {
         codePanel.add(Box.createRigidArea(new Dimension(46, 10)));
         codePanel.add(codeBox);
 
-        debitCreditPanel.add(debitCreditLabel);
-        debitCreditPanel.add(Box.createRigidArea(new Dimension(27, 10)));
-        debitCreditPanel.add(depositExpenseBox);
+        expDepositPanel.add(expenseDepositLabel);
+        expDepositPanel.add(Box.createRigidArea(new Dimension(27, 10)));
+        expDepositPanel.add(depositExpenseBox);
 
         okButton.addActionListener(new okAction());
-        typeBox.addActionListener(new selectionAction());
+        depositExpenseBox.addActionListener(new selectionAction());
 
         pack();
         setVisible(true);
@@ -140,7 +143,7 @@ public class TransactionForm extends JDialog {
     
     // Creates popup warning - Incorrect Amount Format
     private void inputWarning() {
-    	JOptionPane.showMessageDialog(this,  "Transaction amount must contain a numerical decimal value",
+    	JOptionPane.showMessageDialog(this,  "Transaction amount must contain a valid numerical value",
     			                      "Warning!", JOptionPane.WARNING_MESSAGE);
     }
 
@@ -151,7 +154,7 @@ public class TransactionForm extends JDialog {
                 return;
             }
             
-            if(!amntField.getText().matches("^[0-9]*\\.[0-9]*$")) {
+            if(!amntField.getText().matches("^[0-9]*(\\.\\d+)?$")) {
             	inputWarning();
             	return;
             }
@@ -163,20 +166,16 @@ public class TransactionForm extends JDialog {
 
         public void actionPerformed(ActionEvent e) {
 
-           String typeStr = (String)typeBox.getSelectedItem();
+           String typeStr = (String)depositExpenseBox.getSelectedItem();
 
-           if(typeStr.equalsIgnoreCase("Check")) {
+           if(typeStr.equalsIgnoreCase("Deposit")) {
 
-               ComboBoxModel<String> model = new DefaultComboBoxModel<>(checkCodes);
+               ComboBoxModel<String> model = new DefaultComboBoxModel<>(depositCodes);
                codeBox.setModel(model);
            }
-           else if(typeStr.equalsIgnoreCase("Credit Card")) {
+           else if(typeStr.equalsIgnoreCase("Expense")) {
 
-               ComboBoxModel<String> model = new DefaultComboBoxModel<>(creditCodes);
-               codeBox.setModel(model);
-           } else {
-
-               ComboBoxModel<String> model = new DefaultComboBoxModel<>(cashCode);
+               ComboBoxModel<String> model = new DefaultComboBoxModel<>(expenseCodes);
                codeBox.setModel(model);
            }
         }

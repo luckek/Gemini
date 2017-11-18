@@ -5,28 +5,31 @@ public class Account {
     private String balance;
     private String email;
     private String description;
+    private boolean isRetired;
 
-    public Account (String name, String balance, String email, String description) {
+    public Account (String name, String balance, String email, String description, boolean isRetired) {
 
         this.acctName = name;
         this.balance = balance;
         this.email = email;
         this.description = description;
+        this.isRetired = isRetired;
     }
 
     public String getName() {
-        return this.acctName;
+        return acctName;
     }
 
     public String getBalance() {
-        return this.balance;
+        return balance;
     }
     public String getEmail() {
-        return this.email;
+        return email;
     }
     public String getDescription() {
-        return this.description;
+        return description;
     }
+    public boolean isRetired() { return isRetired; }
 
     public void setName(String name) {
 
@@ -44,4 +47,7 @@ public class Account {
 
         this.description = desc;
     }
+    public void setIsRetired(boolean isRetired) { this.isRetired = isRetired; }
+
+
 }
