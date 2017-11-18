@@ -560,6 +560,8 @@ public class InitialScreen extends JFrame {
     }
 
     class acctInfoAction implements ActionListener {
+
+        @Override
         public void actionPerformed(ActionEvent e) {
 
             String acctToView = getAcct("Please select the account you would like to view");
@@ -570,6 +572,8 @@ public class InitialScreen extends JFrame {
     }
 
     class logoutAction implements ActionListener {
+
+        @Override
         public void actionPerformed(ActionEvent e) {
 
         	// initialize save value
@@ -593,6 +597,8 @@ public class InitialScreen extends JFrame {
     }
 
     class addTransaction implements ActionListener {
+
+        @Override
         public void actionPerformed(ActionEvent e) {
 
             String[] newRowData = createTransaction();
@@ -636,6 +642,8 @@ public class InitialScreen extends JFrame {
     }
 
     class removeTransaction implements ActionListener {
+
+        @Override
         public void actionPerformed(ActionEvent e) {
             int index = getTransactionIndex();
 
@@ -709,13 +717,16 @@ public class InitialScreen extends JFrame {
     }
 
     class saveListener implements ActionListener {
-        public void actionPerformed(ActionEvent e) {
 
-            save()
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            save();
         }
     }
 
     class guideListener implements ActionListener {
+
+        @Override
         public void actionPerformed(ActionEvent e) {
 
             // User guide routine here
