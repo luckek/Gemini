@@ -7,13 +7,13 @@ public class Account {
     private String description;
     private boolean isRetired;
 
-    public Account (String name, String balance, String email, String description) {
+    public Account (String name, String balance, String email, String description, boolean isRetired) {
 
         this.acctName = name;
         this.balance = balance;
         this.email = email;
         this.description = description;
-        isRetired = false;
+        this.isRetired = isRetired;
     }
 
     public String getName() {
