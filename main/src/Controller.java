@@ -4,12 +4,11 @@ import java.util.ArrayList;
 
 public class Controller {
 
-    private static LoginPanel mypanel;
     private Model_Read_Files readFile =  new Model_Read_Files();
     private Model_MgmtAccount account = new Model_MgmtAccount();
 
     void initializeScreen() {
-        mypanel = new LoginPanel();
+        LoginPanel mypanel = new LoginPanel();
         mypanel.startPanel();
     }
 
