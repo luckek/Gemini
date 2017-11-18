@@ -296,7 +296,7 @@ public class InitialScreen extends JFrame {
     private String getAcct(String optionMessage) {
 
         // Get all available accounts
-        String[] tmp = controller.getAllAcoounts();
+        String[] tmp = controller.getAllAccounts();
 
         // Remove 'all' option
         String[] accts = new String[tmp.length - 1];

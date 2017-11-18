@@ -17,24 +17,12 @@ public class Controller {
 
     }
 
-    public void addTransaction(Model_Transaction transaction) {
-
-        account.addTransaction(transaction);
-    }
-
-    public void saveAccounts() throws IOException
-    {
+    void saveAccounts() throws IOException {
         readFile.saveAccounts(account);
     }
 
-    public void saveData() throws IOException
-    {
+    void saveData() throws IOException {
         readFile.saveData(account.getTransactionsList());
-    }
-
-    void removeTransaction(int index) {
-
-        account.removeTransaction(index);
     }
 
     void loadData() throws FileNotFoundException {
@@ -79,12 +67,12 @@ public class Controller {
         }
     }
 
-    public Account getAccountInfo(String acctName) {
+    Account getAccountInfo(String acctName) {
         return account.getAccountInfo(acctName);
     }
 
-    public void newAccount(String name, String balance, String email, String description) {
-        account.addAccount(new String[] {name, balance, email, description});
+    String[] getAllAccounts() {
+        return account.getAcctNames();
     }
 
     String[] getAvailableAccts() {
@@ -95,17 +83,25 @@ public class Controller {
         return account.getTransactions();
     }
 
-    void removeAccount(String acctName) {
+    void newAccount(String name, String balance, String email, String description) {
+        account.addAccount(new String[] {name, balance, email, description, "False"});
+    }
 
+    void removeAccount(String acctName) {
         account.removeAccount(acctName);
     }
 
     void retireAccount(String acctToRetire) {
-
         account.retireAccount(acctToRetire);
     }
 
-    String[] getAllAcoounts() {
-        return account.getAcctNames();
+    void addTransaction(Model_Transaction transaction) {
+
+        account.addTransaction(transaction);
+    }
+
+    void removeTransaction(int index) {
+
+        account.removeTransaction(index);
     }
 }
