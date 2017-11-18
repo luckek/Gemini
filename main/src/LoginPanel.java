@@ -156,7 +156,7 @@ public class LoginPanel
                 initialScreen = new InitialScreen(Main.FRAME_STRING);
 
                 initialScreen.setController(controller);
-                initialScreen.initComboBox(controller.getAcctNames());
+                initialScreen.initComboBox(controller.getAvailableAccts());
                 initialScreen.initTranscationTable(controller.getTransactions());
 
             }
