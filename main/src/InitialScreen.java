@@ -314,14 +314,14 @@ public class InitialScreen extends JFrame {
     }
 
     // Opens user guide panel
-    public void openGuide() { GuidePanel guidePanel = new GuidePanel(this, Main.FRAME_STRING, true); }
+    private void openGuide() { GuidePanel guidePanel = new GuidePanel(this, Main.FRAME_STRING, true); }
     
     // Opens benefits calculator dialog
-    public void openCalc() { CalcPanel calcPanel = new CalcPanel(this, Main.FRAME_STRING, true); }
+    private void openCalc() { CalcPanel calcPanel = new CalcPanel(this, Main.FRAME_STRING, true); }
     
-    public void openCode() { CodePanel codePanel = new CodePanel(this, Main.FRAME_STRING, true); }
+    private void openCode() { CodePanel codePanel = new CodePanel(this, Main.FRAME_STRING, true); }
     
-    public void createAccount() {
+    private void createAccount() {
 
         // Opens dialog / form to get information about new account
         AccountForm accountForm = new AccountForm(this, Main.FRAME_STRING, true);
@@ -463,7 +463,7 @@ public class InitialScreen extends JFrame {
     }
 
     // Creates popup warning
-    public int showWarning() {
+    private int showWarning() {
         return JOptionPane.showOptionDialog(this, "Are you sure you want to delete this account?",
                 "Warning!", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
 
@@ -497,13 +497,12 @@ public class InitialScreen extends JFrame {
     }
 
     // Create dialog box when there is a successful save
-    private void saveDialog()
-    {
+    private void saveDialog() {
         JOptionPane.showMessageDialog(this, "Save successful");
     }
 
     // Create dialog box when user attempts to logout without saving
-    public int saveCheckDialog() {
+    private int saveCheckDialog() {
         return JOptionPane.showOptionDialog(this, "Changes have been made, would you like to save?",
                 "Warning!", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
     }
