@@ -114,8 +114,10 @@ public class Model_MgmtAccount {
         transactions.add(transaction);
     }
 
-    void removeTransaction(int index) {
-        transactions.remove(index);
+    void removeTransaction(Model_Transaction transaction) {
+
+        // Get transaction and remove it.
+        transactions.remove(transaction);
     }
 
     void retireAccount(String acctToRetire) {

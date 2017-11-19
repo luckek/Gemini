@@ -399,10 +399,38 @@ public class InitialScreen extends JFrame {
 
     private void removeTableRow(int viewIndex) {
 
-
         DefaultTableModel tmpModel = (DefaultTableModel) transactionTable.getModel();
         int modelIndex = transactionTable.convertRowIndexToModel(viewIndex);
+
+        // Get transaction info
+        String name = (String)tmpModel.getValueAt(modelIndex, 0);
+        String date = (String)tmpModel.getValueAt(modelIndex, 1);
+        String gross = (String)tmpModel.getValueAt(modelIndex, 2);
+        String type = (String)tmpModel.getValueAt(modelIndex, 3);
+        String expDep = (String)tmpModel.getValueAt(modelIndex, 5);
+        Model_Transaction t;
+
+        // Create new transaction
+        if(type.equalsIgnoreCase("Cash")) {
+
+            t = new Model_Cash(type, name, 0, expDep, new Double(gross), date);
+        }
+        else if(type.equalsIgnoreCase("Check")) {
+
+            t = new Model_Check(type, name, 0, expDep, new Double(gross), date);
+
+        } else {
+
+            t = new Model_Credit(type, name, 0, expDep, new Double(gross), date);
+
+        }
+
+        // Remove row
         tmpModel.removeRow(modelIndex);
+
+        // Update model
+        controller.removeTransaction(t);
+
         // note that a change has been made
         changeCheck = true;
     }
@@ -652,7 +680,6 @@ public class InitialScreen extends JFrame {
 
                 decreaseBalance(new Double(amountStr));
                 removeTableRow(index);
-                controller.removeTransaction(index);
             }
         }
     }

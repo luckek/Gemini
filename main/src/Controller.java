@@ -95,7 +95,7 @@ public class Controller {
         account.addTransaction(transaction);
     }
 
-    void removeTransaction(int index) {
-        account.removeTransaction(index);
+    void removeTransaction(Model_Transaction transaction) {
+        account.removeTransaction(transaction);
     }
 }
