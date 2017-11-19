@@ -111,7 +111,19 @@ public class Model_MgmtAccount {
     }
 
     void addTransaction(Model_Transaction transaction) {
+
+        // Add transaction to list
         transactions.add(transaction);
+
+        // Update account
+        double value = transaction.getGross();
+        String acctName = transaction.getName();
+
+        // If adding expense, should decrease balance
+        if(transaction.getType().equalsIgnoreCase("Expense")) {
+            value = -value;
+        }
+        subAccounts.get(acctName).modifyBalance(value);
     }
 
     void removeTransaction(Model_Transaction transaction) {
