@@ -23,8 +23,8 @@ public class Model_Read_Files {
         // Write out info for each account
         for(String name : names) {
             // Write Account info to file.
-            writer.write(name + "," + accounts.getAccountBalance(name) + "," + accounts.getEmail(name)
-                    + "," + accounts.getDescription(name) + "," + accounts.isRetired(name) + "\n");
+            writer.write(name + "," + accounts.getEmail(name) + "," + accounts.getDescription(name) + ","
+                         + accounts.isRetired(name) + "\n");
         }
         writer.close();
     }

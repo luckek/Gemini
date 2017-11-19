@@ -46,7 +46,7 @@ public class Model_MgmtAccount {
         return subAccounts.get(acctName);
     }
 
-    String getAccountBalance(String acctName) {
+    double getAccountBalance(String acctName) {
         return subAccounts.get(acctName).getBalance();
     }
 
@@ -76,18 +76,15 @@ public class Model_MgmtAccount {
         return subAccounts.get(name).isRetired();
     }
 
-    public void setAccountBalance(String acctName, String newBalance) {
-
+    public void setAccountBalance(String acctName, double newBalance) {
         subAccounts.get(acctName).setBalance(newBalance);
     }
 
     public void setEmail(String acctName, String newEmail) {
-
         subAccounts.get(acctName).setEmail(newEmail);
     }
 
     public void setDesc(String acctName, String desc) {
-
         subAccounts.get(acctName).setDesc(desc);
     }
 
@@ -97,11 +94,11 @@ public class Model_MgmtAccount {
 
         String newName = info[0];
 
-        if(info[4].equalsIgnoreCase("True")) {
+        if(info[3].equalsIgnoreCase("True")) {
             isRetired = true;
         }
 
-        Account acct = new Account(info[0], info[1], info[2], info[3], isRetired);
+        Account acct = new Account(info[0], info[1], info[2], isRetired);
 
         subAccounts.put(newName, acct);
     }
