@@ -49,5 +49,10 @@ public class Account {
     }
     public void setIsRetired(boolean isRetired) { this.isRetired = isRetired; }
 
+    void modifyBalance(double amount) {
 
+        double balanceVal = new Double(balance);
+        balanceVal += amount;
+        this.balance = Double.toString(balanceVal);
+    }
 }
