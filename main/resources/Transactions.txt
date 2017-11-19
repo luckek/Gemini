@@ -1,8 +1,8 @@
 AJ,10/10/2017,12.09,Cash,000000,Deposit
 Kyle,10/31/2017,103.76,Credit Card,000000,Deposit
 Jared,11/01/2017,92.01,Check,000000,Expense
-Jared,11/02/2017,100.00,Check,000000,Expense
+Jared,11/02/2017,100.00,Check,000000,Deposit
 Trish,11/02/2017,15.99,Credit Card,000000,Expense
 Michael,12/07/2017,17.00,Check,000000,Deposit
 Travis,01/01/2018,504.90,Credit Card,000000,Deposit
-Trish,02/01/2018,241.00,Cash,000000,Expense
+Trish,02/01/2018,241.00,Cash,000000,Deposit

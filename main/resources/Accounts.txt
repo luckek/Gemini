@@ -1,7 +1,7 @@
 All,0.0,-,-,-
-AJ,100.00,aj@um.com,This is an account,false
-Kyle,9.99,kyle@um.com,Another account,false
-Jared,19.54,jared@um.com,An account,false
-Trish,1000.93,trish@um.com,Trish's account,false
-Michael,102.83,michael@um.com,Michael's account,false
-Travis,83.02,travis@um.com,Travis' account,false
+AJ,12.09,aj@um.com,This is an account,false
+Kyle,103.76,kyle@um.com,Another account,false
+Jared,7.99,jared@um.com,An account,false
+Trish,225.01,trish@um.com,Trish's account,false
+Michael,17.00,michael@um.com,Michael's account,false
+Travis,504.90,travis@um.com,Travis' account,false
