@@ -118,6 +118,16 @@ public class Model_MgmtAccount {
 
         // Get transaction and remove it.
         transactions.remove(transaction);
+
+        // Update account
+        double value = transaction.getGross();
+        String acctName = transaction.getName();
+
+        // If removing deposit, should decrease balance
+        if(transaction.getType().equalsIgnoreCase("Deposit")) {
+            value = -value;
+        }
+        subAccounts.get(acctName).modifyBalance(value);
     }
 
     void retireAccount(String acctToRetire) {
