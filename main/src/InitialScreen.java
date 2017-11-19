@@ -655,7 +655,7 @@ public class InitialScreen extends JFrame {
 
             double amount = transaction.getGross();
             // Add transaction to table
-            addTableRow(transaction.getAll());
+            addTableRow(transaction.getTransactionInfo());
 
             if(transaction.isDeposit().equalsIgnoreCase("Expense")) {
                 amount = -amount;

@@ -58,17 +58,17 @@ public class Model_MgmtAccount {
         return subAccounts.get(acctName).getDescription();
     }
 
-    String[][] getTransactions() {
+    String[][] getTransactionArray() {
 
         String[][] tmp = new String[transactions.size()][7];
 
         for(int i = 0; i < transactions.size(); i++) {
-            tmp[i] = transactions.get(i).getAll();
+            tmp[i] = transactions.get(i).getTransactionInfo();
         }
         return tmp;
     }
 
-    ArrayList<Model_Transaction> getTransactionsList() {
+    ArrayList<Model_Transaction> getTransactionList() {
         return transactions;
     }
 
@@ -91,15 +91,16 @@ public class Model_MgmtAccount {
     void addAccount(String[] info) {
 
         boolean isRetired = false;
-
         String newName = info[0];
 
         if(info[3].equalsIgnoreCase("True")) {
             isRetired = true;
         }
 
+        // Create new account
         Account acct = new Account(info[0], info[1], info[2], isRetired);
 
+        // Add account
         subAccounts.put(newName, acct);
     }
 

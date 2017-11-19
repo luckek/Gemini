@@ -21,7 +21,7 @@ public class Controller {
     }
 
     void saveData() throws IOException {
-        readFile.saveData(account.getTransactionsList());
+        readFile.saveData(account.getTransactionList());
     }
 
     void loadData() throws FileNotFoundException {
@@ -76,7 +76,7 @@ public class Controller {
     }
 
     String[][] getTransactions() {
-        return account.getTransactions();
+        return account.getTransactionArray();
     }
 
     void newAccount(String name, String balance, String email, String description) {
