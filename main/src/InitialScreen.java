@@ -1,4 +1,6 @@
 
+import clojure.lang.PersistentStructMap;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -407,7 +409,23 @@ public class InitialScreen extends JFrame {
         changeCheck = true;
     }
 
-    private void removeAcct(String acctToRemove) {
+    private void deleteAccount(String acctToRemove) {
+
+        DefaultTableModel tmpModel = (DefaultTableModel)transactionTable.getModel();
+        String nameStr;
+
+        for(int i = 0; i < tmpModel.getRowCount(); i++) {
+
+            nameStr = (String)tmpModel.getValueAt(i, 0);
+
+            // If account has transaction associated with it, don't allow removal
+            if(nameStr.equalsIgnoreCase(acctToRemove)) {
+                JOptionPane.showMessageDialog(this, "You cannot delete an account that has transactions associated with it");
+                return;
+            }
+
+        }
+
         accountList.removeItem(acctToRemove);
         controller.removeAccount(acctToRemove);
     }
@@ -536,7 +554,7 @@ public class InitialScreen extends JFrame {
             if ((acctToDelete != null) && (!acctToDelete.isEmpty())) {
                 option = showWarning();
                 if (option == 0) {
-                    removeAcct(acctToDelete);
+                    deleteAccount(acctToDelete);
                     changeCheck = true;
                 }
             }
