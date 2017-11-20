@@ -213,7 +213,6 @@ public class InitialScreen extends JFrame {
         for (String[] row : data) {
             addTableRow(row);
         }
-
         setCellsAlignment(transactionTable, SwingConstants.CENTER);
         updateBalance();
     }
@@ -356,8 +355,6 @@ public class InitialScreen extends JFrame {
         transactionData[3] = tForm.getTransactionType();
         transactionData[4] = tForm.getCode();
         transactionData[5] = tForm.isDeposit();
-
-        updateBalance();
 
         return transactionData;
     }
