@@ -213,12 +213,11 @@ public class InitialScreen extends JFrame {
         for (String[] row : data) {
             addTableRow(row);
         }
-
         setCellsAlignment(transactionTable, SwingConstants.CENTER);
         updateBalance();
     }
 
-    private void updateBalance(double newBalance) {
+    private void setBalance(double newBalance) {
 
         NumberFormat formatter = NumberFormat.getCurrencyInstance();
         String newBalanceStr = formatter.format(newBalance);
@@ -245,20 +244,15 @@ public class InitialScreen extends JFrame {
             double currentValue = new Double(valueStr);
 
             // Convert to negative value if expense
-            if(isExpense.equalsIgnoreCase("Expense")) {
+            if(isExpense.startsWith("E")) {
                 currentValue = -currentValue;
             }
             balance += currentValue;
         }
-        updateBalance(balance);
+        setBalance(balance);
     }
 
-    private void increaseBalance(double amount) {
-        double balance = new Double(balanceLabel.getText().substring(1));
-        updateBalance(balance + amount);
-    }
-
-    private void decreaseBalance(double amount) {
+    private double getBalance() {
 
         String balanceStr = balanceLabel.getText();
         balanceStr = balanceStr.replace("$", "");
@@ -267,17 +261,15 @@ public class InitialScreen extends JFrame {
         if(balanceStr.substring(balanceStr.length() - 1 ).equalsIgnoreCase(")")) {
             balanceStr = balanceStr.replaceAll("()", "");
         }
+        return new Double(balanceStr);
+    }
 
-        double balance = new Double(balanceStr);
+    private void increaseBalance(double amount) {
+        setBalance(getBalance() + amount);
+    }
 
-        if(balance < 0) {
-            // If negative, we want to add the amount back
-            updateBalance(balance + amount);
-
-        } else {
-            // Else subtract amount as normal
-            updateBalance(balance - amount);
-        }
+    private void decreaseBalance(double amount) {
+        setBalance(getBalance() - amount);
     }
 
     private void setCellsAlignment(JTable table, int alignment) {
@@ -314,14 +306,14 @@ public class InitialScreen extends JFrame {
     }
 
     // Opens user guide panel
-    public void openGuide() { GuidePanel guidePanel = new GuidePanel(this, Main.FRAME_STRING, true); }
+    private void openGuide() { GuidePanel guidePanel = new GuidePanel(this, Main.FRAME_STRING, true); }
     
     // Opens benefits calculator dialog
-    public void openCalc() { CalcPanel calcPanel = new CalcPanel(this, Main.FRAME_STRING, true); }
+    private void openCalc() { CalcPanel calcPanel = new CalcPanel(this, Main.FRAME_STRING, true); }
     
-    public void openCode() { CodePanel codePanel = new CodePanel(this, Main.FRAME_STRING, true); }
+    private void openCode() { CodePanel codePanel = new CodePanel(this, Main.FRAME_STRING, true); }
     
-    public void createAccount() {
+    private void createAccount() {
 
         // Opens dialog / form to get information about new account
         AccountForm accountForm = new AccountForm(this, Main.FRAME_STRING, true);
@@ -364,27 +356,7 @@ public class InitialScreen extends JFrame {
         transactionData[4] = tForm.getCode();
         transactionData[5] = tForm.isDeposit();
 
-        updateBalance();
-
         return transactionData;
-    }
-
-    private void removeTransactions(String acct) {
-
-        DefaultTableModel model = (DefaultTableModel)transactionTable.getModel();
-
-        for(int i = 0; i < model.getRowCount(); i++ ) {
-
-            if(model.getValueAt(i, 0).equals(acct)) {
-
-                // Decrease balance
-                String valueStr = (String)model.getValueAt(i, 2);
-                double value = new Double(valueStr);
-                decreaseBalance(value);
-
-                model.removeRow(i);
-            }
-        }
     }
 
     private void addTableRow(String[] rowData) {
@@ -399,17 +371,44 @@ public class InitialScreen extends JFrame {
 
     private void removeTableRow(int viewIndex) {
 
-
         DefaultTableModel tmpModel = (DefaultTableModel) transactionTable.getModel();
         int modelIndex = transactionTable.convertRowIndexToModel(viewIndex);
+
+        // Get transaction info
+        String name = (String)tmpModel.getValueAt(modelIndex, 0);
+        String date = (String)tmpModel.getValueAt(modelIndex, 1);
+        String gross = (String)tmpModel.getValueAt(modelIndex, 2);
+        String type = (String)tmpModel.getValueAt(modelIndex, 3);
+        String expDep = (String)tmpModel.getValueAt(modelIndex, 5);
+        Model_Transaction t;
+
+        // Create new transaction
+        if(type.equalsIgnoreCase("Cash")) {
+
+            t = new Model_Cash(type, name, 0, expDep, new Double(gross), date);
+        }
+        else if(type.equalsIgnoreCase("Check")) {
+
+            t = new Model_Check(type, name, 0, expDep, new Double(gross), date);
+
+        } else {
+
+            t = new Model_Credit(type, name, 0, expDep, new Double(gross), date);
+
+        }
+
+        // Remove row
         tmpModel.removeRow(modelIndex);
+
+        // Update model
+        controller.removeTransaction(t);
+
         // note that a change has been made
         changeCheck = true;
     }
 
     private void removeAcct(String acctToRemove) {
         accountList.removeItem(acctToRemove);
-        removeTransactions(acctToRemove);
         controller.removeAccount(acctToRemove);
     }
 
@@ -437,7 +436,9 @@ public class InitialScreen extends JFrame {
         String rowStr = JOptionPane.showInputDialog(this, "Please enter the row index of the transaction to be removed");
 
         // If user enters something, parse the index
-        if (rowStr != null) {
+        if (rowStr == null) {
+            return rowIndex;
+        } else {
             rowIndex = Integer.parseInt(rowStr);
         }
 
@@ -463,7 +464,7 @@ public class InitialScreen extends JFrame {
     }
 
     // Creates popup warning
-    public int showWarning() {
+    private int showWarning() {
         return JOptionPane.showOptionDialog(this, "Are you sure you want to delete this account?",
                 "Warning!", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
 
@@ -497,13 +498,10 @@ public class InitialScreen extends JFrame {
     }
 
     // Create dialog box when there is a successful save
-    private void saveDialog()
-    {
-        JOptionPane.showMessageDialog(this, "Save successful");
-    }
+    private void saveDialog() { JOptionPane.showMessageDialog(this, "Save successful"); }
 
     // Create dialog box when user attempts to logout without saving
-    public int saveCheckDialog() {
+    private int saveCheckDialog() {
         return JOptionPane.showOptionDialog(this, "Changes have been made, would you like to save?",
                 "Warning!", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
     }
@@ -560,6 +558,8 @@ public class InitialScreen extends JFrame {
     }
 
     class acctInfoAction implements ActionListener {
+
+        @Override
         public void actionPerformed(ActionEvent e) {
 
             String acctToView = getAcct("Please select the account you would like to view");
@@ -570,6 +570,8 @@ public class InitialScreen extends JFrame {
     }
 
     class logoutAction implements ActionListener {
+
+        @Override
         public void actionPerformed(ActionEvent e) {
 
         	// initialize save value
@@ -593,6 +595,8 @@ public class InitialScreen extends JFrame {
     }
 
     class addTransaction implements ActionListener {
+
+        @Override
         public void actionPerformed(ActionEvent e) {
 
             String[] newRowData = createTransaction();
@@ -615,16 +619,16 @@ public class InitialScreen extends JFrame {
 
                 transaction = new Model_Credit(newRowData[3], newRowData[0], new Integer(newRowData[4]), newRowData[5], new Double(newRowData[2]), newRowData[1]);
 
-            } else {
+            } else { // Check
 
                 transaction = new Model_Check(newRowData[3], newRowData[0], new Integer(newRowData[4]), newRowData[5], new Double(newRowData[2]), newRowData[1]);
             }
 
             double amount = transaction.getGross();
             // Add transaction to table
-            addTableRow(transaction.getAll());
+            addTableRow(transaction.getTransactionInfo());
 
-            if(transaction.isDeposit().equalsIgnoreCase("Expense")) {
+            if(transaction.isDeposit().startsWith("E")) {
                 amount = -amount;
             }
 
@@ -636,16 +640,24 @@ public class InitialScreen extends JFrame {
     }
 
     class removeTransaction implements ActionListener {
+
+        @Override
         public void actionPerformed(ActionEvent e) {
             int index = getTransactionIndex();
 
             // If index IS MIN_VALUE nothing was selected, so we should not remove a transaction
             if (index != Integer.MIN_VALUE) {
                 String amountStr = (String)transactionTable.getValueAt(index, 2);
+                double amount = new Double(amountStr);
+                String isDeposit = (String)transactionTable.getValueAt(index, 5);
 
-                decreaseBalance(new Double(amountStr));
+                // If Expense, want to add amount back
+                if(isDeposit.startsWith("E")) {
+                    amount = -amount;
+                }
+
+                decreaseBalance(amount);
                 removeTableRow(index);
-                controller.removeTransaction(index);
             }
         }
     }
@@ -709,13 +721,16 @@ public class InitialScreen extends JFrame {
     }
 
     class saveListener implements ActionListener {
-        public void actionPerformed(ActionEvent e) {
 
-            save()
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            save();
         }
     }
 
     class guideListener implements ActionListener {
+
+        @Override
         public void actionPerformed(ActionEvent e) {
 
             // User guide routine here

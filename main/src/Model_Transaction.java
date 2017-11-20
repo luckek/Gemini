@@ -86,7 +86,7 @@ public class Model_Transaction {
         return date;
     }
 
-    public String[] getAll() {
+    public String[] getTransactionInfo() {
 
         String[] info = new String[7];
 

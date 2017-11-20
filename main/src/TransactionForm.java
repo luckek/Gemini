@@ -168,12 +168,15 @@ public class TransactionForm extends JDialog {
 
            String typeStr = (String)depositExpenseBox.getSelectedItem();
 
-           if(typeStr.equalsIgnoreCase("Deposit")) {
+           if (typeStr == null) { return; }
+
+           // Deposit
+           if(typeStr.startsWith("D")) {
 
                ComboBoxModel<String> model = new DefaultComboBoxModel<>(depositCodes);
                codeBox.setModel(model);
-           }
-           else if(typeStr.equalsIgnoreCase("Expense")) {
+           } // Expense
+           else if(typeStr.startsWith("E")) {
 
                ComboBoxModel<String> model = new DefaultComboBoxModel<>(expenseCodes);
                codeBox.setModel(model);

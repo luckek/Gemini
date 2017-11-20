@@ -46,7 +46,7 @@ public class Model_MgmtAccount {
         return subAccounts.get(acctName);
     }
 
-    String getAccountBalance(String acctName) {
+    double getAccountBalance(String acctName) {
         return subAccounts.get(acctName).getBalance();
     }
 
@@ -58,17 +58,17 @@ public class Model_MgmtAccount {
         return subAccounts.get(acctName).getDescription();
     }
 
-    String[][] getTransactions() {
+    String[][] getTransactionArray() {
 
         String[][] tmp = new String[transactions.size()][7];
 
         for(int i = 0; i < transactions.size(); i++) {
-            tmp[i] = transactions.get(i).getAll();
+            tmp[i] = transactions.get(i).getTransactionInfo();
         }
         return tmp;
     }
 
-    ArrayList<Model_Transaction> getTransactionsList() {
+    ArrayList<Model_Transaction> getTransactionList() {
         return transactions;
     }
 
@@ -76,33 +76,31 @@ public class Model_MgmtAccount {
         return subAccounts.get(name).isRetired();
     }
 
-    public void setAccountBalance(String acctName, String newBalance) {
-
+    public void setAccountBalance(String acctName, double newBalance) {
         subAccounts.get(acctName).setBalance(newBalance);
     }
 
     public void setEmail(String acctName, String newEmail) {
-
         subAccounts.get(acctName).setEmail(newEmail);
     }
 
     public void setDesc(String acctName, String desc) {
-
         subAccounts.get(acctName).setDesc(desc);
     }
 
     void addAccount(String[] info) {
 
         boolean isRetired = false;
-
         String newName = info[0];
 
-        if(info[4].equalsIgnoreCase("True")) {
+        if(info[3].equalsIgnoreCase("True")) {
             isRetired = true;
         }
 
-        Account acct = new Account(info[0], info[1], info[2], info[3], isRetired);
+        // Create new account
+        Account acct = new Account(info[0], info[1], info[2], isRetired);
 
+        // Add account
         subAccounts.put(newName, acct);
     }
 
@@ -111,11 +109,35 @@ public class Model_MgmtAccount {
     }
 
     void addTransaction(Model_Transaction transaction) {
+
+        // Add transaction to list
         transactions.add(transaction);
+
+        // Update account
+        double value = transaction.getGross();
+        String acctName = transaction.getName();
+
+        // If adding expense, should decrease balance
+        if(transaction.getType().startsWith("E")) {
+            value = -value;
+        }
+        subAccounts.get(acctName).modifyBalance(value);
     }
 
-    void removeTransaction(int index) {
-        transactions.remove(index);
+    void removeTransaction(Model_Transaction transaction) {
+
+        // Get transaction and remove it.
+        transactions.remove(transaction);
+
+        // Update account
+        double value = transaction.getGross();
+        String acctName = transaction.getName();
+
+        // If removing deposit, should decrease balance
+        if(transaction.getType().startsWith("D")) {
+            value = -value;
+        }
+        subAccounts.get(acctName).modifyBalance(value);
     }
 
     void retireAccount(String acctToRetire) {

@@ -10,7 +10,7 @@ public class AcctInfoForm extends JDialog {
         super(frame, titleString, modality);
 
         String name = currAccount.getName();
-        String balance = currAccount.getBalance();
+        String balance = Double.toString(currAccount.getBalance());
         String description = currAccount.getDescription();
         String email = currAccount.getEmail();
         boolean isRetired = currAccount.isRetired();
