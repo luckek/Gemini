@@ -218,7 +218,7 @@ public class InitialScreen extends JFrame {
         updateBalance();
     }
 
-    private void updateBalance(double newBalance) {
+    private void setBalance(double newBalance) {
 
         NumberFormat formatter = NumberFormat.getCurrencyInstance();
         String newBalanceStr = formatter.format(newBalance);
@@ -250,7 +250,7 @@ public class InitialScreen extends JFrame {
             }
             balance += currentValue;
         }
-        updateBalance(balance);
+        setBalance(balance);
     }
 
     private double getBalance() {
@@ -266,11 +266,11 @@ public class InitialScreen extends JFrame {
     }
 
     private void increaseBalance(double amount) {
-        updateBalance(getBalance() + amount);
+        setBalance(getBalance() + amount);
     }
 
     private void decreaseBalance(double amount) {
-        updateBalance(getBalance() - amount);
+        setBalance(getBalance() - amount);
     }
 
     private void setCellsAlignment(JTable table, int alignment) {
