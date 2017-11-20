@@ -254,7 +254,17 @@ public class InitialScreen extends JFrame {
     }
 
     private void increaseBalance(double amount) {
-        double balance = new Double(balanceLabel.getText().substring(1));
+
+        String balanceStr = balanceLabel.getText();
+        balanceStr = balanceStr.replace("$", "");
+
+        // If negative
+        if(balanceStr.substring(balanceStr.length() - 1 ).equalsIgnoreCase(")")) {
+            balanceStr = balanceStr.replaceAll("()", "");
+        }
+
+        double balance = new Double(balanceStr);
+
         updateBalance(balance + amount);
     }
 
