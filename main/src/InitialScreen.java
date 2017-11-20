@@ -11,9 +11,6 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 
 // TODO: make sure exiting w/all fields filled out does NOT make a new acct / transaction
-// TODO: Implement retire acct action listener..
-// TODO: Allow viewing of retired accounts...
-// Once acct retired, can't add new transactions - can still view acct - notify user
 
 public class InitialScreen extends JFrame {
 
