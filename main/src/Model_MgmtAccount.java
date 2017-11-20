@@ -118,7 +118,7 @@ public class Model_MgmtAccount {
         String acctName = transaction.getName();
 
         // If adding expense, should decrease balance
-        if(transaction.getType().startsWith("E")) {
+        if(transaction.isDeposit().startsWith("E")) {
             value = -value;
         }
         subAccounts.get(acctName).modifyBalance(value);
@@ -134,7 +134,7 @@ public class Model_MgmtAccount {
         String acctName = transaction.getName();
 
         // If removing deposit, should decrease balance
-        if(transaction.getType().startsWith("D")) {
+        if(transaction.isDeposit().startsWith("D")) {
             value = -value;
         }
         subAccounts.get(acctName).modifyBalance(value);
