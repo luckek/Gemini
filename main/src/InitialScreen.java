@@ -269,15 +269,7 @@ public class InitialScreen extends JFrame {
         }
 
         double balance = new Double(balanceStr);
-
-        if(balance < 0) {
-            // If negative, we want to add the amount back
-            updateBalance(balance + amount);
-
-        } else {
-            // Else subtract amount as normal
-            updateBalance(balance - amount);
-        }
+        updateBalance(balance - amount);
     }
 
     private void setCellsAlignment(JTable table, int alignment) {
@@ -369,24 +361,6 @@ public class InitialScreen extends JFrame {
         return transactionData;
     }
 
-    private void removeTransactions(String acct) {
-
-        DefaultTableModel model = (DefaultTableModel)transactionTable.getModel();
-
-        for(int i = 0; i < model.getRowCount(); i++ ) {
-
-            if(model.getValueAt(i, 0).equals(acct)) {
-
-                // Decrease balance
-                String valueStr = (String)model.getValueAt(i, 2);
-                double value = new Double(valueStr);
-                decreaseBalance(value);
-
-                model.removeRow(i);
-            }
-        }
-    }
-
     private void addTableRow(String[] rowData) {
 
         DefaultTableModel tmpModel = (DefaultTableModel) transactionTable.getModel();
@@ -437,7 +411,6 @@ public class InitialScreen extends JFrame {
 
     private void removeAcct(String acctToRemove) {
         accountList.removeItem(acctToRemove);
-        removeTransactions(acctToRemove);
         controller.removeAccount(acctToRemove);
     }
 
@@ -677,8 +650,15 @@ public class InitialScreen extends JFrame {
             // If index IS MIN_VALUE nothing was selected, so we should not remove a transaction
             if (index != Integer.MIN_VALUE) {
                 String amountStr = (String)transactionTable.getValueAt(index, 2);
+                double amount = new Double(amountStr);
+                String isDeposit = (String)transactionTable.getValueAt(index, 5);
 
-                decreaseBalance(new Double(amountStr));
+                // If Expense, want to add amount back
+                if(isDeposit.startsWith("E")) {
+                    amount = -amount;
+                }
+
+                decreaseBalance(amount);
                 removeTableRow(index);
             }
         }
