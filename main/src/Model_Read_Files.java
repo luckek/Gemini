@@ -2,15 +2,21 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Scanner;
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.spec.SecretKeySpec;
+import javax.xml.bind.DatatypeConverter;
 
 public class Model_Read_Files {
 
-    public void saveAccounts(Model_MgmtAccount accounts) throws IOException
-    {
+    public void saveAccounts(Model_MgmtAccount accounts) throws IOException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException
+    {   
         // Set up FileWriter
         FileWriter writer = null;
         
@@ -25,9 +31,9 @@ public class Model_Read_Files {
         for(int i = 0; i < names.length ; i++)
         {
             // Write Account info to file.
+            String information = names[i] + "," + accounts.getAccountBalance(names[i]) + "," + accounts.getEmail(names[i]) + "," + accounts.getDescription(names[i]) + "\n";
+            //Encrypt(information);
             writer.write(names[i] + "," + accounts.getAccountBalance(names[i]) + "," + accounts.getEmail(names[i]) + "," + accounts.getDescription(names[i]) + "\n");
-
-            // TODO: Popup message when save is complete
         }
         writer.close();
     }
@@ -46,19 +52,15 @@ public class Model_Read_Files {
         for(int i = 0; i < transactions.size() ; i++)
         {
             // Write transaction info to file.
-            // TODO: Hash out what exactly should be saved and in what order
             Model_Transaction currTransaction = transactions.get(i);
-            writer.write(currTransaction.getName() + "," + currTransaction.getDate()+ "," + currTransaction.getGross() + ","
-                    + currTransaction.getType() + "," + currTransaction.getCode() + "," +currTransaction.isDeposit() + "\n");
-
-            // TODO: Popup message when save is complete
-
+            writer.write(currTransaction.getName() + "," + currTransaction.getDate()+ "," + currTransaction.getNet() + ","
+                    + currTransaction.getType() + "," + currTransaction.getCode() + "," +currTransaction.isDeposit() + ",\n");
         }
 
         writer.close();
     }
 
-    public ArrayList<String[]> loadData() throws FileNotFoundException {
+        public ArrayList<String[]> loadData() throws FileNotFoundException {
         //need to not hard-code string array/array size...i'll fix later
         ArrayList<String[]> data = new ArrayList<>();
         // Added a filepath for eclipse for future use
@@ -73,6 +75,27 @@ public class Model_Read_Files {
         return data;
     }
 
+//    public String Encrypt (String Finput) throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException
+//    {
+//        String input = Finput;
+//        String key = "Zyx98765Abc54321";
+//        
+//        SecretKeySpec aesKey = new SecretKeySpec(key.getBytes(), "AES");
+//        Cipher cipher = Cipher.getInstance("AES");
+//        
+//        cipher.init(Cipher.ENCRYPT_MODE, aesKey);
+//        byte[] encrypted = cipher.doFinal(input.getBytes());
+//        String encryptedText = DatatypeConverter.printBase64Binary(encrypted);
+//        System.out.println(encryptedText);
+//        
+//        return encryptedText;
+//    }
+    
+//    public String Decrypt(String Finput)
+//    {
+//        
+//    }
+        
     public ArrayList<String[]> loadAcctInfo() throws FileNotFoundException {
 
         ArrayList<String[]> acctInfo = new ArrayList<>();

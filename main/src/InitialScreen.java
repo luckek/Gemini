@@ -1,4 +1,7 @@
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -7,6 +10,8 @@ import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 
@@ -16,8 +21,7 @@ public class InitialScreen extends JFrame {
 
     private JComboBox<String> accountList;
     private JTable transactionTable;
-    private JLabel balanceLabel, logoLabel;
-    private String logoPath = "main/resources/logo1.png";
+    private JLabel balanceLabel;
     private ButtonGroup radioGroup;
     private Controller controller;
     private String[] columnNames = {"Name", "Date", "Gross Amt", "Type", "Code", "Exp / Dep", "Net Amt"};
@@ -57,7 +61,6 @@ public class InitialScreen extends JFrame {
         JButton logoutBttn = new JButton("Logout");
         JButton addButton = new JButton("Add");
         JButton removeButton = new JButton("Remove");
-        JButton codeButton = new JButton("Add New Code");
 
         radioGroup = new ButtonGroup();
         JRadioButton bothButton = new JRadioButton("Both", true);
@@ -92,7 +95,6 @@ public class InitialScreen extends JFrame {
         outterBalancePanel.setPreferredSize(new Dimension(100, 100));
         addButton.setPreferredSize(new Dimension(100, 22));
         removeButton.setPreferredSize(new Dimension(100, 22));
-        codeButton.setPreferredSize(new Dimension(150, 22));
         wrapperPanel.setPreferredSize(new Dimension(150, 700));
         wrapperPanel.setMaximumSize(new Dimension(150, 700));
         radioPanel.setMaximumSize(new Dimension(150, 700));
@@ -127,7 +129,6 @@ public class InitialScreen extends JFrame {
         leftPanel.add(buttonPanel);
         leftPanel.add(Box.createVerticalBox());
 
-
         buttonPanel.add(Box.createRigidArea(new Dimension(0, 50)));
         buttonPanel.add(Box.createRigidArea(new Dimension(0, 50)));
         buttonPanel.add(Box.createRigidArea(new Dimension(0, 50)));
@@ -153,8 +154,6 @@ public class InitialScreen extends JFrame {
         addRemovePanel.add(addButton);
         addRemovePanel.add(Box.createRigidArea(new Dimension(15, 0)));
         addRemovePanel.add(removeButton);
-        addRemovePanel.add(Box.createRigidArea(new Dimension(15, 0)));
-        addRemovePanel.add(codeButton);
 
         headerPanel.add(transactionLabel);
 
@@ -181,7 +180,6 @@ public class InitialScreen extends JFrame {
         addAcctButton.addActionListener(new addAction());
         calcBttn.addActionListener(new calcAction());
         deleteButton.addActionListener(new deleteAction());
-        codeButton.addActionListener(new codeAction());
         acctInfoButton.addActionListener(new acctInfoAction());
         logoutBttn.addActionListener(new logoutAction());
         addButton.addActionListener(new addTransaction());
@@ -318,8 +316,6 @@ public class InitialScreen extends JFrame {
     // Opens benefits calculator dialog
     public void openCalc() { CalcPanel calcPanel = new CalcPanel(this, Main.FRAME_STRING, true); }
     
-    public void openCode() { CodePanel codePanel = new CodePanel(this, Main.FRAME_STRING, true); }
-    
     public void createAccount() {
 
         // Opens dialog / form to get information about new account
@@ -395,12 +391,6 @@ public class InitialScreen extends JFrame {
         tmpModel.removeRow(modelIndex);
         // note that a change has been made
         changeCheck = true;
-    }
-
-    private void removeAcct(String acctToRemove) {
-        accountList.removeItem(acctToRemove);
-        removeTransactions(acctToRemove);
-        controller.removeAccount(acctToRemove);
     }
 
     // Displays all the account information for acctToView
@@ -486,12 +476,6 @@ public class InitialScreen extends JFrame {
             openCalc();
         }
     }
-    
-    class codeAction implements ActionListener {
-    	public void actionPerformed(ActionEvent e) {
-    		openCode();
-    	}
-    }
 
     class deleteAction implements ActionListener {
         public void actionPerformed(ActionEvent e) {
@@ -501,7 +485,8 @@ public class InitialScreen extends JFrame {
             if ((acctToDelete != null) && (!acctToDelete.isEmpty())) {
                 option = showWarning();
                 if (option == 0) {
-                    removeAcct(acctToDelete);
+                    accountList.removeItem(acctToDelete);
+                    removeTransactions(acctToDelete);
                     changeCheck = true;
                 }
             }
@@ -525,18 +510,10 @@ public class InitialScreen extends JFrame {
 
             try {
                controller.saveAccounts();
-              
-            } catch (IOException e1) {
-                System.out.println("Error saving accounts");
-                e1.printStackTrace();
-            }
+               // Controller.saveData();
 
-            try {
-                controller.saveData();
-            } catch (IOException e1) {
-
-                System.out.println("Error saving transactions");
-                e1.printStackTrace();
+            } catch (IOException | InvalidKeyException | NoSuchAlgorithmException | NoSuchPaddingException | IllegalBlockSizeException | BadPaddingException e1) {
+                System.out.println("Error saving");
             }
 
             // Closes current frame and opens LoginPanel when logout button is pressed
@@ -574,15 +551,9 @@ public class InitialScreen extends JFrame {
                 transaction = new Model_Check(newRowData[3], newRowData[0], new Integer(newRowData[4]), newRowData[5], new Double(newRowData[2]), newRowData[1]);
             }
 
-            double amount = transaction.getGross();
             // Add transaction to table
             addTableRow(transaction.getAll());
-
-            if(transaction.isDeposit().equalsIgnoreCase("Expense")) {
-                amount = -amount;
-            }
-
-            increaseBalance(amount);
+            increaseBalance(transaction.getGross());
 
             // Update model
             controller.addTransaction(transaction);
@@ -671,13 +642,13 @@ public class InitialScreen extends JFrame {
             try {
                 controller.saveAccounts();
                 saveAccountCheck = true;
-              
-            } catch(IOException e1) {
+            } catch(IOException | InvalidKeyException | NoSuchAlgorithmException | NoSuchPaddingException | IllegalBlockSizeException | BadPaddingException e1) {
                 System.out.println("Error saving file...");
                 e1.printStackTrace();
             }
             
-            try {
+            try
+            {
                 controller.saveData();
                 saveDataCheck = true;
             }

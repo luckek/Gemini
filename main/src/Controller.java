@@ -1,6 +1,12 @@
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 
 public class Controller {
 
@@ -22,14 +28,14 @@ public class Controller {
         account.addTransaction(transaction);
     }
 
-    public void saveAccounts() throws IOException
+    public void saveAccounts() throws IOException, InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException
     {
         readFile.saveAccounts(account);
     }
 
     public void saveData() throws IOException
     {
-        readFile.saveData(account.getTransactionsList());
+        readFile.saveData(account.transactions);
     }
 
     void removeTransaction(int index) {
@@ -49,7 +55,6 @@ public class Controller {
 
             // Decide type of transaction
             if(transaction[3].equalsIgnoreCase("Cash")) {
-
 
                 newTransaction = new Model_Cash(transaction[3], transaction[0], code, transaction[5], amount, transaction[1]);
             }
@@ -93,10 +98,5 @@ public class Controller {
 
     String[][] getTransactions() {
         return account.getTransactions();
-    }
-
-    void removeAccount(String acctName) {
-
-        account.removeAccount(acctName);
     }
 }
