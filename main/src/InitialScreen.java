@@ -253,7 +253,7 @@ public class InitialScreen extends JFrame {
         updateBalance(balance);
     }
 
-    private void increaseBalance(double amount) {
+    private double getBalance() {
 
         String balanceStr = balanceLabel.getText();
         balanceStr = balanceStr.replace("$", "");
@@ -262,24 +262,15 @@ public class InitialScreen extends JFrame {
         if(balanceStr.substring(balanceStr.length() - 1 ).equalsIgnoreCase(")")) {
             balanceStr = balanceStr.replaceAll("()", "");
         }
+        return new Double(balanceStr);
+    }
 
-        double balance = new Double(balanceStr);
-
-        updateBalance(balance + amount);
+    private void increaseBalance(double amount) {
+        updateBalance(getBalance() + amount);
     }
 
     private void decreaseBalance(double amount) {
-
-        String balanceStr = balanceLabel.getText();
-        balanceStr = balanceStr.replace("$", "");
-
-        // If negative
-        if(balanceStr.substring(balanceStr.length() - 1 ).equalsIgnoreCase(")")) {
-            balanceStr = balanceStr.replaceAll("()", "");
-        }
-
-        double balance = new Double(balanceStr);
-        updateBalance(balance - amount);
+        updateBalance(getBalance() - amount);
     }
 
     private void setCellsAlignment(JTable table, int alignment) {
