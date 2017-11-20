@@ -436,7 +436,7 @@ public class InitialScreen extends JFrame {
         String rowStr = JOptionPane.showInputDialog(this, "Please enter the row index of the transaction to be removed");
 
         // If user enters something, parse the index
-        if (rowStr == null) {
+        if (rowStr == null || rowStr.isEmpty()) {
             return rowIndex;
         } else {
             rowIndex = Integer.parseInt(rowStr);
