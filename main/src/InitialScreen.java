@@ -244,7 +244,7 @@ public class InitialScreen extends JFrame {
             double currentValue = new Double(valueStr);
 
             // Convert to negative value if expense
-            if(isExpense.equalsIgnoreCase("Expense")) {
+            if(isExpense.startsWith("E")) {
                 currentValue = -currentValue;
             }
             balance += currentValue;
@@ -496,9 +496,7 @@ public class InitialScreen extends JFrame {
     }
 
     // Create dialog box when there is a successful save
-    private void saveDialog() {
-        JOptionPane.showMessageDialog(this, "Save successful");
-    }
+    private void saveDialog() { JOptionPane.showMessageDialog(this, "Save successful"); }
 
     // Create dialog box when user attempts to logout without saving
     private int saveCheckDialog() {
@@ -619,7 +617,7 @@ public class InitialScreen extends JFrame {
 
                 transaction = new Model_Credit(newRowData[3], newRowData[0], new Integer(newRowData[4]), newRowData[5], new Double(newRowData[2]), newRowData[1]);
 
-            } else {
+            } else { // Check
 
                 transaction = new Model_Check(newRowData[3], newRowData[0], new Integer(newRowData[4]), newRowData[5], new Double(newRowData[2]), newRowData[1]);
             }
@@ -628,7 +626,7 @@ public class InitialScreen extends JFrame {
             // Add transaction to table
             addTableRow(transaction.getTransactionInfo());
 
-            if(transaction.isDeposit().equalsIgnoreCase("Expense")) {
+            if(transaction.isDeposit().startsWith("E")) {
                 amount = -amount;
             }
 
