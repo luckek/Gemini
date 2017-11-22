@@ -507,6 +507,7 @@ public class InitialScreen extends JFrame {
 
         if(saveAccountCheck && saveDataCheck) {
             saveDialog();
+            changeCheck = false;
         }
     }
 
