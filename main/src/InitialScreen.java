@@ -1,4 +1,6 @@
 
+import jdk.nashorn.internal.scripts.JO;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -477,10 +479,8 @@ public class InitialScreen extends JFrame {
     }
 
     // Creates popup warning
-    private int showWarning() {
-        return JOptionPane.showOptionDialog(this, "Are you sure you want to delete this account?",
-                "Warning!", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
-
+    private int showWarning(String msg) {
+        return JOptionPane.showConfirmDialog(this, msg, "Warning!", JOptionPane.YES_NO_OPTION);
     }
   
     // Method to save data
@@ -514,14 +514,6 @@ public class InitialScreen extends JFrame {
     // Create dialog box when there is a successful save
     private void saveDialog() { JOptionPane.showMessageDialog(this, "Save successful"); }
 
-    // Create dialog box when user attempts to logout without saving
-    private int saveCheckDialog() {
-        return JOptionPane.showOptionDialog(this, "Changes have been made, would you like to save?",
-                "Warning!", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
-    }
-
-    private int checkDialog() { return JOptionPane.showConfirmDialog(this, "You are about to delete a transaction, are you sure?"); }
-
     void setController(Controller controller) {
         this.controller = controller;
     }
@@ -547,10 +539,9 @@ public class InitialScreen extends JFrame {
     class deleteAction implements ActionListener {
         public void actionPerformed(ActionEvent e) {
 
-            int option;
             String acctToDelete = getAcct("Please select the account you want to delete");
             if ((acctToDelete != null) && (!acctToDelete.isEmpty())) {
-                option = showWarning();
+                int option = showWarning("Are you sure you want to delete this account?");
                 if (option == 0) {
                     deleteAccount(acctToDelete);
                     changeCheck = true;
@@ -595,7 +586,7 @@ public class InitialScreen extends JFrame {
         	
         	// Ask user if they want to save changes
         	if(changeCheck) {
-        		save = saveCheckDialog();
+        		save = showWarning("Changes have been made, would you like to save?");
         	}
         	
         	// If the user said yes, save before logging out
@@ -667,8 +658,10 @@ public class InitialScreen extends JFrame {
                 double amount = new Double(amountStr);
                 String isDeposit = (String) transactionTable.getValueAt(index, 5);
 
-                int option = checkDialog();
+                // Ask if they would like to delete
+                int option = showWarning("Are you sure you want to delete this transaction?");
 
+                // If yes, delete
                 if (option == 0) {
                     // If Expense, want to add amount back
                     if (isDeposit.startsWith("E")) {
