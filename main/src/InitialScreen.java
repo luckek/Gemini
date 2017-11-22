@@ -409,6 +409,7 @@ public class InitialScreen extends JFrame {
         DefaultTableModel tmpModel = (DefaultTableModel)transactionTable.getModel();
         String nameStr;
 
+        // Iterate through rows
         for(int i = 0; i < tmpModel.getRowCount(); i++) {
 
             nameStr = (String)tmpModel.getValueAt(i, 0);
@@ -418,7 +419,6 @@ public class InitialScreen extends JFrame {
                 JOptionPane.showMessageDialog(this, "You cannot delete an account that has transactions associated with it");
                 return;
             }
-
         }
 
         accountList.removeItem(acctToRemove);
@@ -518,6 +518,8 @@ public class InitialScreen extends JFrame {
         return JOptionPane.showOptionDialog(this, "Changes have been made, would you like to save?",
                 "Warning!", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
     }
+
+    private int checkDialog() { return JOptionPane.showConfirmDialog(this, "You are about to delete a transaction, are you sure?"); }
 
     void setController(Controller controller) {
         this.controller = controller;
@@ -660,17 +662,20 @@ public class InitialScreen extends JFrame {
 
             // If index IS MIN_VALUE nothing was selected, so we should not remove a transaction
             if (index != Integer.MIN_VALUE) {
-                String amountStr = (String)transactionTable.getValueAt(index, 2);
+                String amountStr = (String) transactionTable.getValueAt(index, 2);
                 double amount = new Double(amountStr);
-                String isDeposit = (String)transactionTable.getValueAt(index, 5);
+                String isDeposit = (String) transactionTable.getValueAt(index, 5);
 
-                // If Expense, want to add amount back
-                if(isDeposit.startsWith("E")) {
-                    amount = -amount;
+                int option = checkDialog();
+
+                if (option == 0) {
+                    // If Expense, want to add amount back
+                    if (isDeposit.startsWith("E")) {
+                        amount = -amount;
+                    }
+                    decreaseBalance(amount);
+                    removeTableRow(index);
                 }
-
-                decreaseBalance(amount);
-                removeTableRow(index);
             }
         }
     }
