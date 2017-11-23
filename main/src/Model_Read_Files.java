@@ -1,41 +1,54 @@
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
+
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
-import javax.crypto.BadPaddingException;
-import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
-import javax.crypto.spec.SecretKeySpec;
-import javax.xml.bind.DatatypeConverter;
 
 public class Model_Read_Files {
 
-    public void saveAccounts(Model_MgmtAccount accounts) throws IOException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException
-    {   
+    public void saveAccounts(Model_MgmtAccount accounts) {
         // Set up FileWriter
         FileWriter writer = null;
-        
-        // Added a filepath for eclipse for future use
-        //writer = new FileWriter("Accounts.txt");
-        
-        writer = new FileWriter("main/resources/Accounts.txt");
 
-        String[] names = accounts.getAcctNames();
+        try {
+            // Added a filepath for eclipse for future use
+            //writer = new FileWriter("Accounts.txt");
 
-        // Write out info for each account
-        for(int i = 0; i < names.length ; i++)
-        {
-            // Write Account info to file.
-            String information = names[i] + "," + accounts.getAccountBalance(names[i]) + "," + accounts.getEmail(names[i]) + "," + accounts.getDescription(names[i]) + "\n";
-            //Encrypt(information);
-            writer.write(names[i] + "," + accounts.getAccountBalance(names[i]) + "," + accounts.getEmail(names[i]) + "," + accounts.getDescription(names[i]) + "\n");
+            writer = new FileWriter("main/resources/Accounts.txt");
+
+            String[] names = accounts.getAcctNames();
+
+            StringBuilder sb = new StringBuilder();
+            // Write out info for each account
+            for (String name : names) {
+                // Get Account info.
+                String information = name + "," + accounts.getAccountBalance(name) + "," + accounts.getEmail(name) + "," + accounts.getDescription(name) + "\n";
+                //Encrypt(information);
+                // Append information to string
+                sb.append(information);
+            }
+
+            String encryptedStr = Encryption.Encrypt(sb.toString(), "This is a test key");
+
+            if (encryptedStr != null) {
+                writer.write(encryptedStr);
+                writer.flush();
+            } else {
+                System.out.println("Problem encrypting Accounts.txt.\n File not updated");
+            }
+
+        } catch (Exception e) {
+            System.out.println("Problem loading Accounts.txt");
+            e.printStackTrace();
+        } finally {
+
+            try {
+                if (writer != null) {
+                    writer.close();
+                }
+            } catch (IOException I) {
+                I.printStackTrace();
+            }
         }
-        writer.close();
     }
 
     public void saveData(ArrayList<Model_Transaction> transactions) throws IOException
@@ -75,33 +88,54 @@ public class Model_Read_Files {
         return data;
     }
 
-//    public String Encrypt (String Finput) throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException
-//    {
-//        String input = Finput;
-//        String key = "Zyx98765Abc54321";
-//        
-//        SecretKeySpec aesKey = new SecretKeySpec(key.getBytes(), "AES");
-//        Cipher cipher = Cipher.getInstance("AES");
-//        
-//        cipher.init(Cipher.ENCRYPT_MODE, aesKey);
-//        byte[] encrypted = cipher.doFinal(input.getBytes());
-//        String encryptedText = DatatypeConverter.printBase64Binary(encrypted);
-//        System.out.println(encryptedText);
-//        
-//        return encryptedText;
-//    }
-    
-//    public String Decrypt(String Finput)
-//    {
-//        
-//    }
-        
+    public ArrayList<String[]> loadEncryptedAcctInfo() throws FileNotFoundException {
+
+        ArrayList<String[]> acctInfo = new ArrayList<>();
+        // Added a filepath for eclipse for future use
+        //Scanner inFile = new Scanner(new File("Accounts.txt")).useDelimiter("\n");
+
+        Scanner scan = null;
+
+        try {
+
+            // Read in file
+            scan = new Scanner(new File("main/resources/Accounts.txt"));
+
+            // Grab and decrypt full string
+            String decrypted = Encryption.Decrypt(scan.nextLine(), "This is a test key");
+
+            String[] tmp;
+
+            if(decrypted != null) {
+                // Split into rows
+                tmp = decrypted.split("\n");
+            } else {
+                System.out.println("Null decrypted string");
+                tmp = new String[0];
+            }
+
+            // Split into tokens
+            for(String line : tmp) {
+                acctInfo.add(line.split(","));
+            }
+
+        } catch (Exception e) {
+            System.out.println("Problem loading Accounts.txt");
+            e.printStackTrace();
+        } finally {
+            if ( scan != null) {
+                scan.close();
+            }
+        }
+        return acctInfo;
+    }
+
     public ArrayList<String[]> loadAcctInfo() throws FileNotFoundException {
 
         ArrayList<String[]> acctInfo = new ArrayList<>();
         // Added a filepath for eclipse for future use
         //Scanner inFile = new Scanner(new File("Accounts.txt")).useDelimiter("\n");
-        
+
         Scanner inFile = new Scanner(new File("main/resources/Accounts.txt")).useDelimiter("\n");
         while (inFile.hasNext()) {
             String temp = inFile.nextLine();

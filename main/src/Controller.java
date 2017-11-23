@@ -1,12 +1,7 @@
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
 
 public class Controller {
 
@@ -76,7 +71,7 @@ public class Controller {
 
     void loadAcctInfo() throws FileNotFoundException {
 
-        ArrayList<String[]> infoArray = readFile.loadAcctInfo();
+        ArrayList<String[]> infoArray = readFile.loadEncryptedAcctInfo();
 
         for(String[] acct : infoArray) {
             account.addAccount(acct);
