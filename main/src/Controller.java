@@ -28,8 +28,7 @@ public class Controller {
         account.addTransaction(transaction);
     }
 
-    public void saveAccounts() throws IOException, InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException
-    {
+    public void saveAccounts() {
         readFile.saveAccounts(account);
     }
 

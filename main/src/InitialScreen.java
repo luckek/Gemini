@@ -508,13 +508,8 @@ public class InitialScreen extends JFrame {
             // TODO: ensure changeCheck works properly
             // Note: this just saves everything for now.
 
-            try {
                controller.saveAccounts();
                // Controller.saveData();
-
-            } catch (IOException | InvalidKeyException | NoSuchAlgorithmException | NoSuchPaddingException | IllegalBlockSizeException | BadPaddingException e1) {
-                System.out.println("Error saving");
-            }
 
             // Closes current frame and opens LoginPanel when logout button is pressed
             dispose();
@@ -636,17 +631,13 @@ public class InitialScreen extends JFrame {
     class saveListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
 
+            // TODO: figure out new way to do save checks..
             boolean saveAccountCheck = false;
             boolean saveDataCheck = false;
             
-            try {
                 controller.saveAccounts();
                 saveAccountCheck = true;
-            } catch(IOException | InvalidKeyException | NoSuchAlgorithmException | NoSuchPaddingException | IllegalBlockSizeException | BadPaddingException e1) {
-                System.out.println("Error saving file...");
-                e1.printStackTrace();
-            }
-            
+
             try
             {
                 controller.saveData();
