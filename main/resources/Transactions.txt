@@ -1,8 +1,1 @@
-AJ,10/10/2017,12.09,Cash,000000,Deposit
-Kyle,10/31/2017,103.76,Credit Card,000000,Deposit
-Jared,11/01/2017,92.01,Check,000000,Expense
-Jared,11/02/2017,100.00,Check,000000,Expense
-Trish,11/02/2017,15.99,Credit Card,000000,Expense
-Michael,12/07/2017,17.00,Check,000000,Deposit
-Travis,01/01/2018,504.90,Credit Card,000000,Deposit
-Trish,02/01/2018,241.00,Cash,000000,Expense
+IdmvQ3nNmERjKs7ipzJxc51dPho1OKN+bexL4UEa6smPrIHJNoBlxxnnv7ZBRQtO2//fibbcQkNg1u+fC/SikbFZt3FqNKGP0E2ydcYSiiMcUyqkl0KDmSaE+vKJcJ3hBsjo5K5Seoz1WYDwKI/dqInbr2jPfaQhb5SKy7i4RGvaqGloTq+Ecw3b80hqJNnXtDKEW6uJ4PqcQNrROL2st0/V5QkkdcecD4pOB3zJJymtclWTh6uYOPkacrR+PF7qOqjM428SIwexQKfyYaJGUoq0Ao8kDs3z2lgH85aB4fsZohAhLvpbVtLjauAw/q7ZDwf4HZiTH9kjvyHWOjvPkxniMp9FBeIsSJCEPlQLBBH/SCQpWeZxGuXcX0FAOXgwGtruJ7g+Bc7uQuXxV0qYE95usjGojHhK24a9VrsGjRChL4JZqYjAMAgW3XQfe62S

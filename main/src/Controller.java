@@ -39,7 +39,7 @@ public class Controller {
 
     void loadData() throws FileNotFoundException {
 
-        ArrayList<String[]> transactionArray = readFile.loadData();
+        ArrayList<String[]> transactionArray = readFile.loadEncryptedData();
 
         for(String[] transaction : transactionArray) {
 

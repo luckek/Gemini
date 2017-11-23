@@ -62,7 +62,7 @@ public class Encryption {
             // Do the decryption
             byte[] decrypted = cipher.doFinal(Base64.getDecoder().decode(Finput));
 
-            return new String(decrypted);
+            return new String(decrypted, "UTF-8");
 
         } catch (Exception e) {
             System.out.println("Problem while decrypting message");

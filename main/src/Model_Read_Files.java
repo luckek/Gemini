@@ -5,6 +5,10 @@ import java.util.Scanner;
 
 public class Model_Read_Files {
 
+    // TODO: Fix problem with saving doubles
+
+    String key = "This is a secret key";
+
     public void saveAccounts(Model_MgmtAccount accounts) {
         // Set up FileWriter
         FileWriter writer = null;
@@ -51,8 +55,7 @@ public class Model_Read_Files {
         }
     }
 
-    public void saveData(ArrayList<Model_Transaction> transactions) throws IOException
-    {
+    public void saveData(ArrayList<Model_Transaction> transactions) throws IOException {
         // Set up FileWriter
         FileWriter writer = null;
         
@@ -61,15 +64,24 @@ public class Model_Read_Files {
         
         writer = new FileWriter("main/resources/Transactions.txt");
 
+        StringBuilder sb = new StringBuilder();
+
         // Write out info for each transaction
         for(int i = 0; i < transactions.size() ; i++)
         {
             // Write transaction info to file.
             Model_Transaction currTransaction = transactions.get(i);
-            writer.write(currTransaction.getName() + "," + currTransaction.getDate()+ "," + currTransaction.getNet() + ","
+            sb.append(currTransaction.getName() + "," + currTransaction.getDate()+ "," + currTransaction.getNet() + ","
                     + currTransaction.getType() + "," + currTransaction.getCode() + "," +currTransaction.isDeposit() + ",\n");
         }
 
+        String encryptedString = Encryption.Encrypt(sb.toString(), "This is a secret key");
+
+        if(encryptedString != null) {
+            writer.write(encryptedString);
+        } else {
+            System.out.println("Problem encrypting Transactions.txt\nFile not updated");
+        }
         writer.close();
     }
 
@@ -78,12 +90,37 @@ public class Model_Read_Files {
         ArrayList<String[]> data = new ArrayList<>();
         // Added a filepath for eclipse for future use
         //Scanner inFile = new Scanner(new File("Transactions.txt")).useDelimiter("\n");
-        
+
         Scanner inFile = new Scanner(new File("main/resources/Transactions.txt")).useDelimiter("\n");
 
         while (inFile.hasNext()) {
             String temp = inFile.nextLine();
             data.add(temp.split(","));
+        }
+        return data;
+    }
+
+    public ArrayList<String[]> loadEncryptedData() throws FileNotFoundException {
+        ArrayList<String[]> data = new ArrayList<>();
+        // Added a filepath for eclipse for future use
+        //Scanner inFile = new Scanner(new File("Transactions.txt")).useDelimiter("\n");
+
+        Scanner inFile = new Scanner(new File("main/resources/Transactions.txt"));
+
+        String toDecrypt = inFile.nextLine();
+        String decrypted = Encryption.Decrypt(toDecrypt, "This is a secret key");
+
+        String[] tmp;
+
+        if(decrypted != null) {
+            tmp = decrypted.split("\n");
+        } else {
+            System.out.println("Problem decrypting file");
+            tmp = new String[0];
+        }
+
+        for(String line : tmp) {
+            data.add(line.split(","));
         }
         return data;
     }
@@ -130,6 +167,7 @@ public class Model_Read_Files {
         return acctInfo;
     }
 
+    // Kept around just in case problems occur
     public ArrayList<String[]> loadAcctInfo() throws FileNotFoundException {
 
         ArrayList<String[]> acctInfo = new ArrayList<>();
