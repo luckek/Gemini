@@ -5,11 +5,9 @@ import java.util.Scanner;
 
 public class Model_Read_Files {
 
-    // TODO: Fix problem with saving doubles
+    private String key = "This is a secret key";
 
-    String key = "This is a secret key";
-
-    public void saveAccounts(Model_MgmtAccount accounts) {
+    void saveAccounts(Model_MgmtAccount accounts) {
         // Set up FileWriter
         FileWriter writer = null;
 
@@ -26,12 +24,12 @@ public class Model_Read_Files {
             for (String name : names) {
                 // Get Account info.
                 String information = name + "," + accounts.getAccountBalance(name) + "," + accounts.getEmail(name) + "," + accounts.getDescription(name) + "\n";
-                //Encrypt(information);
+
                 // Append information to string
                 sb.append(information);
             }
 
-            String encryptedStr = Encryption.Encrypt(sb.toString(), "This is a test key");
+            String encryptedStr = Encryption.Encrypt(sb.toString(), key);
 
             if (encryptedStr != null) {
                 writer.write(encryptedStr);
@@ -55,7 +53,7 @@ public class Model_Read_Files {
         }
     }
 
-    public void saveData(ArrayList<Model_Transaction> transactions) throws IOException {
+    void saveData(ArrayList<Model_Transaction> transactions) throws IOException {
         // Set up FileWriter
         FileWriter writer = null;
         
@@ -67,15 +65,14 @@ public class Model_Read_Files {
         StringBuilder sb = new StringBuilder();
 
         // Write out info for each transaction
-        for(int i = 0; i < transactions.size() ; i++)
-        {
-            // Write transaction info to file.
-            Model_Transaction currTransaction = transactions.get(i);
-            sb.append(currTransaction.getName() + "," + currTransaction.getDate()+ "," + currTransaction.getNet() + ","
-                    + currTransaction.getType() + "," + currTransaction.getCode() + "," +currTransaction.isDeposit() + ",\n");
+        for(Model_Transaction transaction : transactions) {
+
+            // Get transaction info
+            sb.append(transaction.getName() + "," + transaction.getDate()+ "," + transaction.getGross() + ","
+                    + transaction.getType() + "," + transaction.getCode() + "," + transaction.isDeposit() + ",\n");
         }
 
-        String encryptedString = Encryption.Encrypt(sb.toString(), "This is a secret key");
+        String encryptedString = Encryption.Encrypt(sb.toString(), key);
 
         if(encryptedString != null) {
             writer.write(encryptedString);
@@ -85,22 +82,7 @@ public class Model_Read_Files {
         writer.close();
     }
 
-        public ArrayList<String[]> loadData() throws FileNotFoundException {
-        //need to not hard-code string array/array size...i'll fix later
-        ArrayList<String[]> data = new ArrayList<>();
-        // Added a filepath for eclipse for future use
-        //Scanner inFile = new Scanner(new File("Transactions.txt")).useDelimiter("\n");
-
-        Scanner inFile = new Scanner(new File("main/resources/Transactions.txt")).useDelimiter("\n");
-
-        while (inFile.hasNext()) {
-            String temp = inFile.nextLine();
-            data.add(temp.split(","));
-        }
-        return data;
-    }
-
-    public ArrayList<String[]> loadEncryptedData() throws FileNotFoundException {
+    ArrayList<String[]> loadEncryptedData() throws FileNotFoundException {
         ArrayList<String[]> data = new ArrayList<>();
         // Added a filepath for eclipse for future use
         //Scanner inFile = new Scanner(new File("Transactions.txt")).useDelimiter("\n");
@@ -108,7 +90,7 @@ public class Model_Read_Files {
         Scanner inFile = new Scanner(new File("main/resources/Transactions.txt"));
 
         String toDecrypt = inFile.nextLine();
-        String decrypted = Encryption.Decrypt(toDecrypt, "This is a secret key");
+        String decrypted = Encryption.Decrypt(toDecrypt, key);
 
         String[] tmp;
 
@@ -125,7 +107,7 @@ public class Model_Read_Files {
         return data;
     }
 
-    public ArrayList<String[]> loadEncryptedAcctInfo() throws FileNotFoundException {
+    ArrayList<String[]> loadEncryptedAcctInfo() throws FileNotFoundException {
 
         ArrayList<String[]> acctInfo = new ArrayList<>();
         // Added a filepath for eclipse for future use
@@ -139,7 +121,7 @@ public class Model_Read_Files {
             scan = new Scanner(new File("main/resources/Accounts.txt"));
 
             // Grab and decrypt full string
-            String decrypted = Encryption.Decrypt(scan.nextLine(), "This is a test key");
+            String decrypted = Encryption.Decrypt(scan.nextLine(), key);
 
             String[] tmp;
 
@@ -168,6 +150,20 @@ public class Model_Read_Files {
     }
 
     // Kept around just in case problems occur
+    public ArrayList<String[]> loadData() throws FileNotFoundException {
+        //need to not hard-code string array/array size...i'll fix later
+        ArrayList<String[]> data = new ArrayList<>();
+        // Added a filepath for eclipse for future use
+        //Scanner inFile = new Scanner(new File("Transactions.txt")).useDelimiter("\n");
+
+        Scanner inFile = new Scanner(new File("main/resources/Transactions.txt")).useDelimiter("\n");
+
+        while (inFile.hasNext()) {
+            String temp = inFile.nextLine();
+            data.add(temp.split(","));
+        }
+        return data;
+    }
     public ArrayList<String[]> loadAcctInfo() throws FileNotFoundException {
 
         ArrayList<String[]> acctInfo = new ArrayList<>();
