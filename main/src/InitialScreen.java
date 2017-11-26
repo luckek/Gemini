@@ -252,17 +252,12 @@ public class InitialScreen extends JFrame {
         for(int i = 0; i < transactionTable.getRowCount(); i++) {
 
             // Get gross
-            String grossStr = (String)transactionTable.getValueAt(i, 2);
+            double grossValue = new Double((String)transactionTable.getValueAt(i, 2));
 
             // Get net
-            String netStr = (String)transactionTable.getValueAt(i, 6);
+            double netValue =  new Double((String)transactionTable.getValueAt(i, 6));
 
-            if(grossStr == null) { continue; } // Just in case row is empty
-
-            // Convert to double value
             String isExpense = (String)transactionTable.getValueAt(i, 5);
-            double grossValue = new Double(grossStr);
-            double netValue = new Double(netStr);
 
             double fees = grossValue - netValue;
 
@@ -350,7 +345,7 @@ public class InitialScreen extends JFrame {
     private void openGuide() { GuidePanel guidePanel = new GuidePanel(this, Main.FRAME_STRING, true); }
     
     // Opens benefits calculator dialog
-    private void openCalc() { CalcPanel calcPanel = new CalcPanel(this, Main.FRAME_STRING, true); }
+    private void openCalc() { new CalcPanel(this, Main.FRAME_STRING, true); }
     
     private void openCode() { CodePanel codePanel = new CodePanel(this, Main.FRAME_STRING, true); }
     
