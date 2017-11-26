@@ -12,7 +12,7 @@ public class Model_Transaction {
     protected String date;
     protected double netAmt;
     protected double percentage;
-    //might need to change data types
+    protected double fee;
 
     public Model_Transaction(String name, String type, int code, double grossAmt, String isDeposit, String date) {
 
@@ -49,10 +49,10 @@ public class Model_Transaction {
 
         double tmpAmt = grossAmt - (grossAmt * percentage);
 
-        String amt = Double.toString(tmpAmt);
-
         // This Converts the sting amt to a large decimal, rounds it with banker's rounding, and returns a double.
-        netAmt = new BigDecimal(amt).setScale(2, RoundingMode.HALF_EVEN).doubleValue();
+        netAmt = new BigDecimal(tmpAmt).setScale(2, RoundingMode.HALF_EVEN).doubleValue();
+
+        fee = new BigDecimal(grossAmt - netAmt).setScale(2, RoundingMode.HALF_EVEN).doubleValue();
     }
 
     public void setDate(String date) {
@@ -88,7 +88,7 @@ public class Model_Transaction {
 
     public String[] getTransactionInfo() {
 
-        String[] info = new String[7];
+        String[] info = new String[8];
 
         info[0] = name;
         info[1] = date;
@@ -97,6 +97,7 @@ public class Model_Transaction {
         info[4] = Integer.toString(code);
         info[5] = isDeposit;
         info[6] = Double.toString(netAmt);
+        info[7] = Double.toString(fee);
 
         return info;
     }

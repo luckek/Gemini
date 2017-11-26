@@ -22,7 +22,7 @@ public class InitialScreen extends JFrame {
     private String logoPath = "main/resources/logo1.png";
     private ButtonGroup radioGroup;
     private Controller controller;
-    private String[] columnNames = {"Name", "Date", "Gross Amt", "Type", "Code", "Exp / Dep", "Net Amt"};
+    private String[] columnNames = {"Name", "Date", "Gross Amt", "Type", "Code", "Exp / Dep", "Net Amt", "Fees"};
     private boolean changeCheck = false;
 
     public InitialScreen(String title) {
@@ -31,7 +31,7 @@ public class InitialScreen extends JFrame {
 
         // Configuring frame behavior
         setVisible(true);
-        setSize(1000, 700);
+        setSize(1100, 700);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         // Instantiating components
@@ -95,7 +95,7 @@ public class InitialScreen extends JFrame {
 
 
         leftPanel.setMaximumSize(new Dimension(700, 200));
-        transactionPane.setMaximumSize(new Dimension(600, 500));
+        transactionPane.setMaximumSize(new Dimension(700, 500));
         headerPanel.setPreferredSize(new Dimension(300, 25));
         outterBalancePanel.setPreferredSize(new Dimension(100, 100));
         addButton.setPreferredSize(new Dimension(100, 22));
@@ -212,7 +212,6 @@ public class InitialScreen extends JFrame {
         creditButton.addActionListener(new accountListener());
         save.addActionListener(new saveListener());
         userGuide.addActionListener(new guideListener());
-
     }
 
     void initComboBox(String[] accountNames) {
