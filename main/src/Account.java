@@ -1,4 +1,7 @@
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 public class Account {
 
     private String acctName;
@@ -28,5 +31,7 @@ public class Account {
     public void setDesc(String desc) { this.description = desc; }
     public void setIsRetired(boolean isRetired) { this.isRetired = isRetired; }
 
-    void modifyBalance(double amount) { balance += amount; }
+    void modifyBalance(double amount) {
+        balance = new BigDecimal(balance + amount).setScale(2, RoundingMode.HALF_EVEN).doubleValue();
+    }
 }
