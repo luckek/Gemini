@@ -304,7 +304,7 @@ public class InitialScreen extends JFrame {
         setTotal(getBalance(netBalanceLabel) - amount, netBalanceLabel);
     }
 
-    private void increaseFees(double amount) {
+    private void updateFeesTotal(double amount) {
         setTotal(getBalance(feesLabel) + amount, feesLabel);
     }
 
@@ -342,12 +342,12 @@ public class InitialScreen extends JFrame {
     }
 
     // Opens user guide panel
-    private void openGuide() { GuidePanel guidePanel = new GuidePanel(this, Main.FRAME_STRING, true); }
+    private void openGuide() { new GuidePanel(this, Main.FRAME_STRING, true); }
     
     // Opens benefits calculator dialog
     private void openCalc() { new CalcPanel(this, Main.FRAME_STRING, true); }
     
-    private void openCode() { CodePanel codePanel = new CodePanel(this, Main.FRAME_STRING, true); }
+    private void openCode() { new CodePanel(this, Main.FRAME_STRING, true); }
     
     private void createAccount() {
 
@@ -682,7 +682,7 @@ public class InitialScreen extends JFrame {
 
             increaseGrossBalance(grossAmount);
             increaseNetBalance(netAmount);
-            increaseFees(fees);
+            updateFeesTotal(fees);
 
             // Update model
             controller.addTransaction(transaction);
@@ -703,7 +703,7 @@ public class InitialScreen extends JFrame {
                 String netAmountStr = (String)transactionTable.getValueAt(index, 6);
                 double netAmout = new Double(netAmountStr);
 
-                String feesStr = "";
+                double fees = grossAmount - netAmout;
 
                 String isDeposit = (String) transactionTable.getValueAt(index, 5);
 
@@ -715,8 +715,12 @@ public class InitialScreen extends JFrame {
                     // If Expense, want to add amount back
                     if (isDeposit.startsWith("E")) {
                         grossAmount = -grossAmount;
+                        netAmout = -netAmout;
                     }
+                    // Update balances
                     decreaseGrossBalance(grossAmount);
+                    decreaseNetBalance(netAmout);
+                    updateFeesTotal(-fees);
                     removeTableRow(index);
                 }
             }
