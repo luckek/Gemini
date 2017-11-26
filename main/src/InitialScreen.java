@@ -384,7 +384,7 @@ public class InitialScreen extends JFrame {
 
         String[] transactionData = new String[6];
 
-        // Get transaction data (this will eventually be an account object)
+        // Get transaction data
         transactionData[0] = tForm.getAcctName();
         transactionData[1] = tForm.getDate();
         transactionData[2] = tForm.getAmnt();
@@ -397,16 +397,17 @@ public class InitialScreen extends JFrame {
 
     private void addTableRow(String[] rowData) {
 
+        // Get model and add data to it
         DefaultTableModel tmpModel = (DefaultTableModel) transactionTable.getModel();
-        tmpModel.addRow(rowData); // This is the method call that will add information to the table.
+        tmpModel.addRow(rowData);
 
         // note that a change has been made
         changeCheck = true;
-
     }
 
     private void removeTableRow(int viewIndex) {
 
+        // Convert index between view and model
         DefaultTableModel tmpModel = (DefaultTableModel) transactionTable.getModel();
         int modelIndex = transactionTable.convertRowIndexToModel(viewIndex);
 
@@ -418,7 +419,7 @@ public class InitialScreen extends JFrame {
         String expDep = (String)tmpModel.getValueAt(modelIndex, 5);
         Model_Transaction t;
 
-        // Create new transaction
+        // Create transaction
         if(type.equalsIgnoreCase("Cash")) {
 
             t = new Model_Cash(type, name, 0, expDep, new Double(gross), date);
@@ -439,7 +440,7 @@ public class InitialScreen extends JFrame {
         // Update model
         controller.removeTransaction(t);
 
-        // note that a change has been made
+        // Note that a change has been made
         changeCheck = true;
     }
 
