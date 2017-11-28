@@ -94,7 +94,6 @@ public class InitialScreen extends JFrame {
         radioPanel.setLayout(new BoxLayout(radioPanel, BoxLayout.PAGE_AXIS));
         wrapperPanel.setLayout(new GridLayout(0, 1));
 
-
         leftPanel.setMaximumSize(new Dimension(700, 200));
         transactionPane.setMaximumSize(new Dimension(700, 500));
         headerPanel.setPreferredSize(new Dimension(300, 25));
@@ -169,7 +168,7 @@ public class InitialScreen extends JFrame {
 
         outterBalancePanel.add(Box.createRigidArea(new Dimension(70, 0)));
         outterBalancePanel.add(grossBalancePanel);
-        outterBalancePanel.add(Box.createRigidArea(new Dimension(0, 0)));
+        outterBalancePanel.add(Box.createRigidArea(new Dimension(90, 0)));
         outterBalancePanel.add(netBalancePanel);
         outterBalancePanel.add(Box.createRigidArea(new Dimension(0, 0)));
         outterBalancePanel.add(feesPanel);
