@@ -5,6 +5,7 @@ import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
 import java.io.IOException;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -135,7 +136,6 @@ public class InitialScreen extends JFrame {
         leftPanel.add(buttonPanel);
         leftPanel.add(Box.createVerticalBox());
 
-
         buttonPanel.add(Box.createRigidArea(new Dimension(0, 50)));
         buttonPanel.add(Box.createRigidArea(new Dimension(0, 50)));
         buttonPanel.add(Box.createRigidArea(new Dimension(0, 50)));
@@ -167,7 +167,7 @@ public class InitialScreen extends JFrame {
 
         headerPanel.add(transactionLabel);
 
-        outterBalancePanel.add(Box.createRigidArea(new Dimension(35, 0)));
+        outterBalancePanel.add(Box.createRigidArea(new Dimension(70, 0)));
         outterBalancePanel.add(grossBalancePanel);
         outterBalancePanel.add(Box.createRigidArea(new Dimension(0, 0)));
         outterBalancePanel.add(netBalancePanel);
