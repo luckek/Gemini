@@ -50,7 +50,7 @@ public class Model_Read_Files {
     }
 
     public ArrayList<String[]> loadData() throws FileNotFoundException {
-        //need to not hard-code string array/array size...i'll fix later
+
         ArrayList<String[]> data = new ArrayList<>();
         // USe this when making jar / eclipse
         //Scanner inFile = new Scanner(new File("Transactions.txt")).useDelimiter("\n");

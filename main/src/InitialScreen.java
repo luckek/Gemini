@@ -23,7 +23,7 @@ public class InitialScreen extends JFrame {
     private String logoPath = "main/resources/logo1.png";
     private ButtonGroup radioGroup;
     private Controller controller;
-    private String[] columnNames = {"Name", "Date", "Gross Amt", "Type", "Code", "Exp / Dep", "Net Amt", "Fees"};
+    private String[] columnNames = {"Name", "Date", "Gross Amt", "Type", "Code", "Net Amt", "Exp / Dep", "Fees"};
     private boolean changeCheck = false;
 
     public InitialScreen(String title) {
@@ -254,9 +254,9 @@ public class InitialScreen extends JFrame {
             double grossValue = new Double((String)transactionTable.getValueAt(i, 2));
 
             // Get net
-            double netValue =  new Double((String)transactionTable.getValueAt(i, 6));
+            double netValue =  new Double((String)transactionTable.getValueAt(i, 5));
 
-            String isExpense = (String)transactionTable.getValueAt(i, 5);
+            String isExpense = (String)transactionTable.getValueAt(i, 6);
 
             double fees = grossValue - netValue;
 
@@ -415,7 +415,7 @@ public class InitialScreen extends JFrame {
         String date = (String)tmpModel.getValueAt(modelIndex, 1);
         String gross = (String)tmpModel.getValueAt(modelIndex, 2);
         String type = (String)tmpModel.getValueAt(modelIndex, 3);
-        String expDep = (String)tmpModel.getValueAt(modelIndex, 5);
+        String expDep = (String)tmpModel.getValueAt(modelIndex, 6);
         Model_Transaction t;
 
         // Create transaction
@@ -700,12 +700,12 @@ public class InitialScreen extends JFrame {
                 String grossAmountStr = (String)transactionTable.getValueAt(index, 2);
                 double grossAmount = new Double(grossAmountStr);
 
-                String netAmountStr = (String)transactionTable.getValueAt(index, 6);
+                String netAmountStr = (String)transactionTable.getValueAt(index, 5);
                 double netAmout = new Double(netAmountStr);
 
                 double fees = grossAmount - netAmout;
 
-                String isDeposit = (String) transactionTable.getValueAt(index, 5);
+                String isDeposit = (String) transactionTable.getValueAt(index, 6);
 
                 // Ask if they would like to delete
                 int option = showWarning("Are you sure you want to delete this transaction?");

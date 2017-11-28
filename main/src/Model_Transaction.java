@@ -95,8 +95,8 @@ public class Model_Transaction {
         info[2] = Double.toString(grossAmt);
         info[3] = type;
         info[4] = Integer.toString(code);
-        info[5] = isDeposit;
-        info[6] = Double.toString(netAmt);
+        info[5] = Double.toString(netAmt);
+        info[6] = isDeposit;
         info[7] = Double.toString(fee);
 
         return info;
