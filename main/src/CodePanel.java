@@ -1,29 +1,30 @@
 import javax.swing.*;
+
 import java.awt.*;
 import java.awt.event.*;
 
 public class CodePanel extends JDialog {
 
 	private JTextField codeField;
-	private JLabel infoLabel, codeLabel;
 	private String userCode;
 
 	public CodePanel(Frame frame, String title, boolean modality) {
 
 		super(frame, title, modality);
 
-		setPreferredSize(new Dimension(300, 250));
+		setPreferredSize(new Dimension(300, 200));
+		setResizable(false);
 
 		// Creating components
 		JLabel infoLabel = new JLabel("Please enter the transaction code below: ");
 		infoLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-		JLabel codeLabel = new JLabel("Transaction Code: ");
+		JLabel codeLabel = new JLabel("Code");
 		codeLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
 		codeField = new JTextField(10);
 
-		JButton addButton = new JButton("Add");
+		JButton addButton = new JButton("Add Code");
 		addButton.addActionListener(new addAction());
 
 		JPanel mainPanel = new JPanel();
@@ -32,8 +33,8 @@ public class CodePanel extends JDialog {
 		JPanel codePanel = new JPanel();
 
 		// Layouts
-		centerPanel.setLayout(new GridLayout(5, 0, 90, 0));
-		mainPanel.setPreferredSize(new Dimension(300, 400));
+		centerPanel.setLayout(new GridLayout(4, 0, 90, 0));
+		mainPanel.setPreferredSize(new Dimension(300, 200));
 		mainPanel.setLayout(new BorderLayout());
 
 		// Add components
@@ -42,7 +43,7 @@ public class CodePanel extends JDialog {
 		mainPanel.add(centerPanel, BorderLayout.CENTER);
 
 		centerPanel.add(infoPanel);
-		centerPanel.add(Box.createRigidArea(new Dimension(10, 20)));
+		centerPanel.add(Box.createRigidArea(new Dimension(10, 50)));
 		centerPanel.add(codePanel);
 
 		infoPanel.add(Box.createRigidArea(new Dimension(10, 50)));
@@ -78,7 +79,7 @@ public class CodePanel extends JDialog {
 
 	private void addConfirmation() {
 		JOptionPane.showMessageDialog(this, "Code successfully added",
-				"Completed", JOptionPane.WARNING_MESSAGE);
+				"", JOptionPane.INFORMATION_MESSAGE);
 	}
 
 	class addAction implements ActionListener {
@@ -95,6 +96,20 @@ public class CodePanel extends JDialog {
 				invalidCodeWarning();
 				return;
 			}
+			// pull code
+			userCode = getCode();
+			
+			// check for duplicate codes in transaction array
+			if (TransactionForm.containsCode(userCode)) {
+				duplicateCodeWarning();
+				return;
+			}
+			
+			// call method to add to respective transaction array
+			TransactionForm.addCode(userCode);
+			addConfirmation();
+			codeField.setText("");
 		}
 	}
+	
 }
