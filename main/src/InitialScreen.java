@@ -9,17 +9,11 @@ import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.io.File;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
-import java.io.IOException;
-import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 
 // TODO: make sure exiting w/all fields filled out does NOT make a new acct / transaction
@@ -35,7 +29,7 @@ public class InitialScreen extends JFrame {
     private String logoPath = "main/resources/logo1.png";
     private ButtonGroup radioGroup;
     private Controller controller;
-    private String[] columnNames = {"Name", "Date", "Gross Amt", "Type", "Code", "Net Amt", "Exp / Dep", "Fees"}
+    private String[] columnNames = {"Name", "Date", "Gross Amt", "Type", "Code", "Net Amt", "Exp / Dep", "Fees"};
     private boolean changeCheck = false;
 
     public InitialScreen(String title) {

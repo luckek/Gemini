@@ -27,7 +27,7 @@ public class Model_Read_Files {
             // Write out info for each account
             for (String name : names) {
                 // Get Account info.
-                String information = name + "," + accounts.getAccountBalance(name) + "," + accounts.getEmail(name) + "," + accounts.getDescription(name) + "," + accounts.getIsRetired(name) + "\n";
+                String information = name + "," + accounts.getEmail(name) + "," + accounts.getDescription(name) + "," + accounts.isRetired(name) + "\n";
 
                 // Append information to string
                 sb.append(information);
