@@ -1,4 +1,6 @@
-
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -6,13 +8,12 @@ import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.File;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.text.NumberFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 // TODO: make sure exiting w/all fields filled out does NOT make a new acct / transaction
@@ -37,11 +38,13 @@ public class InitialScreen extends JFrame {
 
         // Configuring frame behavior
         setVisible(true);
+
         setSize(1100, 700);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         // Instantiating components
         JPanel mainPanel = new JPanel(new BorderLayout());
+
         JPanel buttonPanel = new JPanel(new GridLayout(13, 0, 20, 31));
         JPanel leftPanel = new JPanel();
         JPanel wrapperPanel = new JPanel();
@@ -82,7 +85,7 @@ public class InitialScreen extends JFrame {
         JMenu fileMenu = new JMenu("File");
         JMenu helpMenu = new JMenu("Help");
         JMenu printMenu = new JMenu("Print");
-
+      
         JMenuItem save = new JMenuItem("Save");
         JMenuItem userGuide = new JMenuItem("User Guide");
         JMenuItem print = new JMenuItem("Print");
@@ -123,7 +126,6 @@ public class InitialScreen extends JFrame {
         // File Menu
         fileMenu.add(save);
         menuBar.add(fileMenu);
-        
         printMenu.add(print);
         menuBar.add(printMenu);
         
@@ -253,7 +255,7 @@ public class InitialScreen extends JFrame {
     }
 
     private void updateBalance() {
-
+      
         double grossBalance = 0;
         double netBalance = 0;
         double feesTotal = 0;
@@ -446,7 +448,6 @@ public class InitialScreen extends JFrame {
     }
 
     private String[] createTransaction() {
-
         // Get accounts
         String[] tmp = controller.getAvailableAccts();
         String[] accts = new String[tmp.length - 1];
@@ -467,7 +468,6 @@ public class InitialScreen extends JFrame {
         transactionData[3] = tForm.getTransactionType();
         transactionData[4] = tForm.getCode();
         transactionData[5] = tForm.isDeposit();
-
         return transactionData;
     }
 
@@ -482,7 +482,7 @@ public class InitialScreen extends JFrame {
     }
 
     private void removeTableRow(int viewIndex) {
-
+      
         // Convert index between view and model
         DefaultTableModel tmpModel = (DefaultTableModel) transactionTable.getModel();
         int modelIndex = transactionTable.convertRowIndexToModel(viewIndex);
@@ -554,7 +554,6 @@ public class InitialScreen extends JFrame {
         int rowIndex = Integer.MIN_VALUE;
 
         if (tmpModel.getRowCount() == 0) {
-
             JOptionPane.showMessageDialog(this, "There are no transactions to remove!",
                     "Warning!", JOptionPane.WARNING_MESSAGE);
 
@@ -643,7 +642,7 @@ public class InitialScreen extends JFrame {
             openCalc();
         }
     }
-    
+
     class codeAction implements ActionListener {
     	public void actionPerformed(ActionEvent e) {
     		openCode();
@@ -652,7 +651,6 @@ public class InitialScreen extends JFrame {
 
     class deleteAction implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-
             String acctToDelete = getAcct("Please select the account you want to delete");
             if ((acctToDelete != null) && (!acctToDelete.isEmpty())) {
                 int option = showWarning("Are you sure you want to delete this account?");
@@ -691,7 +689,7 @@ public class InitialScreen extends JFrame {
     }
 
     class logoutAction implements ActionListener {
-
+      
         @Override
         public void actionPerformed(ActionEvent e) {
 
@@ -774,6 +772,7 @@ public class InitialScreen extends JFrame {
 
             // If index IS MIN_VALUE nothing was selected, so we should not remove a transaction
             if (index != Integer.MIN_VALUE) {
+
                 String grossAmountStr = (String)transactionTable.getValueAt(index, 2);
                 double grossAmount = new Double(grossAmountStr);
 
@@ -863,7 +862,6 @@ public class InitialScreen extends JFrame {
     }
 
     class saveListener implements ActionListener {
-
         @Override
         public void actionPerformed(ActionEvent e) {
             save();
@@ -879,7 +877,7 @@ public class InitialScreen extends JFrame {
             openGuide();
         }
     }
-    
+  
     class printListener implements ActionListener {
 
         @Override

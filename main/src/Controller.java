@@ -26,7 +26,7 @@ public class Controller {
 
     void loadData() throws FileNotFoundException {
 
-        ArrayList<String[]> transactionArray = readFile.loadData();
+        ArrayList<String[]> transactionArray = readFile.loadEncryptedData();
 
         for(String[] transaction : transactionArray) {
 
@@ -56,7 +56,7 @@ public class Controller {
 
     void loadAcctInfo() throws FileNotFoundException {
 
-        ArrayList<String[]> infoArray = readFile.loadAcctInfo();
+        ArrayList<String[]> infoArray = readFile.loadEncryptedAcctInfo();
 
         for(String[] acct : infoArray) {
             account.addAccount(acct);
