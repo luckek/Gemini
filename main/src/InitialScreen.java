@@ -1,3 +1,4 @@
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -6,9 +7,13 @@ import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 // TODO: make sure exiting w/all fields filled out does NOT make a new acct / transaction
 
@@ -76,9 +81,11 @@ public class InitialScreen extends JFrame {
 
         JMenu fileMenu = new JMenu("File");
         JMenu helpMenu = new JMenu("Help");
+        JMenu printMenu = new JMenu("Print");
 
         JMenuItem save = new JMenuItem("Save");
         JMenuItem userGuide = new JMenuItem("User Guide");
+        JMenuItem print = new JMenuItem("Print");
 
         accountList = new JComboBox<>(); // This should be populated by a list of all accounts
         transactionTable = new JTable(new DefaultTableModel(columnNames, 0));
@@ -116,7 +123,10 @@ public class InitialScreen extends JFrame {
         // File Menu
         fileMenu.add(save);
         menuBar.add(fileMenu);
-
+        
+        printMenu.add(print);
+        menuBar.add(printMenu);
+        
         // Help Menu
         helpMenu.add(userGuide);
         menuBar.add(helpMenu);
@@ -211,6 +221,7 @@ public class InitialScreen extends JFrame {
         creditButton.addActionListener(new accountListener());
         save.addActionListener(new saveListener());
         userGuide.addActionListener(new guideListener());
+        print.addActionListener(new printListener());
     }
 
     void initComboBox(String[] accountNames) {
@@ -342,6 +353,73 @@ public class InitialScreen extends JFrame {
     // Opens user guide panel
     private void openGuide() { new GuidePanel(this, Main.FRAME_STRING, true); }
     
+    //Printing. Re-uses code, so...might need to be cleaned up?
+    private void print() throws IOException { 
+    	String filterString = (String) accountList.getSelectedItem();
+        String filterString2 = radioGroup.getSelection().getActionCommand();
+
+        TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(((DefaultTableModel) transactionTable.getModel()));
+
+        RowFilter nameFilter = null;
+        RowFilter typeFilter = null;
+
+        ArrayList<RowFilter<Object, Object>> filters = new ArrayList<>(2);
+
+        if (filterString != null && !filterString.equalsIgnoreCase("All")) {
+
+            nameFilter = RowFilter.regexFilter(filterString);
+        }
+
+        if (filterString2 != null && !filterString2.equalsIgnoreCase("Both")) {
+
+            typeFilter = RowFilter.regexFilter(filterString2);
+        }
+
+        if (nameFilter == null && typeFilter == null) {
+
+            transactionTable.setRowSorter(null);
+
+        } else if (nameFilter == null) {
+
+            typeFilter = RowFilter.regexFilter(filterString2);
+            sorter.setRowFilter(typeFilter);
+
+            transactionTable.setRowSorter(sorter);
+
+        } else if (typeFilter == null) {
+
+            nameFilter = RowFilter.regexFilter(filterString);
+            sorter.setRowFilter(nameFilter);
+
+            transactionTable.setRowSorter(sorter);
+
+        } else {
+
+            filters.add(nameFilter);
+            filters.add(typeFilter);
+
+            sorter.setRowFilter(RowFilter.andFilter(filters));
+
+            transactionTable.setRowSorter(sorter);
+        }
+
+        // Update / calculate balance
+        updateBalance();
+        
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
+        BufferedWriter writer = new BufferedWriter(new FileWriter("transactions_" + timeStamp + ".txt"));
+          
+        for(int i = 0; i < transactionTable.getRowCount(); i++) {
+        	String name = (String)transactionTable.getValueAt(i, 0);
+            String date = (String)transactionTable.getValueAt(i,1);
+            String gross = (String)transactionTable.getValueAt(i, 2);
+            String type = (String)transactionTable.getValueAt(i, 3);
+            String expDep = (String)transactionTable.getValueAt(i, 5);
+            writer.append(name + ", " + date + ", " + gross + ", " + type + ", " + expDep);
+            writer.newLine();
+        }
+        writer.close();
+    }
     // Opens benefits calculator dialog
     private void openCalc() { new CalcPanel(this, Main.FRAME_STRING, true); }
     
@@ -799,6 +877,21 @@ public class InitialScreen extends JFrame {
 
             // User guide routine here
             openGuide();
+        }
+    }
+    
+    class printListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+
+            // User guide routine here
+            try {
+				print();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
         }
     }
 }
