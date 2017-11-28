@@ -369,7 +369,7 @@ public class InitialScreen extends JFrame {
         updateBalance();
         
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
-        BufferedWriter writer = new BufferedWriter(new FileWriter("C:\\Users\\AJ\\Desktop\\transactions_" + timeStamp + ".txt"));
+        BufferedWriter writer = new BufferedWriter(new FileWriter("transactions_" + timeStamp + ".txt"));
           
         for(int i = 0; i < transactionTable.getRowCount(); i++) {
         	String name = (String)transactionTable.getValueAt(i, 0);
