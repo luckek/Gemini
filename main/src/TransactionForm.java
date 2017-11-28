@@ -7,6 +7,8 @@ import java.awt.event.ActionListener;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class TransactionForm extends JDialog {
 
@@ -17,8 +19,9 @@ public class TransactionForm extends JDialog {
     private JComboBox<String> typeBox;
     private JComboBox<String> depositExpenseBox;
     private String[] transactionTypes = new String[] {"Check", "Credit Card", "Cash"}; // Make enum class / constant of transaction class?
-    private String[] depositCodes = new String[] {"50109", "50287"};
-    private String[] expenseCodes = new String[] {"61123", "61225", "62210", "62241", "62245"};
+    private static String[] depositCodes = new String[] {"50109", "50287"};
+    private static String[] expenseCodes = new String[] {"61123", "61225", "62210", "62241", "62245"};
+    private static String[] customCodes = new String[] {"00000"};
 
     private final DateFormat dateFormatter = new SimpleDateFormat("mm/dd/yyyy");
     
@@ -44,8 +47,8 @@ public class TransactionForm extends JDialog {
         JLabel codeLabel = new JLabel("Code: ");
         codeBox = new JComboBox<>(expenseCodes);
         JButton okButton = new JButton("Ok");
-        JLabel expenseDepositLabel = new JLabel("Exp / Dep");
-        depositExpenseBox = new JComboBox<>(new String[] {"Expense", "Deposit"});
+        JLabel expenseDepositLabel = new JLabel("Exp / Dep: ");
+        depositExpenseBox = new JComboBox<>(new String[] {"Expense", "Deposit", "Custom"});
         
         try {
         	MaskFormatter dateMask = new MaskFormatter("##/##/####");
@@ -131,6 +134,41 @@ public class TransactionForm extends JDialog {
     public String getTransactionType() { return (String)typeBox.getSelectedItem(); }
     public String isDeposit() { return (String) depositExpenseBox.getSelectedItem(); }
     public String getCode() { return (String)codeBox.getSelectedItem(); }
+    
+    public static void addCode(String customCode, String isExpense) {
+
+        if(isExpense.equalsIgnoreCase("Expense")) {
+
+            expenseCodes = Arrays.copyOf(expenseCodes, expenseCodes.length + 1);
+            expenseCodes[expenseCodes.length - 1] = customCode;
+
+        } else {
+
+            depositCodes = Arrays.copyOf(depositCodes, depositCodes.length + 1);
+            depositCodes[depositCodes.length - 1] = customCode;
+        }
+    }
+    
+    public static boolean containsCode(String customCode) {
+
+
+        // Check expense codes
+        for(int i = 0; i < expenseCodes.length; i++) {
+            if(expenseCodes[i].equalsIgnoreCase(customCode)) {
+                return true;
+            }
+        }
+
+        // Check deposit codes
+        for(int i = 0; i < depositCodes.length; i++) {
+            if(depositCodes[i].equalsIgnoreCase(customCode)) {
+                return true;
+            }
+        }
+
+        // If they are not found, code doesn't exist
+    	return false;
+    }
 
     // Closes dialog
     private void close() { this.dispose(); }
@@ -166,17 +204,24 @@ public class TransactionForm extends JDialog {
 
         public void actionPerformed(ActionEvent e) {
 
-           String typeStr = (String)depositExpenseBox.getSelectedItem();
+           String isDeposit = (String)depositExpenseBox.getSelectedItem();
 
-           if(typeStr.equalsIgnoreCase("Deposit")) {
+           if (isDeposit == null) { return; }
+
+           // Deposit
+           if(isDeposit.startsWith("D")) {
 
                ComboBoxModel<String> model = new DefaultComboBoxModel<>(depositCodes);
                codeBox.setModel(model);
-           }
-           else if(typeStr.equalsIgnoreCase("Expense")) {
+           } // Expense
+           else if(isDeposit.startsWith("E")) {
 
                ComboBoxModel<String> model = new DefaultComboBoxModel<>(expenseCodes);
                codeBox.setModel(model);
+           }
+           else {
+        	   ComboBoxModel<String> model = new DefaultComboBoxModel<>(customCodes);
+        	   codeBox.setModel(model);
            }
         }
     }

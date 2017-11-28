@@ -10,10 +10,11 @@ public class AcctInfoForm extends JDialog {
         super(frame, titleString, modality);
 
         String name = currAccount.getName();
-        String balance = currAccount.getBalance();
+        String balance = Double.toString(currAccount.getBalance());
         String description = currAccount.getDescription();
         String email = currAccount.getEmail();
-        setPreferredSize(new Dimension(300, 300));
+        boolean isRetired = currAccount.isRetired();
+        setPreferredSize(new Dimension(300, 350));
 
         JLabel nameLabel  = new JLabel("Name: ");
         nameLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -25,7 +26,12 @@ public class AcctInfoForm extends JDialog {
         JLabel descriptionLabel2 = new JLabel(description);
         JLabel emailLabel = new JLabel("E-mail: ");
         JLabel emailLabel2 = new JLabel(email);
+        JLabel retiredLabel = new JLabel();
         JButton okButton = new JButton("Ok");
+
+        if(isRetired) {
+            retiredLabel.setText("This account is retired");
+        }
 
         okButton.addActionListener(new okAction());
 
@@ -34,9 +40,10 @@ public class AcctInfoForm extends JDialog {
         JPanel balancePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JPanel descriptionPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JPanel emailPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel reitredPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JPanel centerPanel = new JPanel();
 
-        centerPanel.setLayout(new GridLayout(4, 0, 90, 0));
+        centerPanel.setLayout(new GridLayout(5, 0, 90, 0));
         mainPanel.setPreferredSize(new Dimension(500, 500));
         mainPanel.setLayout(new BorderLayout());
 
@@ -49,6 +56,7 @@ public class AcctInfoForm extends JDialog {
         centerPanel.add(balancePanel);
         centerPanel.add(descriptionPanel);
         centerPanel.add(emailPanel);
+        centerPanel.add(reitredPanel);
 
         namePanel.add(nameLabel);
         namePanel.add(nameLabel2);
@@ -61,6 +69,8 @@ public class AcctInfoForm extends JDialog {
 
         emailPanel.add(emailLabel);
         emailPanel.add(emailLabel2);
+
+        reitredPanel.add(retiredLabel);
 
         pack();
         setVisible(true);

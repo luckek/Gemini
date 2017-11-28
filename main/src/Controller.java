@@ -1,16 +1,14 @@
-
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 
 public class Controller {
 
-    private static LoginPanel mypanel;
     private Model_Read_Files readFile =  new Model_Read_Files();
     private Model_MgmtAccount account = new Model_MgmtAccount();
 
     void initializeScreen() {
-        mypanel = new LoginPanel();
+        LoginPanel mypanel = new LoginPanel();
         mypanel.startPanel();
     }
 
@@ -18,28 +16,17 @@ public class Controller {
 
     }
 
-    public void addTransaction(Model_Transaction transaction) {
-
-        account.addTransaction(transaction);
-    }
-
-    public void saveAccounts() {
+    void saveAccounts() throws IOException {
         readFile.saveAccounts(account);
     }
 
-    public void saveData() throws IOException
-    {
-        readFile.saveData(account.getTransactionsList());
-    }
-
-    void removeTransaction(int index) {
-
-        account.removeTransaction(index);
+    void saveData() throws IOException {
+        readFile.saveData(account.getTransactionList());
     }
 
     void loadData() throws FileNotFoundException {
 
-        ArrayList<String[]> transactionArray = readFile.loadEncryptedData();
+        ArrayList<String[]> transactionArray = readFile.loadData();
 
         for(String[] transaction : transactionArray) {
 
@@ -57,11 +44,9 @@ public class Controller {
 
                 newTransaction = new Model_Credit(transaction[3], transaction[0], code, transaction[5], amount, transaction[1]);
 
-
             } else { // Check
 
                 newTransaction = new Model_Check(transaction[3], transaction[0], code, transaction[5], amount, transaction[1]);
-
             }
 
             // Add transaction to model
@@ -71,26 +56,46 @@ public class Controller {
 
     void loadAcctInfo() throws FileNotFoundException {
 
-        ArrayList<String[]> infoArray = readFile.loadEncryptedAcctInfo();
+        ArrayList<String[]> infoArray = readFile.loadAcctInfo();
 
         for(String[] acct : infoArray) {
             account.addAccount(acct);
         }
     }
 
-    public Account getAccountInfo(String acctName) {
+    Account getAccountInfo(String acctName) {
         return account.getAccountInfo(acctName);
     }
 
-    public void newAccount(String name, String balance, String email, String description) {
-        account.addAccount(new String[] {name, balance, email, description});
-    }
-
-    String[] getAcctNames() {
+    String[] getAllAccounts() {
         return account.getAcctNames();
     }
 
+    String[] getAvailableAccts() {
+        return account.getAvailableAccts();
+    }
+
     String[][] getTransactions() {
-        return account.getTransactions();
+        return account.getTransactionArray();
+    }
+
+    void newAccount(String name, String balance, String email, String description) {
+        account.addAccount(new String[] {name, balance, email, description, "False"});
+    }
+
+    void removeAccount(String acctName) {
+        account.removeAccount(acctName);
+    }
+
+    void retireAccount(String acctToRetire) {
+        account.retireAccount(acctToRetire);
+    }
+
+    void addTransaction(Model_Transaction transaction) {
+        account.addTransaction(transaction);
+    }
+
+    void removeTransaction(Model_Transaction transaction) {
+        account.removeTransaction(transaction);
     }
 }
