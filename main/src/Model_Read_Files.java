@@ -12,9 +12,9 @@ public class Model_Read_Files {
         // Set up FileWriter
         FileWriter writer;
         
-        // Added a filepath for eclipse for future use
-        //writer = new FileWriter("Accounts.txt");
-        
+        // Use this line when making jar / using eclipse
+//        writer = new FileWriter("Accounts.txt");
+
         writer = new FileWriter("main/resources/Accounts.txt");
 
         // Get all accounts(not just retired ones)
@@ -34,10 +34,10 @@ public class Model_Read_Files {
         // Set up FileWriter
         FileWriter writer;
         
-        // Added a filepath for eclipse for future use
-        //writer = new FileWriter("Transactions.txt");
-        
-        writer = new FileWriter("main/resources/Transactions.txt");
+        // Use this when making jar / using eclipse
+//        writer = new FileWriter("Transactions.txt");
+
+        writer = new FileWriter("Transactions.txt");
 
         // Write out info for each transaction
         for(Model_Transaction transaction : transactions) {
@@ -50,9 +50,9 @@ public class Model_Read_Files {
     }
 
     public ArrayList<String[]> loadData() throws FileNotFoundException {
-        //need to not hard-code string array/array size...i'll fix later
+
         ArrayList<String[]> data = new ArrayList<>();
-        // Added a filepath for eclipse for future use
+        // USe this when making jar / eclipse
         //Scanner inFile = new Scanner(new File("Transactions.txt")).useDelimiter("\n");
         
         Scanner inFile = new Scanner(new File("main/resources/Transactions.txt")).useDelimiter("\n");
@@ -67,7 +67,7 @@ public class Model_Read_Files {
     public ArrayList<String[]> loadAcctInfo() throws FileNotFoundException {
 
         ArrayList<String[]> acctInfo = new ArrayList<>();
-        // Added a filepath for eclipse for future use
+        // Use this when making jar / using eclipse
         //Scanner inFile = new Scanner(new File("Accounts.txt")).useDelimiter("\n");
         
         Scanner inFile = new Scanner(new File("main/resources/Accounts.txt")).useDelimiter("\n");

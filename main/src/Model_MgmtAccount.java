@@ -60,7 +60,7 @@ public class Model_MgmtAccount {
 
     String[][] getTransactionArray() {
 
-        String[][] tmp = new String[transactions.size()][7];
+        String[][] tmp = new String[transactions.size()][8];
 
         for(int i = 0; i < transactions.size(); i++) {
             tmp[i] = transactions.get(i).getTransactionInfo();

@@ -1,4 +1,3 @@
-import jdk.nashorn.internal.scripts.JO;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -7,6 +6,7 @@ import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -21,12 +21,14 @@ public class InitialScreen extends JFrame {
 
     private JComboBox<String> accountList;
     private JTable transactionTable;
-    private JLabel balanceLabel;
+    private JLabel grossBalanceLabel;
+    private JLabel netBalanceLabel;
+    private JLabel feesLabel;
     private JLabel logoLabel;
     private String logoPath = "main/resources/logo1.png";
     private ButtonGroup radioGroup;
     private Controller controller;
-    private String[] columnNames = {"Name", "Date", "Gross Amt", "Type", "Code", "Exp / Dep", "Net Amt"};
+    private String[] columnNames = {"Name", "Date", "Gross Amt", "Type", "Code", "Net Amt", "Exp / Dep", "Fees"};
     private boolean changeCheck = false;
 
     public InitialScreen(String title) {
@@ -35,7 +37,7 @@ public class InitialScreen extends JFrame {
 
         // Configuring frame behavior
         setVisible(true);
-        setSize(1000, 700);
+        setSize(1100, 700);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         // Instantiating components
@@ -46,7 +48,9 @@ public class InitialScreen extends JFrame {
         JPanel transactionPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JPanel outterPanel = new JPanel(new BorderLayout());
         JPanel headerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        JPanel balancePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JPanel grossBalancePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JPanel netBalancePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JPanel feesPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JPanel outterBalancePanel = new JPanel();
         JPanel addRemovePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JPanel radioPanel = new JPanel();
@@ -54,7 +58,9 @@ public class InitialScreen extends JFrame {
         JLabel acctLabel = new JLabel("Account: ");
         JLabel transactionLabel = new JLabel("Transactions: ");
         JLabel devLabel = new JLabel(Main.DEV_STRING);
-        balanceLabel = new JLabel();
+        grossBalanceLabel = new JLabel();
+        netBalanceLabel = new JLabel();
+        feesLabel = new JLabel();
 
         JButton addAcctButton = new JButton("Add Account");
         JButton calcBttn = new JButton("Benefits Calculator");
@@ -91,12 +97,12 @@ public class InitialScreen extends JFrame {
         // Layouts and sizing
         transactionPanel.setLayout(new BoxLayout(transactionPanel, BoxLayout.PAGE_AXIS));
         leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.LINE_AXIS));
-        outterBalancePanel.setLayout(new BoxLayout(outterBalancePanel, BoxLayout.PAGE_AXIS));
+        outterBalancePanel.setLayout(new BoxLayout(outterBalancePanel, BoxLayout.LINE_AXIS));
         radioPanel.setLayout(new BoxLayout(radioPanel, BoxLayout.PAGE_AXIS));
         wrapperPanel.setLayout(new GridLayout(0, 1));
 
         leftPanel.setMaximumSize(new Dimension(700, 200));
-        transactionPane.setMaximumSize(new Dimension(600, 500));
+        transactionPane.setMaximumSize(new Dimension(700, 500));
         headerPanel.setPreferredSize(new Dimension(300, 25));
         outterBalancePanel.setPreferredSize(new Dimension(100, 100));
         addButton.setPreferredSize(new Dimension(100, 22));
@@ -105,7 +111,7 @@ public class InitialScreen extends JFrame {
         wrapperPanel.setPreferredSize(new Dimension(150, 700));
         wrapperPanel.setMaximumSize(new Dimension(150, 700));
         radioPanel.setMaximumSize(new Dimension(150, 700));
-        balanceLabel.setPreferredSize(new Dimension(150, 20));
+        grossBalanceLabel.setPreferredSize(new Dimension(65, 20));
 
         bothButton.setActionCommand("Both");
         creditButton.setActionCommand("Deposit");
@@ -139,7 +145,6 @@ public class InitialScreen extends JFrame {
         leftPanel.add(buttonPanel);
         leftPanel.add(Box.createVerticalBox());
 
-
         buttonPanel.add(Box.createRigidArea(new Dimension(0, 50)));
         buttonPanel.add(Box.createRigidArea(new Dimension(0, 50)));
         buttonPanel.add(Box.createRigidArea(new Dimension(0, 50)));
@@ -171,11 +176,21 @@ public class InitialScreen extends JFrame {
 
         headerPanel.add(transactionLabel);
 
-        outterBalancePanel.add(balancePanel);
-        outterBalancePanel.add(Box.createRigidArea(new Dimension(0, 25)));
+        outterBalancePanel.add(Box.createRigidArea(new Dimension(70, 0)));
+        outterBalancePanel.add(grossBalancePanel);
+        outterBalancePanel.add(Box.createRigidArea(new Dimension(90, 0)));
+        outterBalancePanel.add(netBalancePanel);
+        outterBalancePanel.add(Box.createRigidArea(new Dimension(0, 0)));
+        outterBalancePanel.add(feesPanel);
 
-        balancePanel.add(new JLabel("Current Balance:"));
-        balancePanel.add(balanceLabel);
+        grossBalancePanel.add(new JLabel("Gross Balance:"));
+        grossBalancePanel.add(grossBalanceLabel);
+
+        netBalancePanel.add(new JLabel("Net Balance:"));
+        netBalancePanel.add(netBalanceLabel);
+
+        feesPanel.add(new JLabel("Fees total:"));
+        feesPanel.add(feesLabel);
 
         radioGroup.add(bothButton);
         radioGroup.add(debitButton);
@@ -224,7 +239,7 @@ public class InitialScreen extends JFrame {
         updateBalance();
     }
 
-    private void setBalance(double newBalance) {
+    private void setTotal(double newBalance, JLabel labelToUpdate) {
 
         NumberFormat formatter = NumberFormat.getCurrencyInstance();
         String newBalanceStr = formatter.format(newBalance);
@@ -234,34 +249,45 @@ public class InitialScreen extends JFrame {
             newBalanceStr = newBalanceStr.replace(")", "");
             newBalanceStr = "-" + newBalanceStr;
         }
-        balanceLabel.setText(newBalanceStr);
+        labelToUpdate.setText(newBalanceStr);
     }
 
     private void updateBalance() {
 
-        double balance = 0;
+        double grossBalance = 0;
+        double netBalance = 0;
+        double feesTotal = 0;
 
         for(int i = 0; i < transactionTable.getRowCount(); i++) {
 
-            String valueStr = (String)transactionTable.getValueAt(i, 2);
+            // Get gross
+            double grossValue = new Double((String)transactionTable.getValueAt(i, 2));
 
-            if(valueStr == null) { continue; } // Just in case row is empty
+            // Get net
+            double netValue =  new Double((String)transactionTable.getValueAt(i, 5));
 
-            String isExpense = (String)transactionTable.getValueAt(i, 5);
-            double currentValue = new Double(valueStr);
+            String isExpense = (String)transactionTable.getValueAt(i, 6);
+
+            double fees = grossValue - netValue;
 
             // Convert to negative value if expense
             if(isExpense.startsWith("E")) {
-                currentValue = -currentValue;
+                grossValue = -grossValue;
+                netValue = -netValue;
             }
-            balance += currentValue;
+
+            grossBalance += grossValue;
+            netBalance += netValue;
+            feesTotal += fees;
         }
-        setBalance(balance);
+        setTotal(grossBalance, grossBalanceLabel);
+        setTotal(netBalance, netBalanceLabel);
+        setTotal(feesTotal, feesLabel);
     }
 
-    private double getBalance() {
+    private double getBalance(JLabel BalanceToGet) {
 
-        String balanceStr = balanceLabel.getText();
+        String balanceStr = BalanceToGet.getText();
         balanceStr = balanceStr.replace("$", "");
 
         // If negative
@@ -271,12 +297,24 @@ public class InitialScreen extends JFrame {
         return new Double(balanceStr);
     }
 
-    private void increaseBalance(double amount) {
-        setBalance(getBalance() + amount);
+    private void increaseGrossBalance(double amount) {
+        setTotal(getBalance(grossBalanceLabel) + amount, grossBalanceLabel);
     }
 
-    private void decreaseBalance(double amount) {
-        setBalance(getBalance() - amount);
+    private void decreaseGrossBalance(double amount) {
+        setTotal(getBalance(grossBalanceLabel) - amount, grossBalanceLabel);
+    }
+
+    private void increaseNetBalance(double amount) {
+        setTotal(getBalance(netBalanceLabel) + amount, netBalanceLabel);
+    }
+
+    private void decreaseNetBalance(double amount) {
+        setTotal(getBalance(netBalanceLabel) - amount, netBalanceLabel);
+    }
+
+    private void updateFeesTotal(double amount) {
+        setTotal(getBalance(feesLabel) + amount, feesLabel);
     }
 
     private void setCellsAlignment(JTable table, int alignment) {
@@ -313,7 +351,7 @@ public class InitialScreen extends JFrame {
     }
 
     // Opens user guide panel
-    private void openGuide() { GuidePanel guidePanel = new GuidePanel(this, Main.FRAME_STRING, true); }
+    private void openGuide() { new GuidePanel(this, Main.FRAME_STRING, true); }
     
     //Printing. Re-uses code, so...might need to be cleaned up?
     private void print() throws IOException { 
@@ -383,9 +421,9 @@ public class InitialScreen extends JFrame {
         writer.close();
     }
     // Opens benefits calculator dialog
-    private void openCalc() { CalcPanel calcPanel = new CalcPanel(this, Main.FRAME_STRING, true); }
+    private void openCalc() { new CalcPanel(this, Main.FRAME_STRING, true); }
     
-    private void openCode() { CodePanel codePanel = new CodePanel(this, Main.FRAME_STRING, true); }
+    private void openCode() { new CodePanel(this, Main.FRAME_STRING, true); }
     
     private void createAccount() {
 
@@ -422,7 +460,7 @@ public class InitialScreen extends JFrame {
 
         String[] transactionData = new String[6];
 
-        // Get transaction data (this will eventually be an account object)
+        // Get transaction data
         transactionData[0] = tForm.getAcctName();
         transactionData[1] = tForm.getDate();
         transactionData[2] = tForm.getAmnt();
@@ -435,16 +473,17 @@ public class InitialScreen extends JFrame {
 
     private void addTableRow(String[] rowData) {
 
+        // Get model and add data to it
         DefaultTableModel tmpModel = (DefaultTableModel) transactionTable.getModel();
-        tmpModel.addRow(rowData); // This is the method call that will add information to the table.
+        tmpModel.addRow(rowData);
 
         // note that a change has been made
         changeCheck = true;
-
     }
 
     private void removeTableRow(int viewIndex) {
 
+        // Convert index between view and model
         DefaultTableModel tmpModel = (DefaultTableModel) transactionTable.getModel();
         int modelIndex = transactionTable.convertRowIndexToModel(viewIndex);
 
@@ -453,10 +492,10 @@ public class InitialScreen extends JFrame {
         String date = (String)tmpModel.getValueAt(modelIndex, 1);
         String gross = (String)tmpModel.getValueAt(modelIndex, 2);
         String type = (String)tmpModel.getValueAt(modelIndex, 3);
-        String expDep = (String)tmpModel.getValueAt(modelIndex, 5);
+        String expDep = (String)tmpModel.getValueAt(modelIndex, 6);
         Model_Transaction t;
 
-        // Create new transaction
+        // Create transaction
         if(type.equalsIgnoreCase("Cash")) {
 
             t = new Model_Cash(type, name, 0, expDep, new Double(gross), date);
@@ -477,7 +516,7 @@ public class InitialScreen extends JFrame {
         // Update model
         controller.removeTransaction(t);
 
-        // note that a change has been made
+        // Note that a change has been made
         changeCheck = true;
     }
 
@@ -706,15 +745,21 @@ public class InitialScreen extends JFrame {
                 transaction = new Model_Check(newRowData[3], newRowData[0], new Integer(newRowData[4]), newRowData[5], new Double(newRowData[2]), newRowData[1]);
             }
 
-            double amount = transaction.getGross();
+            double grossAmount = transaction.getGross();
+            double netAmount = transaction.getNet();
+            double fees = grossAmount - netAmount;
+
             // Add transaction to table
             addTableRow(transaction.getTransactionInfo());
 
             if(transaction.isDeposit().startsWith("E")) {
-                amount = -amount;
+                grossAmount = -grossAmount;
+                netAmount = -netAmount;
             }
 
-            increaseBalance(amount);
+            increaseGrossBalance(grossAmount);
+            increaseNetBalance(netAmount);
+            updateFeesTotal(fees);
 
             // Update model
             controller.addTransaction(transaction);
@@ -729,9 +774,15 @@ public class InitialScreen extends JFrame {
 
             // If index IS MIN_VALUE nothing was selected, so we should not remove a transaction
             if (index != Integer.MIN_VALUE) {
-                String amountStr = (String) transactionTable.getValueAt(index, 2);
-                double amount = new Double(amountStr);
-                String isDeposit = (String) transactionTable.getValueAt(index, 5);
+                String grossAmountStr = (String)transactionTable.getValueAt(index, 2);
+                double grossAmount = new Double(grossAmountStr);
+
+                String netAmountStr = (String)transactionTable.getValueAt(index, 5);
+                double netAmout = new Double(netAmountStr);
+
+                double fees = grossAmount - netAmout;
+
+                String isDeposit = (String) transactionTable.getValueAt(index, 6);
 
                 // Ask if they would like to delete
                 int option = showWarning("Are you sure you want to delete this transaction?");
@@ -740,9 +791,13 @@ public class InitialScreen extends JFrame {
                 if (option == 0) {
                     // If Expense, want to add amount back
                     if (isDeposit.startsWith("E")) {
-                        amount = -amount;
+                        grossAmount = -grossAmount;
+                        netAmout = -netAmout;
                     }
-                    decreaseBalance(amount);
+                    // Update balances
+                    decreaseGrossBalance(grossAmount);
+                    decreaseNetBalance(netAmout);
+                    updateFeesTotal(-fees);
                     removeTableRow(index);
                 }
             }

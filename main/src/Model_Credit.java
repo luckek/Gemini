@@ -8,9 +8,9 @@ public class Model_Credit extends Model_Transaction {
         percentage = 0.12;
         double tmpAmt = grossAmt - (grossAmt * percentage);
 
-        String amt = Double.toString(tmpAmt);
-
         // This Converts the sting amt to a large decimal, rounds it with banker's rounding, and returns a double.
-        netAmt = new BigDecimal(amt).setScale(2, RoundingMode.HALF_EVEN).doubleValue();
+        netAmt = new BigDecimal(tmpAmt).setScale(2, RoundingMode.HALF_EVEN).doubleValue();
+
+        fee = new BigDecimal(grossAmt - netAmt).setScale(2, RoundingMode.HALF_EVEN).doubleValue();
     }
 }
