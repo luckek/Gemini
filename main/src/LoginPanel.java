@@ -17,8 +17,11 @@ public class LoginPanel
     private JTextField usernameTF;
     private JPasswordField passwordPF;
     private JLabel invalid, logoLabel;
-    private String logoPath = "main/resources/logo1.png";
+    // Use this line when making jar / using eclipse
+    private String logoPath = "logo1.png";
+    //private String logoPath = "main/resources/logo1.png";
     private InitialScreen initialScreen;
+    private static JCheckBox passwordText;
     private JFrame frame;
     private Controller controller = new Controller();
 
@@ -72,6 +75,7 @@ public class LoginPanel
         // Create password password field
         passwordPF = new JPasswordField();
         passwordPF.setBounds(250, 270, 250, 40);
+        passwordPF.setEchoChar('*');
         panel.add(passwordPF);
         passwordPF.addActionListener(new LoginAction());
 
@@ -86,22 +90,46 @@ public class LoginPanel
         invalid = new JLabel("");
         invalid.setForeground(Color.red);
         invalid.setFont(basic);
-        invalid.setBounds(240, 330, 400, 20);
+        invalid.setBounds(240, 450, 400, 20);
         panel.add(invalid);
 
-        // Create Developed by Label
         // Create logo
         logoLabel = new JLabel (new ImageIcon(logoPath));
         logoLabel.setBounds(80, -70, 150, 300);
         panel.add(logoLabel);
+        
+        // Create Developed by Label
         JLabel develop = new JLabel(Main.DEV_STRING);
         develop.setBounds(50,600, 200, 20);
         panel.add(develop);
+        
+        // Create show password text
+        passwordText = new JCheckBox("Show password text");
+        passwordText.setBounds(300, 340, 150, 20);
+        passwordText.addActionListener(new CheckAction());
+        panel.add(passwordText);
 
         frame.setVisible(true);
 
     }
 
+    // When show passwordText box is checked
+    class CheckAction implements ActionListener
+    {
+    	public void actionPerformed (ActionEvent e)
+    	{
+    		if(passwordText.isSelected())
+    		{
+    			passwordPF.setEchoChar((char) 0);
+    		}
+    		else
+    		{
+    			passwordPF.setEchoChar('*');
+    		}
+    		
+    	}
+    }
+    
     // When login button is pushed
     class LoginAction implements ActionListener
     {
