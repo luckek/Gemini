@@ -50,7 +50,7 @@ public class TransactionForm extends JDialog {
         codeBox = new JComboBox<>(expenseCodes);
         JButton okButton = new JButton("Ok");
         JLabel expenseDepositLabel = new JLabel("Exp / Dep: ");
-        depositExpenseBox = new JComboBox<>(new String[] {"Expense", "Deposit", "Custom"});
+        depositExpenseBox = new JComboBox<>(new String[] {"Expense", "Deposit"});
         
         try {
         	MaskFormatter dateMask = new MaskFormatter("##/##/####");
@@ -122,7 +122,7 @@ public class TransactionForm extends JDialog {
         codePanel.add(codeBox);
 
         expDepositPanel.add(expenseDepositLabel);
-        expDepositPanel.add(Box.createRigidArea(new Dimension(27, 10)));
+        expDepositPanel.add(Box.createRigidArea(new Dimension(15, 10)));
         expDepositPanel.add(depositExpenseBox);
 
         okButton.addActionListener(new okAction());
