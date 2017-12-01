@@ -5,25 +5,27 @@
 //*********************************************************
 
 // Imported Classes and Libraries
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.FileNotFoundException;
 
-public class LoginPanel
-{
+public class LoginPanel {
 
     // Components and variables
     private JTextField usernameTF;
     private JPasswordField passwordPF;
     private JLabel invalid, logoLabel;
+    // Use this line when making jar / using eclipse
+//    private String logoPath = "logo1.png";
     private String logoPath = "main/resources/logo1.png";
     private InitialScreen initialScreen;
+    private JCheckBox passwordText;
     private JFrame frame;
     private Controller controller = new Controller();
 
-    void startPanel()
-    {
+    void startPanel() {
         // Create frame
         frame = new JFrame("Login");
         frame.pack();
@@ -72,6 +74,7 @@ public class LoginPanel
         // Create password password field
         passwordPF = new JPasswordField();
         passwordPF.setBounds(250, 270, 250, 40);
+        passwordPF.setEchoChar('*');
         panel.add(passwordPF);
         passwordPF.addActionListener(new LoginAction());
 
@@ -86,27 +89,46 @@ public class LoginPanel
         invalid = new JLabel("");
         invalid.setForeground(Color.red);
         invalid.setFont(basic);
-        invalid.setBounds(240, 330, 400, 20);
+        invalid.setBounds(240, 450, 400, 20);
         panel.add(invalid);
 
-        // Create Developed by Label
         // Create logo
         logoLabel = new JLabel (new ImageIcon(logoPath));
         logoLabel.setBounds(80, -70, 150, 300);
         panel.add(logoLabel);
+        
+        // Create Developed by Label
         JLabel develop = new JLabel(Main.DEV_STRING);
         develop.setBounds(50,600, 200, 20);
         panel.add(develop);
+        
+        // Create show password text
+        passwordText = new JCheckBox("Show password text");
+        passwordText.setBounds(300, 340, 150, 20);
+        passwordText.addActionListener(new CheckAction());
+        panel.add(passwordText);
 
         frame.setVisible(true);
 
     }
 
+    // When show passwordText box is checked
+    class CheckAction implements ActionListener {
+    	public void actionPerformed (ActionEvent e) {
+
+    		if(passwordText.isSelected()) {
+    			passwordPF.setEchoChar((char) 0);
+    		} else {
+    			passwordPF.setEchoChar('*');
+    		}
+    		
+    	}
+    }
+    
     // When login button is pushed
-    class LoginAction implements ActionListener
-    {
-        public void actionPerformed (ActionEvent e)
-        {
+    class LoginAction implements ActionListener {
+        public void actionPerformed (ActionEvent e) {
+
             // Variables
             boolean usernameCheck = false;
             boolean passwordCheck = false;
@@ -115,20 +137,17 @@ public class LoginPanel
             String passStr = new String(password);
 
             // Check if the username is right
-            if(username.equals("csadmin"))
-            {
+            if(username.equals("csadmin")) {
                 usernameCheck = true;
             }
 
             // Check if the password is right
-            if(passStr.equals("csci323"))
-            {
+            if(passStr.equals("csci323")) {
                 passwordCheck = true;
             }
 
             // If both the username and password are correct, login
-            if((usernameCheck) && (passwordCheck))
-            {
+            if((usernameCheck) && (passwordCheck)) {
                 // Reset username and password fields
                 usernameTF.setText("");
                 passwordPF.setText("");
@@ -137,15 +156,14 @@ public class LoginPanel
                 try {
 				    controller.loadAcctInfo();
                 } catch (FileNotFoundException e1) {
-                    // TODO Auto-generated catch block
                     System.out.println("Cannot find Accounts.txt");
                     e1.printStackTrace();
                 }
+
 				// Load Transaction data
 				try {
 					controller.loadData();
 				} catch (FileNotFoundException e1) {
-					// TODO Auto-generated catch block
                     System.out.println("Cannot find Transactions.txt");
 					e1.printStackTrace();
 				}
@@ -159,10 +177,8 @@ public class LoginPanel
                 initialScreen.initComboBox(controller.getAvailableAccts());
                 initialScreen.initTranscationTable(controller.getTransactions());
 
-            }
             // If one of them is wrong, that tell user that they have an invalid username or password
-            else
-            {
+            } else {
                 // Reset username and password fields
                 usernameTF.setText("");
                 passwordPF.setText("");

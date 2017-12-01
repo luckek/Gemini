@@ -1,14 +1,13 @@
 import javax.swing.*;
 import javax.swing.text.MaskFormatter;
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 
 public class TransactionForm extends JDialog {
 
@@ -23,7 +22,8 @@ public class TransactionForm extends JDialog {
     private static String[] expenseCodes = new String[] {"61123", "61225", "62210", "62241", "62245"};
     private static String[] customCodes = new String[] {"00000"};
 
-    private final DateFormat dateFormatter = new SimpleDateFormat("mm/dd/yyyy");
+    private final DateFormat dateFormatter = new SimpleDateFormat("MM/dd/yyyy");
+    private Date date = new Date();
     
     public TransactionForm(Frame frame, String title, boolean modality, String[] accountNames) {
 
@@ -38,7 +38,7 @@ public class TransactionForm extends JDialog {
         JLabel dateLabel = new JLabel("Date: ");
         dateField = new JFormattedTextField(dateFormatter);
         dateField.setColumns(10);
-        dateField.setFocusLostBehavior(EXIT_ON_CLOSE);
+        dateField.setFocusLostBehavior(EXIT_ON_CLOSE); // Why is this here?
         JLabel amntLabel = new JLabel("Amount: ");
         amntLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
         amntField = new JTextField(10);
@@ -48,7 +48,7 @@ public class TransactionForm extends JDialog {
         codeBox = new JComboBox<>(expenseCodes);
         JButton okButton = new JButton("Ok");
         JLabel expenseDepositLabel = new JLabel("Exp / Dep: ");
-        depositExpenseBox = new JComboBox<>(new String[] {"Expense", "Deposit", "Custom"});
+        depositExpenseBox = new JComboBox<>(new String[] {"Expense", "Deposit"});
         
         try {
         	MaskFormatter dateMask = new MaskFormatter("##/##/####");
@@ -58,6 +58,8 @@ public class TransactionForm extends JDialog {
         	System.out.println("Parse Exception: ");
         	e.printStackTrace();
         }
+        
+        dateField.setText(dateFormatter.format(date));
 
         JPanel mainPanel = new JPanel();
         JPanel namePanel = new JPanel();
@@ -118,7 +120,7 @@ public class TransactionForm extends JDialog {
         codePanel.add(codeBox);
 
         expDepositPanel.add(expenseDepositLabel);
-        expDepositPanel.add(Box.createRigidArea(new Dimension(27, 10)));
+        expDepositPanel.add(Box.createRigidArea(new Dimension(15, 10)));
         expDepositPanel.add(depositExpenseBox);
 
         okButton.addActionListener(new okAction());
@@ -143,7 +145,6 @@ public class TransactionForm extends JDialog {
             expenseCodes[expenseCodes.length - 1] = customCode;
 
         } else {
-
             depositCodes = Arrays.copyOf(depositCodes, depositCodes.length + 1);
             depositCodes[depositCodes.length - 1] = customCode;
         }
@@ -153,15 +154,15 @@ public class TransactionForm extends JDialog {
 
 
         // Check expense codes
-        for(int i = 0; i < expenseCodes.length; i++) {
-            if(expenseCodes[i].equalsIgnoreCase(customCode)) {
+        for(String code : expenseCodes) {
+            if(code.equalsIgnoreCase(customCode)) {
                 return true;
             }
         }
 
         // Check deposit codes
-        for(int i = 0; i < depositCodes.length; i++) {
-            if(depositCodes[i].equalsIgnoreCase(customCode)) {
+        for(String code : depositCodes) {
+            if(code.equalsIgnoreCase(customCode)) {
                 return true;
             }
         }
@@ -173,27 +174,21 @@ public class TransactionForm extends JDialog {
     // Closes dialog
     private void close() { this.dispose(); }
 
-    // Creates popup warning - Empty Fields
-    private void showWarning() {
-        JOptionPane.showMessageDialog(this, "Please fill out all fields",
+    // Creates popup warning with specified message
+    private void showWarning(String msg) {
+        JOptionPane.showMessageDialog(this, msg,
                 "Warning!", JOptionPane.WARNING_MESSAGE);
-    }
-    
-    // Creates popup warning - Incorrect Amount Format
-    private void inputWarning() {
-    	JOptionPane.showMessageDialog(this,  "Transaction amount must contain a valid numerical value",
-    			                      "Warning!", JOptionPane.WARNING_MESSAGE);
     }
 
     class okAction implements ActionListener {
         public void actionPerformed (ActionEvent e) {
             if(dateField.getText().isEmpty() || amntField.getText().isEmpty()){
-                showWarning();
+                showWarning("Please fill out all fields");
                 return;
             }
             
             if(!amntField.getText().matches("^[0-9]*(\\.\\d+)?$")) {
-            	inputWarning();
+                showWarning("Transaction amount must contain a valid numerical value");
             	return;
             }
             close();
