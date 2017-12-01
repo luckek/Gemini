@@ -1,6 +1,5 @@
 import javax.swing.*;
 import javax.swing.text.MaskFormatter;
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -9,6 +8,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 
 public class TransactionForm extends JDialog {
 
@@ -23,7 +24,8 @@ public class TransactionForm extends JDialog {
     private static String[] expenseCodes = new String[] {"61123", "61225", "62210", "62241", "62245"};
     private static String[] customCodes = new String[] {"00000"};
 
-    private final DateFormat dateFormatter = new SimpleDateFormat("mm/dd/yyyy");
+    private final DateFormat dateFormatter = new SimpleDateFormat("MM/dd/yyyy");
+    private Date date = new Date();
     
     public TransactionForm(Frame frame, String title, boolean modality, String[] accountNames) {
 
@@ -58,6 +60,8 @@ public class TransactionForm extends JDialog {
         	System.out.println("Parse Exception: ");
         	e.printStackTrace();
         }
+        
+        dateField.setText(dateFormatter.format(date));
 
         JPanel mainPanel = new JPanel();
         JPanel namePanel = new JPanel();
