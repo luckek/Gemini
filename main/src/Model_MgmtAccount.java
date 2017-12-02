@@ -58,6 +58,8 @@ public class Model_MgmtAccount {
         return subAccounts.get(acctName).getDescription();
     }
 
+    String getPhoneNumber(String acctName) { return subAccounts.get(acctName).getPhoneNumber(); }
+
     String[][] getTransactionArray() {
 
         String[][] tmp = new String[transactions.size()][8];
