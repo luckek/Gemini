@@ -71,6 +71,17 @@ public class Controller {
         return account.getAcctNames();
     }
 
+    String[][] getAllAccountInfo() {
+        String[] accounts = account.getAcctNames();
+        int numFields = 6;
+        String[][] acctInfo = new String[accounts.length][numFields];
+
+        for(int i = 0; i < accounts.length; i ++) {
+            acctInfo[i] = account.getAccountInfoArray(accounts[i]);
+        }
+        return acctInfo;
+    }
+
     String[] getAvailableAccts() {
         return account.getAvailableAccts();
     }

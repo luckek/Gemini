@@ -46,6 +46,10 @@ public class Model_MgmtAccount {
         return subAccounts.get(acctName);
     }
 
+    String[] getAccountInfoArray(String name) {
+        return subAccounts.get(name).getAcctInfo();
+    }
+
     double getAccountBalance(String acctName) {
         return subAccounts.get(acctName).getBalance();
     }
@@ -145,4 +149,5 @@ public class Model_MgmtAccount {
     void retireAccount(String acctToRetire) {
         subAccounts.get(acctToRetire).setIsRetired(true);
     }
+
 }

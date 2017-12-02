@@ -545,8 +545,14 @@ public class InitialScreen extends JFrame {
     // Displays all the account information for acctToView
     private void viewAcct(String acctToView) {
 
-        Account acct = controller.getAccountInfo(acctToView);
-        AcctInfoForm viewAcctDlg = new AcctInfoForm(this, Main.FRAME_STRING, true, acct);
+        if(acctToView.equalsIgnoreCase("All")) {
+
+            new AllAcctsForm(this, Main.FRAME_STRING, true, controller.getAllAccountInfo());
+
+        } else {
+            Account acct = controller.getAccountInfo(acctToView);
+            AcctInfoForm viewAcctDlg = new AcctInfoForm(this, Main.FRAME_STRING, true, acct);
+        }
     }
 
     private int getTransactionIndex() {
