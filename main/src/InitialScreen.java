@@ -434,14 +434,15 @@ public class InitialScreen extends JFrame {
 
         // Grab information
         String newAcctName = accountForm.getName();
-        String newAcctAmnt = accountForm.getAmnt();
         String newAcctEmail = accountForm.getEmail();
         String newAcctDesc = accountForm.getDescription();
+        String newAcctNumber = accountForm.getPhoneNumber();
 
         // Only create account if all information is present
-        if ((!newAcctName.isEmpty()) && (!newAcctAmnt.isEmpty()) && (!newAcctEmail.isEmpty()) && (!newAcctDesc.isEmpty())) {
+        if ((!newAcctName.isEmpty()) && (!newAcctEmail.isEmpty()) && (!newAcctDesc.isEmpty())
+                && (!newAcctNumber.isEmpty())) {
             accountList.addItem(newAcctName);
-            controller.newAccount(newAcctName, newAcctAmnt, newAcctEmail, newAcctDesc);
+            controller.newAccount(newAcctName, newAcctEmail, newAcctDesc, newAcctNumber);
             // note that a change has been made
             changeCheck = true;
         }

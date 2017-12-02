@@ -79,8 +79,8 @@ public class Controller {
         return account.getTransactionArray();
     }
 
-    void newAccount(String name, String balance, String email, String description) {
-        account.addAccount(new String[] {name, balance, email, description, "False"});
+    void newAccount(String name, String email, String description, String phoneNumber) {
+        account.addAccount(new String[] {name, email, description, "False", phoneNumber});
     }
 
     void removeAccount(String acctName) {

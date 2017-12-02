@@ -58,6 +58,8 @@ public class Model_MgmtAccount {
         return subAccounts.get(acctName).getDescription();
     }
 
+    String getPhoneNumber(String acctName) { return subAccounts.get(acctName).getPhoneNumber(); }
+
     String[][] getTransactionArray() {
 
         String[][] tmp = new String[transactions.size()][8];
@@ -98,7 +100,7 @@ public class Model_MgmtAccount {
         }
 
         // Create new account
-        Account acct = new Account(info[0], info[1], info[2], isRetired);
+        Account acct = new Account(info[0], info[1], info[2], isRetired, info[4]);
 
         // Add account
         subAccounts.put(newName, acct);
