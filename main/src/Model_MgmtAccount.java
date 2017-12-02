@@ -98,7 +98,7 @@ public class Model_MgmtAccount {
         }
 
         // Create new account
-        Account acct = new Account(info[0], info[1], info[2], isRetired);
+        Account acct = new Account(info[0], info[1], info[2], isRetired, info[4]);
 
         // Add account
         subAccounts.put(newName, acct);
