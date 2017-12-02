@@ -1,3 +1,5 @@
+import com.sun.org.apache.bcel.internal.generic.FLOAD;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -13,6 +15,7 @@ public class AcctInfoForm extends JDialog {
         String balance = Double.toString(currAccount.getBalance());
         String description = currAccount.getDescription();
         String email = currAccount.getEmail();
+        String number = currAccount.getPhoneNumber();
         boolean isRetired = currAccount.isRetired();
         setPreferredSize(new Dimension(300, 350));
 
@@ -26,6 +29,8 @@ public class AcctInfoForm extends JDialog {
         JLabel descriptionLabel2 = new JLabel(description);
         JLabel emailLabel = new JLabel("E-mail: ");
         JLabel emailLabel2 = new JLabel(email);
+        JLabel numberLabel = new JLabel("Number: ");
+        JLabel numberLabel2 = new JLabel(number);
         JLabel retiredLabel = new JLabel();
         JButton okButton = new JButton("Ok");
 
@@ -40,11 +45,11 @@ public class AcctInfoForm extends JDialog {
         JPanel balancePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JPanel descriptionPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JPanel emailPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel numberPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JPanel reitredPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JPanel centerPanel = new JPanel();
 
-        centerPanel.setLayout(new GridLayout(5, 0, 90, 0));
-        mainPanel.setPreferredSize(new Dimension(500, 500));
+        centerPanel.setLayout(new GridLayout(6, 0, 90, 0));
         mainPanel.setLayout(new BorderLayout());
 
         add(mainPanel);
@@ -56,6 +61,7 @@ public class AcctInfoForm extends JDialog {
         centerPanel.add(balancePanel);
         centerPanel.add(descriptionPanel);
         centerPanel.add(emailPanel);
+        centerPanel.add(numberPanel);
         centerPanel.add(reitredPanel);
 
         namePanel.add(nameLabel);
@@ -69,6 +75,9 @@ public class AcctInfoForm extends JDialog {
 
         emailPanel.add(emailLabel);
         emailPanel.add(emailLabel2);
+
+        numberPanel.add(numberLabel);
+        numberPanel.add(numberLabel2);
 
         reitredPanel.add(retiredLabel);
 
