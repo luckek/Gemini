@@ -11,7 +11,6 @@ public class AllBalancesForm extends JDialog {
 
         setPreferredSize(new Dimension(300, 300));
 
-
         JPanel infoPanel = new JPanel();
         JPanel mainPanel = new JPanel(new BorderLayout());
 
