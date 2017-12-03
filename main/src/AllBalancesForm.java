@@ -9,26 +9,22 @@ public class AllBalancesForm extends JDialog {
 
         super(frame, title, modality);
 
-        setPreferredSize(new Dimension(300, 300));
+        setPreferredSize(new Dimension(330, 300));
 
         JPanel infoPanel = new JPanel();
-        JPanel mainPanel = new JPanel(new BorderLayout());
 
         // Setting up info table
         JTable acctInfoTable = new JTable(allInfo, columnHeaders);
-        acctInfoTable.setPreferredScrollableViewportSize(new Dimension(200, 200));
+        acctInfoTable.setPreferredScrollableViewportSize(new Dimension(300, 300));
 
         JScrollPane infoPane =  new JScrollPane(acctInfoTable);
 
         // Populating panels / content pane
-        add(mainPanel);
-
-        mainPanel.add(infoPanel);
+        add(infoPanel);
 
         infoPanel.add(infoPane);
 
         pack();
         setVisible(true);
     }
-
 }
