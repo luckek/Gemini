@@ -38,4 +38,8 @@ public class Account {
     void modifyBalance(double amount) {
         balance = new BigDecimal(balance + amount).setScale(2, RoundingMode.HALF_EVEN).doubleValue();
     }
+
+    String[] nameAndBalance() {
+        return new String[]{acctName, Double.toString(balance)};
+    }
 }

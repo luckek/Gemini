@@ -1,6 +1,3 @@
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -68,6 +65,7 @@ public class InitialScreen extends JFrame {
         JButton addAcctButton = new JButton("Add Account");
         JButton calcBttn = new JButton("Benefits Calculator");
         JButton acctInfoButton = new JButton("View Account Info");
+        JButton viewBalancesButton = new JButton("View Account Balances");
         JButton deleteButton = new JButton("Delete Account");
         JButton logoutBttn = new JButton("Logout");
         JButton retireBttn = new JButton("Retire Account");
@@ -149,15 +147,15 @@ public class InitialScreen extends JFrame {
 
         buttonPanel.add(Box.createRigidArea(new Dimension(0, 50)));
         buttonPanel.add(Box.createRigidArea(new Dimension(0, 50)));
-        buttonPanel.add(Box.createRigidArea(new Dimension(0, 50)));
         buttonPanel.add(acctLabel);
         buttonPanel.add(accountList);
         buttonPanel.add(addAcctButton);
         buttonPanel.add(calcBttn);
         buttonPanel.add(deleteButton);
         buttonPanel.add(retireBttn);
-        buttonPanel.add(logoutBttn);
         buttonPanel.add(acctInfoButton);
+        buttonPanel.add(viewBalancesButton);
+        buttonPanel.add(logoutBttn);
         buttonPanel.add(Box.createRigidArea(new Dimension(0, 50)));
         buttonPanel.add(Box.createRigidArea(new Dimension(0, 50)));
 
@@ -214,6 +212,7 @@ public class InitialScreen extends JFrame {
         retireBttn.addActionListener(new retireAction());
         codeButton.addActionListener(new codeAction());
         acctInfoButton.addActionListener(new acctInfoAction());
+        viewBalancesButton.addActionListener(new acctBalancesAction());
         logoutBttn.addActionListener(new logoutAction());
         addButton.addActionListener(new addTransaction());
         removeButton.addActionListener(new removeTransaction());
@@ -336,10 +335,13 @@ public class InitialScreen extends JFrame {
 
         // Get all available accounts
         String[] tmp = controller.getAllAccounts();
+        String[] accts;
+
 
         // Remove 'all' option
-        String[] accts = new String[tmp.length - 1];
+        accts = new String[tmp.length - 1];
         System.arraycopy(tmp, 1, accts, 0, accts.length);
+
 
         // TODO: change this to a popup msg - "no accts available"
         if (accts.length == 0) {
@@ -544,9 +546,12 @@ public class InitialScreen extends JFrame {
 
     // Displays all the account information for acctToView
     private void viewAcct(String acctToView) {
-
         Account acct = controller.getAccountInfo(acctToView);
-        AcctInfoForm viewAcctDlg = new AcctInfoForm(this, Main.FRAME_STRING, true, acct);
+        new AcctInfoForm(this, Main.FRAME_STRING, true, acct);
+    }
+
+    private void viewBalances() {
+        new AllBalancesForm(this, Main.FRAME_STRING, true, controller.NamesAndBalances());
     }
 
     private int getTransactionIndex() {
@@ -686,6 +691,13 @@ public class InitialScreen extends JFrame {
             if ((acctToView != null) && (!acctToView.isEmpty())) {
                 viewAcct(acctToView);
             }
+        }
+    }
+
+    class acctBalancesAction implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            viewBalances();
         }
     }
 

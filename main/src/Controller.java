@@ -71,6 +71,17 @@ public class Controller {
         return account.getAcctNames();
     }
 
+    String[][] NamesAndBalances() {
+        String[] accounts = account.getAcctNames();
+        int numFields = 2;
+        ArrayList<String[]> nameAndBalance = new ArrayList<>(accounts.length - 1);
+
+        for(int i = 1; i < accounts.length; i ++) {
+            nameAndBalance.add(account.nameAndBalance(accounts[i]));
+        }
+        return nameAndBalance.toArray(new String[accounts.length - 1][numFields]);
+    }
+
     String[] getAvailableAccts() {
         return account.getAvailableAccts();
     }
