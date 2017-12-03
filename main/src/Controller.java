@@ -109,4 +109,8 @@ public class Controller {
     void removeTransaction(Model_Transaction transaction) {
         account.removeTransaction(transaction);
     }
+
+    String getAcctEmail(String acctName) {
+        return account.getEmail(acctName);
+    }
 }

@@ -443,6 +443,15 @@ public class InitialScreen extends JFrame {
         // Only create account if all information is present
         if ((!newAcctName.isEmpty()) && (!newAcctEmail.isEmpty()) && (!newAcctDesc.isEmpty())
                 && (!newAcctNumber.isEmpty())) {
+
+            for(String name : controller.getAllAccounts()) {
+
+                if(newAcctName.equalsIgnoreCase(name) || newAcctEmail.equalsIgnoreCase(controller.getAcctEmail(name))) {
+                    JOptionPane.showMessageDialog(this, "This account already exists");
+                    return;
+                }
+            }
+
             accountList.addItem(newAcctName);
             controller.newAccount(newAcctName, newAcctEmail, newAcctDesc, newAcctNumber);
             // note that a change has been made
