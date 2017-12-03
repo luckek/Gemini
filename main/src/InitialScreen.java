@@ -1,6 +1,3 @@
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -332,14 +329,19 @@ public class InitialScreen extends JFrame {
     }
 
     // Uses JOptionPane to get user selected account
-    private String getAcct(String optionMessage) {
+    private String getAcct(String optionMessage, boolean removeAll) {
 
         // Get all available accounts
         String[] tmp = controller.getAllAccounts();
+        String[] accts;
 
-        // Remove 'all' option
-        String[] accts = new String[tmp.length - 1];
-        System.arraycopy(tmp, 1, accts, 0, accts.length);
+        if(removeAll) {
+            // Remove 'all' option
+            accts = new String[tmp.length - 1];
+            System.arraycopy(tmp, 1, accts, 0, accts.length);
+        } else {
+            accts = tmp;
+        }
 
         // TODO: change this to a popup msg - "no accts available"
         if (accts.length == 0) {
@@ -547,7 +549,9 @@ public class InitialScreen extends JFrame {
 
         if(acctToView.equalsIgnoreCase("All")) {
 
-            new AllAcctsForm(this, Main.FRAME_STRING, true, controller.getAllAccountInfo());
+            String[][] check = controller.NamesAndBalances();
+
+            new AllAcctsForm(this, Main.FRAME_STRING, true, controller.NamesAndBalances());
 
         } else {
             Account acct = controller.getAccountInfo(acctToView);
@@ -658,7 +662,7 @@ public class InitialScreen extends JFrame {
 
     class deleteAction implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            String acctToDelete = getAcct("Please select the account you want to delete");
+            String acctToDelete = getAcct("Please select the account you want to delete", true);
             if ((acctToDelete != null) && (!acctToDelete.isEmpty())) {
                 int option = showWarning("Are you sure you want to delete this account?");
                 if (option == 0) {
@@ -674,7 +678,7 @@ public class InitialScreen extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
 
-            String acct = getAcct("Please select the account you would like to retire");
+            String acct = getAcct("Please select the account you would like to retire", true);
 
             if(acct != null) {
                 controller.retireAccount(acct);
@@ -688,7 +692,7 @@ public class InitialScreen extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
 
-            String acctToView = getAcct("Please select the account you would like to view");
+            String acctToView = getAcct("Please select the account you would like to view", false);
             if ((acctToView != null) && (!acctToView.isEmpty())) {
                 viewAcct(acctToView);
             }

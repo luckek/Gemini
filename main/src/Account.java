@@ -39,7 +39,7 @@ public class Account {
         balance = new BigDecimal(balance + amount).setScale(2, RoundingMode.HALF_EVEN).doubleValue();
     }
 
-    String[] getAcctInfo() {
-        return new String[]{acctName, Double.toString(balance), email, description, Boolean.toString(isRetired), phoneNumber };
+    String[] nameAndBalance() {
+        return new String[]{acctName, Double.toString(balance)};
     }
 }

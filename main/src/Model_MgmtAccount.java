@@ -46,8 +46,8 @@ public class Model_MgmtAccount {
         return subAccounts.get(acctName);
     }
 
-    String[] getAccountInfoArray(String name) {
-        return subAccounts.get(name).getAcctInfo();
+    String[] nameAndBalance(String name) {
+        return subAccounts.get(name).nameAndBalance();
     }
 
     double getAccountBalance(String acctName) {
