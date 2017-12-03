@@ -1,11 +1,11 @@
 import javax.swing.*;
 import java.awt.*;
 
-public class AllAcctsForm extends JDialog {
+public class AllBalancesForm extends JDialog {
 
     String[] columnHeaders = {"Name", "Balance"};
 
-    public AllAcctsForm(Frame frame, String title, boolean modality, String[][] allInfo) {
+    public AllBalancesForm(Frame frame, String title, boolean modality, String[][] allInfo) {
 
         super(frame, title, modality);
 

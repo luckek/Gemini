@@ -1,5 +1,3 @@
-import com.intellij.ui.JBColor;
-
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -553,7 +551,7 @@ public class InitialScreen extends JFrame {
     }
 
     private void viewBalances() {
-        new AllAcctsForm(this, Main.FRAME_STRING, true, controller.NamesAndBalances());
+        new AllBalancesForm(this, Main.FRAME_STRING, true, controller.NamesAndBalances());
     }
 
     private int getTransactionIndex() {
