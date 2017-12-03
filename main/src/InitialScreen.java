@@ -1,3 +1,4 @@
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -357,69 +358,32 @@ public class InitialScreen extends JFrame {
     // Opens user guide panel
     private void openGuide() { new GuidePanel(this, Main.FRAME_STRING, true); }
     
-    //Printing. Re-uses code, so...might need to be cleaned up?
-    private void print() throws IOException { 
-    	String filterString = (String) accountList.getSelectedItem();
-        String filterString2 = radioGroup.getSelection().getActionCommand();
+    private void print() throws IOException {
 
-        TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(((DefaultTableModel) transactionTable.getModel()));
-
-        RowFilter nameFilter = null;
-        RowFilter typeFilter = null;
-
-        ArrayList<RowFilter<Object, Object>> filters = new ArrayList<>(2);
-
-        if (filterString != null && !filterString.equalsIgnoreCase("All")) {
-
-            nameFilter = RowFilter.regexFilter(filterString);
-        }
-
-        if (filterString2 != null && !filterString2.equalsIgnoreCase("Both")) {
-
-            typeFilter = RowFilter.regexFilter(filterString2);
-        }
-
-        if (nameFilter == null && typeFilter == null) {
-
-            transactionTable.setRowSorter(null);
-
-        } else if (nameFilter == null) {
-
-            typeFilter = RowFilter.regexFilter(filterString2);
-            sorter.setRowFilter(typeFilter);
-
-            transactionTable.setRowSorter(sorter);
-
-        } else if (typeFilter == null) {
-
-            nameFilter = RowFilter.regexFilter(filterString);
-            sorter.setRowFilter(nameFilter);
-
-            transactionTable.setRowSorter(sorter);
-
-        } else {
-
-            filters.add(nameFilter);
-            filters.add(typeFilter);
-
-            sorter.setRowFilter(RowFilter.andFilter(filters));
-
-            transactionTable.setRowSorter(sorter);
-        }
-
-        // Update / calculate balance
-        updateBalance();
-        
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
         BufferedWriter writer = new BufferedWriter(new FileWriter("transactions_" + timeStamp + ".txt"));
+
+        // Add column names
+        for(int i = 0; i < columnNames.length; i++) {
+            if(i != columnNames.length - 1) {
+                writer.append(columnNames[i] + ",");
+            } else { // Don't append comma to end of line
+                writer.append(columnNames[i]);
+            }
+        }
+        writer.newLine();
           
         for(int i = 0; i < transactionTable.getRowCount(); i++) {
-        	String name = (String)transactionTable.getValueAt(i, 0);
-            String date = (String)transactionTable.getValueAt(i,1);
-            String gross = (String)transactionTable.getValueAt(i, 2);
-            String type = (String)transactionTable.getValueAt(i, 3);
-            String expDep = (String)transactionTable.getValueAt(i, 5);
-            writer.append(name + ", " + date + ", " + gross + ", " + type + ", " + expDep);
+
+            for(int j = 0; j < transactionTable.getColumnCount(); j++) {
+                String value = (String) transactionTable.getValueAt(i, j);
+
+                if(j != transactionTable.getColumnCount() - 1) {
+                    writer.append(value + ",");
+                } else { // Don't append comma to end of line
+                    writer.append(value);
+                }
+            }
             writer.newLine();
         }
         writer.close();
