@@ -99,7 +99,8 @@ public class AccountForm extends JDialog {
     class okAction implements ActionListener {
         public void actionPerformed (ActionEvent e) {
 
-            if(nameField.getText().isEmpty() || emailField.getText().isEmpty() || descriptionField.getText().isEmpty() ){
+            if(nameField.getText().isEmpty() || emailField.getText().isEmpty() || descriptionField.getText().isEmpty()
+                    || numberField.getText().isEmpty()){
 
                 showWarning();
                 return;

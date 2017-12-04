@@ -407,14 +407,15 @@ public class InitialScreen extends JFrame {
         String newAcctDesc = accountForm.getDescription();
         String newAcctNumber = accountForm.getPhoneNumber();
 
-        // Only create account if all information is present
+        // Only attempt to create account if all information is present
         if ((!newAcctName.isEmpty()) && (!newAcctEmail.isEmpty()) && (!newAcctDesc.isEmpty())
                 && (!newAcctNumber.isEmpty())) {
 
             for(String name : controller.getAllAccounts()) {
 
-                if(newAcctName.equalsIgnoreCase(name) || newAcctEmail.equalsIgnoreCase(controller.getAcctEmail(name))) {
-                    JOptionPane.showMessageDialog(this, "This account already exists");
+                // Check for account of the same name
+                if(newAcctName.equalsIgnoreCase(name)) {
+                    JOptionPane.showMessageDialog(this, "An account with this name already exists");
                     return;
                 }
             }
