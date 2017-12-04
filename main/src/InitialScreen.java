@@ -1,5 +1,7 @@
 
 import javax.swing.*;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
@@ -218,10 +220,10 @@ public class InitialScreen extends JFrame {
         logoutBttn.addActionListener(new logoutAction());
         addButton.addActionListener(new addTransaction());
         removeButton.addActionListener(new removeTransaction());
-        accountList.addActionListener(new accountListener());
-        bothButton.addActionListener(new accountListener());
-        debitButton.addActionListener(new accountListener());
-        creditButton.addActionListener(new accountListener());
+        accountList.addActionListener(new filterListener());
+        bothButton.addActionListener(new filterListener());
+        debitButton.addActionListener(new filterListener());
+        creditButton.addActionListener(new filterListener());
         save.addActionListener(new saveListener());
         userGuide.addActionListener(new guideListener());
         print.addActionListener(new printListener());
@@ -798,7 +800,7 @@ public class InitialScreen extends JFrame {
         }
     }
 
-    class accountListener implements ActionListener {
+    class filterListener implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -808,10 +810,10 @@ public class InitialScreen extends JFrame {
 
             TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(((DefaultTableModel) transactionTable.getModel()));
 
-            RowFilter nameFilter = null;
-            RowFilter typeFilter = null;
+            RowFilter<DefaultTableModel, Integer> nameFilter = null;
+            RowFilter<DefaultTableModel, Integer> typeFilter = null;
 
-            ArrayList<RowFilter<Object, Object>> filters = new ArrayList<>(2);
+            ArrayList<RowFilter<DefaultTableModel, Integer>> filters = new ArrayList<>(2);
 
             if (filterString != null && !filterString.equalsIgnoreCase("All")) {
 
