@@ -29,6 +29,7 @@ public class InitialScreen extends JFrame {
     private Controller controller;
     private String[] columnNames = {"Name", "Date", "Gross Amt", "Type", "Code", "Net Amt", "Exp / Dep", "Fees"};
     private boolean changeCheck = false;
+    private boolean inInit;
 
     public InitialScreen(String title) {
 
@@ -234,11 +235,13 @@ public class InitialScreen extends JFrame {
 
     void initTranscationTable(String[][] data) {
 
+        inInit = true;
         for (String[] row : data) {
             addTableRow(row);
         }
         setCellsAlignment(transactionTable, SwingConstants.CENTER);
         updateBalance();
+        inInit = false;
     }
 
     private void setTotal(double newBalance, JLabel labelToUpdate) {
@@ -453,8 +456,11 @@ public class InitialScreen extends JFrame {
         DefaultTableModel tmpModel = (DefaultTableModel) transactionTable.getModel();
         tmpModel.addRow(rowData);
 
-        // note that a change has been made
-        changeCheck = true;
+        // Only note change if not initializing
+        if(!inInit) {
+            // note that a change has been made
+            changeCheck = true;
+        }
     }
 
     private void removeTableRow(int viewIndex) {
@@ -741,6 +747,7 @@ public class InitialScreen extends JFrame {
                 netAmount = -netAmount;
             }
 
+            // Update balances
             increaseGrossBalance(grossAmount);
             increaseNetBalance(netAmount);
             updateFeesTotal(fees);
