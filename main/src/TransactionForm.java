@@ -220,10 +220,6 @@ public class TransactionForm extends JDialog {
                ComboBoxModel<String> model = new DefaultComboBoxModel<>(expenseCodes);
                codeBox.setModel(model);
            }
-           else {
-        	   ComboBoxModel<String> model = new DefaultComboBoxModel<>(customCodes);
-        	   codeBox.setModel(model);
-           }
         }
     }
 }
