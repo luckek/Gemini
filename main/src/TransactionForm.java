@@ -3,6 +3,7 @@ import javax.swing.text.MaskFormatter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -81,6 +82,7 @@ public class TransactionForm extends JDialog {
         codeBox.setPreferredSize(new Dimension(112, 20));
         okButton.setPreferredSize(new Dimension(50, 20));
         mainPanel.setLayout(new BorderLayout());
+        getRootPane().setDefaultButton(okButton);
 
         // Adding components
         add(mainPanel);

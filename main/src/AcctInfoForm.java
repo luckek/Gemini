@@ -39,6 +39,7 @@ public class AcctInfoForm extends JDialog {
         }
 
         okButton.addActionListener(new okAction());
+        getRootPane().setDefaultButton(okButton);
 
         JPanel mainPanel = new JPanel();
         JPanel namePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
