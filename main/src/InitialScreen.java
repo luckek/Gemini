@@ -686,7 +686,7 @@ public class InitialScreen extends JFrame {
         public void actionPerformed(ActionEvent e) {
 
         	// initialize save value
-        	int save = -1;
+        	int save = -2;
         	
         	// Ask user if they want to save changes
         	if(changeCheck) {
@@ -696,7 +696,9 @@ public class InitialScreen extends JFrame {
         	// If the user said yes, save before logging out
         	if(save == 0) {
         		save();
-        	}
+        	} else if(save == -1) {
+        	    return;
+            }
         	
             // Closes current frame and opens LoginPanel when logout button is pressed
             dispose();
