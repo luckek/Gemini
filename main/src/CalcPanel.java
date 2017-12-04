@@ -13,7 +13,7 @@ public class CalcPanel extends JDialog {
 		
 		super (frame, title, modality);
 		
-		setPreferredSize(new Dimension(300, 300));
+		setPreferredSize(new Dimension(300, 220));
 		
 		// Creating components
 		JLabel amntLabel = new JLabel ("Amount: ");
@@ -35,18 +35,22 @@ public class CalcPanel extends JDialog {
 		JPanel amntPanel = new JPanel();
 		JPanel percentPanel = new JPanel();
 		JPanel resultPanel = new JPanel();
+		JPanel bottomPanel = new JPanel();
 		
 		// Layouts
 		centerPanel.setLayout(new GridLayout(5, 0, 90, 0));
 		mainPanel.setPreferredSize(new Dimension(300, 400));
+		calcButton.setPreferredSize(new Dimension(100, 20));
 		mainPanel.setLayout(new BorderLayout());
 		
 		// Add components
 		add(mainPanel);
 		
-		mainPanel.add(calcButton, BorderLayout.PAGE_END);
+		mainPanel.add(bottomPanel, BorderLayout.PAGE_END);
 		mainPanel.add(centerPanel, BorderLayout.CENTER);
-		
+
+		bottomPanel.add(calcButton);
+
 		centerPanel.add(amntPanel);
 		centerPanel.add(percentPanel);
 		centerPanel.add(resultPanel);

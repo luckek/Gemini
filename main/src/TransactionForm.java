@@ -70,6 +70,7 @@ public class TransactionForm extends JDialog {
         JPanel typePanel = new JPanel();
         JPanel centerPanel = new JPanel();
         JPanel expDepositPanel = new JPanel();
+        JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 
         // Setting layouts / sizing
         centerPanel.setLayout(new GridLayout(7, 0, 90, 0));
@@ -78,13 +79,16 @@ public class TransactionForm extends JDialog {
         typeBox.setPreferredSize(new Dimension(112, 20));
         depositExpenseBox.setPreferredSize(new Dimension(112, 20));
         codeBox.setPreferredSize(new Dimension(112, 20));
+        okButton.setPreferredSize(new Dimension(50, 20));
         mainPanel.setLayout(new BorderLayout());
 
         // Adding components
         add(mainPanel);
 
-        mainPanel.add(okButton, BorderLayout.PAGE_END);
+        mainPanel.add(bottomPanel, BorderLayout.PAGE_END);
         mainPanel.add(centerPanel,BorderLayout.CENTER);
+
+        bottomPanel.add(okButton);
 
         centerPanel.add(infoPanel);
         centerPanel.add(namePanel);

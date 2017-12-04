@@ -37,17 +37,21 @@ public class AccountForm extends JDialog {
         JPanel emailPanel = new JPanel();
         JPanel numberPanel = new JPanel();
         JPanel centerPanel = new JPanel();
+        JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 
         // Setting layouts
         centerPanel.setLayout(new GridLayout(5, 0, 90, 0));
         mainPanel.setPreferredSize(new Dimension(500, 500));
         mainPanel.setLayout(new BorderLayout());
+        okButton.setSize(new Dimension(40, 15));
 
         // Adding components
         add(mainPanel);
 
-        mainPanel.add(okButton, BorderLayout.PAGE_END);
+        mainPanel.add(bottomPanel, BorderLayout.PAGE_END);
         mainPanel.add(centerPanel,BorderLayout.CENTER);
+
+        bottomPanel.add(okButton);
 
         centerPanel.add(infoPanel);
         centerPanel.add(namePanel);

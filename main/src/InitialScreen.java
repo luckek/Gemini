@@ -347,7 +347,6 @@ public class InitialScreen extends JFrame {
         System.arraycopy(tmp, 1, accts, 0, accts.length);
 
 
-        // TODO: change this to a popup msg - "no accts available"
         if (accts.length == 0) {
             JOptionPane.showMessageDialog(this, "There are no accounts to view");
         }
@@ -879,11 +878,9 @@ public class InitialScreen extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
 
-            // User guide routine here
             try {
 				print();
 			} catch (IOException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
         }
