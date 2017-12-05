@@ -1,5 +1,5 @@
 
-import java.io.*;
+import javax.swing.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -11,15 +11,22 @@ public class Model_Read_Files {
 
     private String key = "This is a secret key";
 
+    private String accountsFile = "main/resources/Accounts.txt";
+    private String transactionsFile = "main/resources/Transactions.txt";
+    private String codeFile = "main/resources/Codes.txt";
+
+    // For making jar / eclipse
+//    private String accountsFile = "Accounts.txt";
+//    private String transactionsFile = "Transactions.txt";
+//    private String codeFile = "Codes.txt";
+
     void saveAccounts(Model_MgmtAccount accounts) {
         // Set up FileWriter
         FileWriter writer = null;
 
         try {
-         // Use this line when making jar / using eclipse
-        //writer = new FileWriter("Accounts.txt");
 
-            writer = new FileWriter("main/resources/Accounts.txt");
+            writer = new FileWriter(accountsFile);
 
             String[] names = accounts.getAcctNames();
 
@@ -61,11 +68,8 @@ public class Model_Read_Files {
     void saveData(ArrayList<Model_Transaction> transactions) throws IOException {
         // Set up FileWriter
         FileWriter writer = null;
-        
-        // Use this line when making jar / using eclipse
-        //writer = new FileWriter("Transactions.txt");
-        
-        writer = new FileWriter("main/resources/Transactions.txt");
+
+        writer = new FileWriter(transactionsFile);
 
         StringBuilder sb = new StringBuilder();
 
@@ -90,32 +94,45 @@ public class Model_Read_Files {
     // Saving/loading codes from file
     void saveCode(String code, String isExpense) throws IOException {
     	
-    	FileWriter writer;
-    	writer = new FileWriter("main/resources/Codes.txt", true);
-    	
-    	writer.write(code+","+isExpense+"\n");
-    	writer.close();
+    	FileWriter writer = null;
+
+        try {
+
+        writer = new FileWriter(codeFile, true);
+
+            writer.write(code + "," + isExpense + "\n");
+        } catch(IOException e) {
+            System.out.println("Trouble saving codes");
+        }
+        finally {
+            if(writer != null) {
+                writer.close();
+            }
+        }
     }
     
     public ArrayList<String> loadCodes() throws FileNotFoundException {
-    	
-    	ArrayList<String> codes = new ArrayList<>();
-    	Scanner inFile = new Scanner(new File("main/resources/Codes.txt")).useDelimiter("\n");
-    	
-    	while (inFile.hasNext()) {
-    		String temp = inFile.nextLine();
-    		codes.add(temp);
-    	}
-    	
+
+        ArrayList<String> codes = new ArrayList<>();
+
+        try {
+            Scanner inFile = new Scanner(new File(codeFile)).useDelimiter("\n");
+
+            while (inFile.hasNext()) {
+                String temp = inFile.nextLine();
+                codes.add(temp);
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("Can't find Codes.txt");
+            JOptionPane.showMessageDialog(null, "Cant find codes");
+        }
     	return codes;
     }
     
     ArrayList<String[]> loadEncryptedData() throws FileNotFoundException {
         ArrayList<String[]> data = new ArrayList<>();
-        // Added a filepath for eclipse for future use
-        //Scanner inFile = new Scanner(new File("Transactions.txt")).useDelimiter("\n");
 
-        Scanner inFile = new Scanner(new File("main/resources/Transactions.txt"));
+        Scanner inFile = new Scanner(new File(transactionsFile));
 
         String toDecrypt = inFile.nextLine();
         String decrypted = Encryption.Decrypt(toDecrypt, key);
@@ -138,15 +155,13 @@ public class Model_Read_Files {
     ArrayList<String[]> loadEncryptedAcctInfo() throws FileNotFoundException {
 
         ArrayList<String[]> acctInfo = new ArrayList<>();
-        // Added a filepath for eclipse for future use
-        //Scanner inFile = new Scanner(new File("Accounts.txt")).useDelimiter("\n");
 
         Scanner scan = null;
 
         try {
 
             // Read in file
-            scan = new Scanner(new File("main/resources/Accounts.txt"));
+            scan = new Scanner(new File(accountsFile));
 
             // Grab and decrypt full string
             String decrypted = Encryption.Decrypt(scan.nextLine(), key);
@@ -179,12 +194,9 @@ public class Model_Read_Files {
 
     // Kept around just in case problems occur
     public ArrayList<String[]> loadData() throws FileNotFoundException {
-        //need to not hard-code string array/array size...i'll fix later
-        ArrayList<String[]> data = new ArrayList<>();
-        // Added a filepath for eclipse for future use
-        //Scanner inFile = new Scanner(new File("Transactions.txt")).useDelimiter("\n");
 
-        Scanner inFile = new Scanner(new File("main/resources/Transactions.txt")).useDelimiter("\n");
+        ArrayList<String[]> data = new ArrayList<>();
+        Scanner inFile = new Scanner(new File(transactionsFile)).useDelimiter("\n");
 
         while (inFile.hasNext()) {
             String temp = inFile.nextLine();
@@ -193,13 +205,11 @@ public class Model_Read_Files {
         return data;
     }
 
-
     public ArrayList<String[]> loadAcctInfo() throws FileNotFoundException {
 
         ArrayList<String[]> acctInfo = new ArrayList<>();
-        // Use this when making jar / using eclipse
-        //Scanner inFile = new Scanner(new File("Accounts.txt")).useDelimiter("\n");
-        Scanner inFile = new Scanner(new File("main/resources/Accounts.txt")).useDelimiter("\n");
+        Scanner inFile = new Scanner(new File(accountsFile)).useDelimiter("\n");
+
         while (inFile.hasNext()) {
             String temp = inFile.nextLine();
             acctInfo.add(temp.split(","));
