@@ -1,17 +1,23 @@
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class CodeDescPanel extends JDialog {
     
     public CodeDescPanel(Frame frame, String title, boolean modality) {
         
         super(frame, title, modality);
-        
-        setPreferredSize(new Dimension(350, 350));
+        setPreferredSize(new Dimension(350, 400));
         
         JPanel mainPanel = new JPanel(new BorderLayout());
         JPanel descriptionPanel = new JPanel();
+
+        JPanel bottomPanel = new JPanel();
+
+        JButton okButton = new JButton("Ok");
+        getRootPane().setDefaultButton(okButton);
         
         JLabel descriptionLabel = new JLabel("<html><br><p><u>Income Codes:</p></u>"
                     +"<p>50109 Other Income</p>"
@@ -33,11 +39,27 @@ public class CodeDescPanel extends JDialog {
         
         // Add all the components
         add(mainPanel);
-        
+
+        mainPanel.add(descriptionPanel, BorderLayout.CENTER);
+        mainPanel.add(bottomPanel, BorderLayout.PAGE_END);
+
         descriptionPanel.add(descriptionLabel);
-        mainPanel.add(descriptionPanel, BorderLayout.WEST);
-        
+
+        bottomPanel.add(okButton);
+
+        okButton.addActionListener(new okAction());
+
         pack();
         setVisible(true);
+    }
+
+    private void close() { this.dispose(); }
+
+    class okAction implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            close();
+        }
     }
 }
