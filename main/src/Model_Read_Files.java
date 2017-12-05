@@ -1,5 +1,4 @@
 
-import javax.swing.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -21,16 +20,13 @@ public class Model_Read_Files {
 //    private String codeFile = "Codes.txt";
 
     void saveAccounts(Model_MgmtAccount accounts) {
+
         // Set up FileWriter
-        FileWriter writer = null;
-
-        try {
-
-            writer = new FileWriter(accountsFile);
+        try(FileWriter writer = new FileWriter(accountsFile)) {
 
             String[] names = accounts.getAcctNames();
-
             StringBuilder sb = new StringBuilder();
+
             // Write out info for each account
             for (String name : names) {
                 // Get Account info.
@@ -50,73 +46,60 @@ public class Model_Read_Files {
                 System.out.println("Problem encrypting Accounts.txt.\n File not updated");
             }
 
-        } catch (Exception e) {
+        } catch (IOException e) {
             System.out.println("Problem loading Accounts.txt");
             e.printStackTrace();
-        } finally {
-
-            try {
-                if (writer != null) {
-                    writer.close();
-                }
-            } catch (IOException I) {
-                I.printStackTrace();
-            }
         }
     }
 
     void saveData(ArrayList<Model_Transaction> transactions) throws IOException {
-        // Set up FileWriter
-        FileWriter writer = null;
 
-        writer = new FileWriter(transactionsFile);
+        // Setup file writer
+        try(FileWriter writer = new FileWriter(transactionsFile)) {
 
-        StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new StringBuilder();
 
-        // Write out info for each transaction
-        for(Model_Transaction transaction : transactions) {
+            // Write out info for each transaction
+            for (Model_Transaction transaction : transactions) {
 
-            // Get transaction info
-            sb.append(transaction.getName() + "," + transaction.getDate()+ "," + transaction.getGross() + ","
-                    + transaction.getType() + "," + transaction.getCode() + "," + transaction.isDeposit() + ",\n");
+                // Get transaction info
+                sb.append(transaction.getName() + "," + transaction.getDate() + "," + transaction.getGross() + ","
+                        + transaction.getType() + "," + transaction.getCode() + "," + transaction.isDeposit() + ",\n");
+            }
+
+            String encryptedString = Encryption.Encrypt(sb.toString(), key);
+
+            if (encryptedString != null) {
+                writer.write(encryptedString);
+            } else {
+                System.out.println("Problem encrypting Transactions.txt\nFile not updated");
+            }
+        } catch (IOException e) {
+            System.out.println("Trouble saving Transactions.txt");
+            e.printStackTrace();
         }
-
-        String encryptedString = Encryption.Encrypt(sb.toString(), key);
-
-        if(encryptedString != null) {
-            writer.write(encryptedString);
-        } else {
-            System.out.println("Problem encrypting Transactions.txt\nFile not updated");
-        }
-        writer.close();
     }
   
     // Saving/loading codes from file
     void saveCode(String code, String isExpense) throws IOException {
-    	
-    	FileWriter writer = null;
 
-        try {
-
-        writer = new FileWriter(codeFile, true);
+        try(FileWriter writer = new FileWriter(codeFile, true)) {
 
             writer.write(code + "," + isExpense + "\n");
+
         } catch(IOException e) {
             System.out.println("Trouble saving codes");
-        }
-        finally {
-            if(writer != null) {
-                writer.close();
-            }
+            e.printStackTrace();
         }
     }
     
-    public ArrayList<String> loadCodes() throws FileNotFoundException {
+    public ArrayList<String> loadCodes() {
 
         ArrayList<String> codes = new ArrayList<>();
 
-        try {
-            Scanner inFile = new Scanner(new File(codeFile)).useDelimiter("\n");
+        try (Scanner inFile = new Scanner(new File(codeFile))) {
+
+            inFile.useDelimiter("\n");
 
             while (inFile.hasNext()) {
                 String temp = inFile.nextLine();
@@ -124,30 +107,36 @@ public class Model_Read_Files {
             }
         } catch (FileNotFoundException e) {
             System.out.println("Can't find Codes.txt");
-            JOptionPane.showMessageDialog(null, "Cant find codes");
+            e.printStackTrace();
         }
-    	return codes;
+        return codes;
     }
     
     ArrayList<String[]> loadEncryptedData() throws FileNotFoundException {
+
         ArrayList<String[]> data = new ArrayList<>();
 
-        Scanner inFile = new Scanner(new File(transactionsFile));
+        try(Scanner inFile = new Scanner(new File(transactionsFile))) {
 
-        String toDecrypt = inFile.nextLine();
-        String decrypted = Encryption.Decrypt(toDecrypt, key);
+            // Grab line & decrypt it
+            String toDecrypt = inFile.nextLine();
+            String decrypted = Encryption.Decrypt(toDecrypt, key);
 
-        String[] tmp;
+            String[] tmp;
 
-        if(decrypted != null) {
-            tmp = decrypted.split("\n");
-        } else {
-            System.out.println("Problem decrypting file");
-            tmp = new String[0];
-        }
+            if (decrypted != null) {
+                tmp = decrypted.split("\n");
+            } else {
+                System.out.println("Problem decrypting file");
+                tmp = new String[0];
+            }
 
-        for(String line : tmp) {
-            data.add(line.split(","));
+            for (String line : tmp) {
+                data.add(line.split(","));
+            }
+        } catch(FileNotFoundException e) {
+            System.out.println("Cannot find Transactions.txt");
+            e.printStackTrace();
         }
         return data;
     }
@@ -156,12 +145,8 @@ public class Model_Read_Files {
 
         ArrayList<String[]> acctInfo = new ArrayList<>();
 
-        Scanner scan = null;
-
-        try {
-
-            // Read in file
-            scan = new Scanner(new File(accountsFile));
+        // Set up scanner
+        try(Scanner scan = new Scanner(new File(accountsFile))) {
 
             // Grab and decrypt full string
             String decrypted = Encryption.Decrypt(scan.nextLine(), key);
@@ -184,10 +169,6 @@ public class Model_Read_Files {
         } catch (Exception e) {
             System.out.println("Problem loading Accounts.txt");
             e.printStackTrace();
-        } finally {
-            if ( scan != null) {
-                scan.close();
-            }
         }
         return acctInfo;
     }
