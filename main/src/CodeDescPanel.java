@@ -1,6 +1,6 @@
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
 
 public class CodeDescPanel extends JDialog {
     
@@ -8,11 +8,9 @@ public class CodeDescPanel extends JDialog {
         
         super(frame, title, modality);
         
-        setPreferredSize(new Dimension(700, 700));
+        setPreferredSize(new Dimension(350, 350));
         
-        JPanel mainPanel = new JPanel();
-        mainPanel.setLayout(new BorderLayout());
-        
+        JPanel mainPanel = new JPanel(new BorderLayout());
         JPanel descriptionPanel = new JPanel();
         
         JLabel descriptionLabel = new JLabel("<html><br><p><u>Income Codes:</p></u>"
@@ -31,7 +29,6 @@ public class CodeDescPanel extends JDialog {
                     + "<p>62315 Advertising-Newspaper Non Refundable</p>"
                     + "<p>62817 Meetings & Conference Costs</p>"
                     + "<p>62852 Bank Service Charges</p></html>");
-        //titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         descriptionLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
         
         // Add all the components
