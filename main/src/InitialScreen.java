@@ -435,7 +435,6 @@ public class InitialScreen extends JFrame {
             if(balance > 0) {
                 Date date = new Date();
                 DateFormat dateFormatter = new SimpleDateFormat("MM/dd/yyyy");
-                System.out.println(date.toString());
                 Model_Transaction t = new Model_Transaction(newAcctName, "Check", 12345, balance, "Deposit", dateFormatter.format(date));
                 addTransaction(t);
             }
