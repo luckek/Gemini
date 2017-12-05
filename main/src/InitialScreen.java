@@ -1,4 +1,6 @@
 
+import org.bouncycastle.math.raw.Mod;
+
 import javax.swing.*;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
@@ -9,12 +11,14 @@ import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
+import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 // TODO: make sure exiting w/all fields filled out does NOT make a new acct / transaction
 
@@ -407,14 +411,15 @@ public class InitialScreen extends JFrame {
         String newAcctEmail = accountForm.getEmail();
         String newAcctDesc = accountForm.getDescription();
         String newAcctNumber = accountForm.getPhoneNumber();
+        String newAcctBlance = accountForm.getBalance();
 
         // Only attempt to create account if all information is present
         if ((!newAcctName.isEmpty()) && (!newAcctEmail.isEmpty()) && (!newAcctDesc.isEmpty())
-                && (!newAcctNumber.isEmpty())) {
+                && (!newAcctNumber.isEmpty()) && (!newAcctBlance.isEmpty())) {
 
+            // Check for account of the same name
             for(String name : controller.getAllAccounts()) {
 
-                // Check for account of the same name
                 if(newAcctName.equalsIgnoreCase(name)) {
                     JOptionPane.showMessageDialog(this, "An account with this name already exists");
                     return;
@@ -423,6 +428,17 @@ public class InitialScreen extends JFrame {
 
             accountList.addItem(newAcctName);
             controller.newAccount(newAcctName, newAcctEmail, newAcctDesc, newAcctNumber);
+
+            double balance = new Double(newAcctBlance);
+
+            // Add new transaction if initial balance is not zero
+            if(balance > 0) {
+                Date date = new Date();
+                DateFormat dateFormatter = new SimpleDateFormat("MM/dd/yyyy");
+                System.out.println(date.toString());
+                Model_Transaction t = new Model_Transaction(newAcctName, "Check", 12345, balance, "Deposit", dateFormatter.format(date));
+                addTransaction(t);
+            }
             // note that a change has been made
             changeCheck = true;
         }
@@ -435,7 +451,6 @@ public class InitialScreen extends JFrame {
 
         // Remove 'All' option.
         System.arraycopy(tmp, 1, accts, 0, accts.length);
-
 
         // Open form and initialize it
         TransactionForm tForm = new TransactionForm(this, Main.FRAME_STRING, true, accts);
@@ -491,7 +506,6 @@ public class InitialScreen extends JFrame {
         } else {
 
             t = new Model_Credit(type, name, 0, expDep, new Double(gross), date);
-
         }
 
         // Remove row
@@ -609,6 +623,29 @@ public class InitialScreen extends JFrame {
             saveDialog();
             changeCheck = false;
         }
+    }
+
+    private void addTransaction(Model_Transaction transaction) {
+
+        double grossAmount = transaction.getGross();
+        double netAmount = transaction.getNet();
+        double fees = grossAmount - netAmount;
+
+        // Add transaction to table
+        addTableRow(transaction.getTransactionInfo());
+
+        if(transaction.isDeposit().startsWith("E")) {
+            grossAmount = -grossAmount;
+            netAmount = -netAmount;
+        }
+
+        // Update balances
+        increaseGrossBalance(grossAmount);
+        increaseNetBalance(netAmount);
+        updateFeesTotal(fees);
+
+        // Update model
+        controller.addTransaction(transaction);
     }
 
     // Create dialog box when there is a successful save
@@ -739,25 +776,8 @@ public class InitialScreen extends JFrame {
                 transaction = new Model_Check(newRowData[3], newRowData[0], new Integer(newRowData[4]), newRowData[5], new Double(newRowData[2]), newRowData[1]);
             }
 
-            double grossAmount = transaction.getGross();
-            double netAmount = transaction.getNet();
-            double fees = grossAmount - netAmount;
-
-            // Add transaction to table
-            addTableRow(transaction.getTransactionInfo());
-
-            if(transaction.isDeposit().startsWith("E")) {
-                grossAmount = -grossAmount;
-                netAmount = -netAmount;
-            }
-
-            // Update balances
-            increaseGrossBalance(grossAmount);
-            increaseNetBalance(netAmount);
-            updateFeesTotal(fees);
-
-            // Update model
-            controller.addTransaction(transaction);
+            // Add new transaction
+            addTransaction(transaction);
         }
     }
 
