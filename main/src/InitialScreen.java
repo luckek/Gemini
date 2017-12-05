@@ -80,7 +80,9 @@ public class InitialScreen extends JFrame {
         JRadioButton debitButton = new JRadioButton("Expense");
         JRadioButton creditButton = new JRadioButton("Deposit");
 
-        JMenuBar menuBar = new JMenuBar();
+        BackgroundMenuBar bgdMenu = new BackgroundMenuBar();
+        Color maroon = new Color(209, 161, 173);
+        bgdMenu.setColor(maroon);
 
         JMenu fileMenu = new JMenu("File");
         JMenu helpMenu = new JMenu("Help");
@@ -125,15 +127,15 @@ public class InitialScreen extends JFrame {
 
         // File Menu
         fileMenu.add(save);
-        menuBar.add(fileMenu);
+        bgdMenu.add(fileMenu);
         printMenu.add(print);
-        menuBar.add(printMenu);
+        bgdMenu.add(printMenu);
         
         // Help Menu
         helpMenu.add(userGuide);
-        menuBar.add(helpMenu);
+        bgdMenu.add(helpMenu);
 
-        this.setJMenuBar(menuBar);
+        this.setJMenuBar(bgdMenu);
 
         // Populating panels / content pane
         add(mainPanel);
