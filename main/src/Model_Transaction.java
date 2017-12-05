@@ -22,6 +22,9 @@ public class Model_Transaction {
         this.grossAmt = grossAmt;
         this.isDeposit = isDeposit;
         this.date = date;
+        this.netAmt = grossAmt;
+        this.percentage = 1;
+        this.fee = 0;
     }
 
     public void setName(String name) {
