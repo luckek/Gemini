@@ -275,14 +275,18 @@ public class InitialScreen extends JFrame {
         for(int i = 0; i < transactionTable.getRowCount(); i++) {
 
             // Get gross
-            double grossValue = new Double((String)transactionTable.getValueAt(i, 2));
+            String grossStr = (String) transactionTable.getValueAt(i, 2);
+            double grossValue = new Double(grossStr.replace("$", ""));
 
             // Get net
-            double netValue =  new Double((String)transactionTable.getValueAt(i, 5));
+            String netStr = (String)transactionTable.getValueAt(i, 5);
+            double netValue =  new Double(netStr.replace("$", ""));
 
-            String isExpense = (String)transactionTable.getValueAt(i, 6);
-
+            // Calculate fees
             double fees = grossValue - netValue;
+
+            // Determine if expense
+            String isExpense = (String)transactionTable.getValueAt(i, 6);
 
             // Convert to negative value if expense
             if(isExpense.startsWith("E")) {
@@ -476,6 +480,14 @@ public class InitialScreen extends JFrame {
 
         // Get model and add data to it
         DefaultTableModel tmpModel = (DefaultTableModel) transactionTable.getModel();
+
+        NumberFormat formatter = NumberFormat.getCurrencyInstance();
+
+        // Format currency
+        rowData[2] = formatter.format(new Double(rowData[2]));
+        rowData[5] = formatter.format(new Double(rowData[5]));
+        rowData[7] = formatter.format(new Double(rowData[7]));
+
         tmpModel.addRow(rowData);
 
         // Only note change if not initializing
