@@ -2,6 +2,7 @@ import javax.swing.*;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
 
 public class CodePanel extends JDialog {
 
@@ -118,7 +119,12 @@ public class CodePanel extends JDialog {
             }
 
             // call method to add to respective transaction array
-            TransactionForm.addCode(userCode, (String)isExpenseBox.getSelectedItem());
+            try {
+				TransactionForm.addCode(userCode, (String)isExpenseBox.getSelectedItem());
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
             addConfirmation();
         }
     }

@@ -87,6 +87,29 @@ public class Model_Read_Files {
         writer.close();
     }
   
+    // Saving/loading codes from file
+    void saveCode(String code, String isExpense) throws IOException {
+    	
+    	FileWriter writer;
+    	writer = new FileWriter("main/resources/Codes.txt", true);
+    	
+    	writer.write(code+","+isExpense+"\n");
+    	writer.close();
+    }
+    
+    public ArrayList<String> loadCodes() throws FileNotFoundException {
+    	
+    	ArrayList<String> codes = new ArrayList<>();
+    	Scanner inFile = new Scanner(new File("main/resources/Codes.txt")).useDelimiter("\n");
+    	
+    	while (inFile.hasNext()) {
+    		String temp = inFile.nextLine();
+    		codes.add(temp);
+    	}
+    	
+    	return codes;
+    }
+    
     ArrayList<String[]> loadEncryptedData() throws FileNotFoundException {
         ArrayList<String[]> data = new ArrayList<>();
         // Added a filepath for eclipse for future use

@@ -4,9 +4,12 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 
@@ -21,7 +24,9 @@ public class TransactionForm extends JDialog {
     private String[] transactionTypes = new String[] {"Check", "Credit Card", "Cash"}; // Make enum class / constant of transaction class?
     private static String[] depositCodes = new String[] {"50109", "50287"};
     private static String[] expenseCodes = new String[] {"61123", "61225", "62210", "62241", "62245"};
-    private static String[] customCodes = new String[] {"00000"};
+    private static ArrayList<String> customCodes = new ArrayList<String>();
+    private static boolean loadCodes = true;
+	private static Model_Read_Files readFile = new Model_Read_Files();
 
     private final DateFormat dateFormatter = new SimpleDateFormat("MM/dd/yyyy");
     private Date date = new Date();
@@ -31,6 +36,16 @@ public class TransactionForm extends JDialog {
         super(frame, title, modality);
 
         setPreferredSize(new Dimension(300, 400));
+        
+        // Loads custom transaction codes
+        if (loadCodes) {
+            try {
+    			loadCodes();
+    		} catch (FileNotFoundException e) {
+    			// TODO Auto-generated catch block
+    			e.printStackTrace();
+    		}
+        }
 
         // Creating components
         JLabel nameLabel  = new JLabel("Name: ");
@@ -134,6 +149,7 @@ public class TransactionForm extends JDialog {
 
         pack();
         setVisible(true);
+
     }
 
     public String getAcctName() { return (String)nameBox.getSelectedItem(); }
@@ -143,17 +159,45 @@ public class TransactionForm extends JDialog {
     public String isDeposit() { return (String) depositExpenseBox.getSelectedItem(); }
     public String getCode() { return (String)codeBox.getSelectedItem(); }
     
-    public static void addCode(String customCode, String isExpense) {
+    public static void addCode(String customCode, String isExpense) throws IOException {
 
-        if(isExpense.equalsIgnoreCase("Expense")) {
+    	// Saves codes to file
+        if(isExpense.startsWith("E")) {
 
+        	
             expenseCodes = Arrays.copyOf(expenseCodes, expenseCodes.length + 1);
             expenseCodes[expenseCodes.length - 1] = customCode;
 
         } else {
+        	
             depositCodes = Arrays.copyOf(depositCodes, depositCodes.length + 1);
             depositCodes[depositCodes.length - 1] = customCode;
         }
+        
+        readFile.saveCode(customCode, isExpense);
+    }
+    
+    // Loads codes when window is first opened
+    public static void loadCodes() throws FileNotFoundException {
+    	customCodes = readFile.loadCodes();
+    	
+    	for (String code : customCodes) {
+    		String customCode = code.substring(0, code.indexOf(','));
+    		String isExpense = code.substring(code.indexOf(',') + 1);
+    		
+    		if (isExpense.startsWith("E")) {
+    			expenseCodes = Arrays.copyOf(expenseCodes, expenseCodes.length + 1);
+    			expenseCodes[expenseCodes.length - 1] = customCode;
+    		}
+    		
+    		else if (isExpense.startsWith("D")) {
+    			depositCodes = Arrays.copyOf(depositCodes, depositCodes.length + 1);
+    			depositCodes[depositCodes.length - 1] = customCode;
+    		}
+    		
+    		loadCodes = false;
+    		
+    	}
     }
     
     public static boolean containsCode(String customCode) {
