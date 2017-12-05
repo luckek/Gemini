@@ -8,6 +8,7 @@ public class AccountForm extends JDialog {
     private JTextField emailField;
     private JTextField descriptionField;
     private JTextField numberField;
+    private JTextField balanceField;
 
     public AccountForm(Frame frame, String title, boolean modality) {
 
@@ -26,6 +27,8 @@ public class AccountForm extends JDialog {
         descriptionField = new JTextField(10);
         JLabel numberLabel = new JLabel("Number: ");
         numberField = new JTextField(10);
+        JLabel balanceLabel = new JLabel("Balance:");
+        balanceField = new JTextField(10);
         JButton okButton = new JButton("Ok");
 
         okButton.addActionListener(new okAction());
@@ -37,11 +40,12 @@ public class AccountForm extends JDialog {
         JPanel descriptionPanel = new JPanel();
         JPanel emailPanel = new JPanel();
         JPanel numberPanel = new JPanel();
+        JPanel balancePanel = new JPanel();
         JPanel centerPanel = new JPanel();
         JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 
         // Setting layouts
-        centerPanel.setLayout(new GridLayout(5, 0, 90, 0));
+        centerPanel.setLayout(new GridLayout(6, 0, 90, 0));
         mainPanel.setPreferredSize(new Dimension(500, 500));
         mainPanel.setLayout(new BorderLayout());
         okButton.setSize(new Dimension(40, 15));
@@ -59,6 +63,7 @@ public class AccountForm extends JDialog {
         centerPanel.add(emailPanel);
         centerPanel.add(descriptionPanel);
         centerPanel.add(numberPanel);
+        centerPanel.add(balancePanel);
 
         infoPanel.add(Box.createRigidArea(new Dimension(10, 50)));
         infoPanel.add(new JLabel("<html><center><p>Please enter the name of the " +
@@ -81,6 +86,10 @@ public class AccountForm extends JDialog {
         numberPanel.add(Box.createRigidArea(new Dimension(25, 0)));
         numberPanel.add(numberField);
 
+        balancePanel.add(balanceLabel);
+        balancePanel.add(Box.createRigidArea(new Dimension(20, 0)));
+        balancePanel.add(balanceField);
+
         pack();
         setVisible(true);
         }
@@ -90,9 +99,16 @@ public class AccountForm extends JDialog {
     public String getEmail() { return emailField.getText(); }
     public String getDescription() { return descriptionField.getText(); }
     public String getPhoneNumber() { return numberField.getText(); }
+    public String getBalance() { return balanceField.getText(); }
 
     // Closes dialog
     private void close() { this.dispose(); }
+
+    private void inputWarning() {
+
+        JOptionPane.showMessageDialog(this,  "Initial amount must contain a valid numerical value",
+                   			                      "Warning!", JOptionPane.WARNING_MESSAGE);
+    }
 
     // Creates popup warning
     private void showWarning() {
@@ -108,6 +124,12 @@ public class AccountForm extends JDialog {
                     || numberField.getText().isEmpty()){
 
                 showWarning();
+                return;
+            }
+
+            if(!balanceField.getText().matches("^[0-9]*(\\.\\d+)?$")) {
+
+                inputWarning();
                 return;
             }
             close();
