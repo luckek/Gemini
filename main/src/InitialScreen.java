@@ -90,6 +90,7 @@ public class InitialScreen extends JFrame {
       
         JMenuItem save = new JMenuItem("Save");
         JMenuItem userGuide = new JMenuItem("User Guide");
+        JMenuItem codeDesc = new JMenuItem("Code Descriptions");
         JMenuItem print = new JMenuItem("Print");
 
         accountList = new JComboBox<>(); // This should be populated by a list of all accounts
@@ -133,6 +134,8 @@ public class InitialScreen extends JFrame {
         
         // Help Menu
         helpMenu.add(userGuide);
+        helpMenu.add(codeDesc);
+      
         bgdMenu.add(helpMenu);
 
         this.setJMenuBar(bgdMenu);
@@ -226,6 +229,7 @@ public class InitialScreen extends JFrame {
         creditButton.addActionListener(new accountListener());
         save.addActionListener(new saveListener());
         userGuide.addActionListener(new guideListener());
+        codeDesc.addActionListener(new codeDescriptionListener());
         print.addActionListener(new printListener());
     }
 
@@ -361,6 +365,9 @@ public class InitialScreen extends JFrame {
 
     // Opens user guide panel
     private void openGuide() { new GuidePanel(this, Main.FRAME_STRING, true); }
+    
+    // Opens code description panel
+    private void openCodeDesc() { new CodeDescPanel(this, Main.FRAME_STRING, true); }
     
     private void print() throws IOException {
 
@@ -872,6 +879,15 @@ public class InitialScreen extends JFrame {
 
             // User guide routine here
             openGuide();
+        }
+    }
+    
+    class codeDescriptionListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+
+            openCodeDesc();
         }
     }
   
