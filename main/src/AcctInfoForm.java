@@ -48,15 +48,19 @@ public class AcctInfoForm extends JDialog {
         JPanel emailPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JPanel numberPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JPanel reitredPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JPanel centerPanel = new JPanel();
 
         centerPanel.setLayout(new GridLayout(6, 0, 90, 0));
         mainPanel.setLayout(new BorderLayout());
+        okButton.setPreferredSize(new Dimension(50, 25));
 
         add(mainPanel);
 
-        mainPanel.add(okButton, BorderLayout.PAGE_END);
+        mainPanel.add(bottomPanel, BorderLayout.PAGE_END);
         mainPanel.add(centerPanel,BorderLayout.CENTER);
+
+        bottomPanel.add(okButton);
 
         centerPanel.add(namePanel);
         centerPanel.add(balancePanel);

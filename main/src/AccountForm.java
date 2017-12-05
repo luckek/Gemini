@@ -1,13 +1,15 @@
 import javax.swing.*;
+import javax.swing.text.MaskFormatter;
 import java.awt.*;
 import java.awt.event.*;
+import java.text.ParseException;
 
 public class AccountForm extends JDialog {
 
     private JTextField nameField;
     private JTextField emailField;
     private JTextField descriptionField;
-    private JTextField numberField;
+    private JFormattedTextField numberField;
     private JTextField balanceField;
 
     public AccountForm(Frame frame, String title, boolean modality) {
@@ -26,7 +28,8 @@ public class AccountForm extends JDialog {
         JLabel descriptionLabel = new JLabel("Description: ");
         descriptionField = new JTextField(10);
         JLabel numberLabel = new JLabel("Number: ");
-        numberField = new JTextField(10);
+        numberField = new JFormattedTextField();
+        numberField.setColumns(10);
         JLabel balanceLabel = new JLabel("Balance:");
         balanceField = new JTextField(10);
         JButton okButton = new JButton("Ok");
@@ -43,6 +46,15 @@ public class AccountForm extends JDialog {
         JPanel balancePanel = new JPanel();
         JPanel centerPanel = new JPanel();
         JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+
+        try {
+            MaskFormatter dateMask = new MaskFormatter("###-###-####");
+            dateMask.setPlaceholderCharacter('_');
+            dateMask.install(numberField);
+        } catch (ParseException e) {
+            System.out.println("Parse Exception: ");
+            e.printStackTrace();
+        }
 
         // Setting layouts
         centerPanel.setLayout(new GridLayout(6, 0, 90, 0));
@@ -122,13 +134,11 @@ public class AccountForm extends JDialog {
 
             if(nameField.getText().isEmpty() || emailField.getText().isEmpty() || descriptionField.getText().isEmpty()
                     || numberField.getText().isEmpty()){
-
                 showWarning();
                 return;
             }
 
             if(!balanceField.getText().matches("^[0-9]*(\\.\\d+)?$")) {
-
                 inputWarning();
                 return;
             }
