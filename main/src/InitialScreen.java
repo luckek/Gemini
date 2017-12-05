@@ -16,7 +16,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-// TODO: make sure exiting w/all fields filled out does NOT make a new acct / transaction
+// TODO: make sure backing out cancels action
+// TODO: ability to edit account
 
 public class InitialScreen extends JFrame {
 
