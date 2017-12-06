@@ -406,6 +406,7 @@ public class InitialScreen extends JFrame {
         }
         writer.close();
     }
+
     // Opens benefits calculator dialog
     private void openCalc() { new CalcPanel(this, Main.FRAME_STRING, true); }
     
@@ -668,6 +669,10 @@ public class InitialScreen extends JFrame {
     // Create dialog box when there is a successful save
     private void saveDialog() { JOptionPane.showMessageDialog(this, "Save successful"); }
 
+    private void printDialog() {
+        JOptionPane.showMessageDialog(this, "Printing successful");
+    }
+
     void setController(Controller controller) {
         this.controller = controller;
     }
@@ -928,6 +933,7 @@ public class InitialScreen extends JFrame {
 
             try {
 				print();
+				printDialog();
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}

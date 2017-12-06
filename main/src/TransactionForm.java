@@ -38,12 +38,7 @@ public class TransactionForm extends JDialog {
         
         // Loads custom transaction codes
         if (loadCodes) {
-            try {
-    			loadCodes();
-    		} catch (FileNotFoundException e) {
-    			// TODO Auto-generated catch block
-    			e.printStackTrace();
-    		}
+            loadCodes();
         }
 
         // Creating components
@@ -177,9 +172,10 @@ public class TransactionForm extends JDialog {
     }
     
     // Loads codes when window is first opened
-    public static void loadCodes() throws FileNotFoundException {
-    	customCodes = readFile.loadCodes();
-    	
+    public static void loadCodes() {
+
+        customCodes = readFile.loadCodes();
+
     	for (String code : customCodes) {
     		String customCode = code.substring(0, code.indexOf(','));
     		String isExpense = code.substring(code.indexOf(',') + 1);
