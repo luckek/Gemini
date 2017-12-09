@@ -77,6 +77,7 @@ public class InitialScreen extends JFrame {
         JButton addButton = new JButton("Add");
         JButton removeButton = new JButton("Remove");
         JButton codeButton = new JButton("Add New Code");
+        JButton editButton = new JButton("Edit Account");
 
         radioGroup = new ButtonGroup();
         JRadioButton bothButton = new JRadioButton("Both", true);
@@ -156,15 +157,15 @@ public class InitialScreen extends JFrame {
         leftPanel.add(Box.createVerticalBox());
 
         buttonPanel.add(Box.createRigidArea(new Dimension(0, 50)));
-        buttonPanel.add(Box.createRigidArea(new Dimension(0, 50)));
         buttonPanel.add(acctLabel);
         buttonPanel.add(accountList);
         buttonPanel.add(addAcctButton);
-        buttonPanel.add(calcBttn);
+        buttonPanel.add(editButton);
+        buttonPanel.add(acctInfoButton);
         buttonPanel.add(deleteButton);
         buttonPanel.add(retireBttn);
-        buttonPanel.add(acctInfoButton);
         buttonPanel.add(viewBalancesButton);
+        buttonPanel.add(calcBttn);
         buttonPanel.add(logoutBttn);
         buttonPanel.add(Box.createRigidArea(new Dimension(0, 50)));
         buttonPanel.add(Box.createRigidArea(new Dimension(0, 50)));
@@ -234,6 +235,7 @@ public class InitialScreen extends JFrame {
         userGuide.addActionListener(new guideListener());
         codeDesc.addActionListener(new codeDescriptionListener());
         print.addActionListener(new printListener());
+        editButton.addActionListener(new editListener());
     }
 
     void initComboBox(String[] accountNames) {
@@ -669,6 +671,15 @@ public class InitialScreen extends JFrame {
     // Create dialog box when there is a successful save
     private void saveDialog() { JOptionPane.showMessageDialog(this, "Save successful"); }
 
+    private String[] editAccountDialog(String acctName) {
+        EditAccountDialog dlg = new EditAccountDialog(this, Main.FRAME_STRING, true, controller.getAccountInfo(acctName));
+        return new String[] {dlg.getEmail(), dlg.getDesc(), dlg.getNumber(), Integer.toString(dlg.getOkPressed())};
+    }
+
+    private void editDialog() {
+        JOptionPane.showMessageDialog(this, "Changes successfully made");
+    }
+
     private void printDialog() {
         JOptionPane.showMessageDialog(this, "Printing successful");
     }
@@ -937,6 +948,38 @@ public class InitialScreen extends JFrame {
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
+        }
+    }
+
+    class editListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            String acctName = getAcct("Please select the account you would like to edit");
+            String[] newInfo = editAccountDialog(acctName);
+
+            String newEmail = newInfo[0];
+            String newDesc = newInfo[1];
+            String newNumber = newInfo[2];
+
+            if(newEmail != null && !newEmail.isEmpty()) {
+                controller.setEmail(acctName, newEmail);
+            }
+
+            if(newDesc != null && !newDesc.isEmpty()) {
+                controller.setDesc(acctName, newDesc);
+            }
+
+            if(newNumber != null && !newNumber.isEmpty()) {
+                controller.setNumber(acctName, newNumber);
+            }
+
+            if(newInfo[3] != null && !newInfo[3].isEmpty()) {
+
+                if(newInfo[3].equalsIgnoreCase("1")) {
+                    editDialog();
+                }
+            }
         }
     }
 }

@@ -113,4 +113,16 @@ public class Controller {
     String getAcctEmail(String acctName) {
         return account.getEmail(acctName);
     }
+
+    public void setEmail(String acctName, String newEmail) {
+        account.setEmail(acctName, newEmail);
+    }
+
+    public void setDesc(String acctName, String newDesc) {
+        account.setDesc(acctName, newDesc);
+    }
+
+    public void setNumber(String acctName, String newNumber) {
+        account.setNumber(acctName, newNumber);
+    }
 }

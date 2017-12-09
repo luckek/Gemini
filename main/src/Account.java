@@ -33,7 +33,7 @@ public class Account {
     public void setEmail(String email) { this.email = email; }
     public void setDesc(String desc) { this.description = desc; }
     public void setIsRetired(boolean isRetired) { this.isRetired = isRetired; }
-    public void setPhoneNumber(String newNumber) { this.phoneNumber = phoneNumber; }
+    public void setPhoneNumber(String newNumber) { this.phoneNumber = newNumber; }
 
     void modifyBalance(double amount) {
         balance = new BigDecimal(balance + amount).setScale(2, RoundingMode.HALF_EVEN).doubleValue();
