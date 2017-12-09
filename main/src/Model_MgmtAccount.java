@@ -94,6 +94,8 @@ public class Model_MgmtAccount {
         subAccounts.get(acctName).setDesc(desc);
     }
 
+    public void setNumber(String acctName, String number) { subAccounts.get(acctName).setPhoneNumber(number);}
+
     void addAccount(String[] info) {
 
         boolean isRetired = false;

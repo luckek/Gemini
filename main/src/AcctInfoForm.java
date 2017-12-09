@@ -21,16 +21,17 @@ public class AcctInfoForm extends JDialog {
         JLabel nameLabel  = new JLabel("Name: ");
         nameLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
         JLabel nameLabel2 = new JLabel(name);
+        JLabel emailLabel = new JLabel("E-mail: ");
+        JLabel emailLabel2 = new JLabel(email);
+        JLabel descriptionLabel = new JLabel("Description: ");
+        JLabel descriptionLabel2 = new JLabel(description);
+        JLabel numberLabel = new JLabel("Number: ");
+        JLabel numberLabel2 = new JLabel(number);
         JLabel amntLabel = new JLabel("Account Balance: ");
         amntLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
         JLabel balanceLabel = new JLabel(balance);
-        JLabel descriptionLabel = new JLabel("Description: ");
-        JLabel descriptionLabel2 = new JLabel(description);
-        JLabel emailLabel = new JLabel("E-mail: ");
-        JLabel emailLabel2 = new JLabel(email);
-        JLabel numberLabel = new JLabel("Number: ");
-        JLabel numberLabel2 = new JLabel(number);
         JLabel retiredLabel = new JLabel();
+
         JButton okButton = new JButton("Ok");
 
         if(isRetired) {
