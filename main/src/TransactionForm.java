@@ -20,6 +20,7 @@ public class TransactionForm extends JDialog {
     private JComboBox<String> codeBox;
     private JComboBox<String> typeBox;
     private JComboBox<String> depositExpenseBox;
+    private JTextField descField;
     private String[] transactionTypes = new String[] {"Check", "Credit Card", "Cash"}; // Make enum class / constant of transaction class?
     private static String[] depositCodes = new String[] {"50109", "50287"};
     private static String[] expenseCodes = new String[] {"61123", "61225", "62210", "62241", "62245"};
@@ -34,7 +35,7 @@ public class TransactionForm extends JDialog {
 
         super(frame, title, modality);
 
-        setPreferredSize(new Dimension(300, 400));
+        setPreferredSize(new Dimension(300, 500));
         
         // Loads custom transaction codes
         if (loadCodes) {
@@ -59,6 +60,8 @@ public class TransactionForm extends JDialog {
         JButton okButton = new JButton("Ok");
         JLabel expenseDepositLabel = new JLabel("Exp / Dep: ");
         depositExpenseBox = new JComboBox<>(new String[] {"Expense", "Deposit"});
+        JLabel descLabel = new JLabel("Description:");
+        descField = new JTextField(10);
         
         try {
         	MaskFormatter dateMask = new MaskFormatter("##/##/####");
@@ -78,12 +81,13 @@ public class TransactionForm extends JDialog {
         JPanel infoPanel = new JPanel();
         JPanel codePanel = new JPanel();
         JPanel typePanel = new JPanel();
+        JPanel descPanel = new JPanel();
         JPanel centerPanel = new JPanel();
         JPanel expDepositPanel = new JPanel();
         JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 
         // Setting layouts / sizing
-        centerPanel.setLayout(new GridLayout(7, 0, 90, 0));
+        centerPanel.setLayout(new GridLayout(8, 0, 90, 0));
         mainPanel.setPreferredSize(new Dimension(300, 400));
         nameBox.setPreferredSize(new Dimension(112, 20));
         typeBox.setPreferredSize(new Dimension(112, 20));
@@ -108,6 +112,7 @@ public class TransactionForm extends JDialog {
         centerPanel.add(typePanel);
         centerPanel.add(expDepositPanel);
         centerPanel.add(codePanel);
+        centerPanel.add(descPanel);
 
         infoPanel.add(Box.createRigidArea(new Dimension(10, 50)));
         infoPanel.add(new JLabel("<html><center><p>Please enter the name of the " +
@@ -138,12 +143,15 @@ public class TransactionForm extends JDialog {
         expDepositPanel.add(Box.createRigidArea(new Dimension(15, 10)));
         expDepositPanel.add(depositExpenseBox);
 
+        descPanel.add(descLabel);
+        descPanel.add(Box.createRigidArea(new Dimension(13, 0)));
+        descPanel.add(descField);
+
         okButton.addActionListener(new okAction());
         depositExpenseBox.addActionListener(new selectionAction());
 
         pack();
         setVisible(true);
-
     }
 
     public String getAcctName() { return (String)nameBox.getSelectedItem(); }
@@ -152,6 +160,7 @@ public class TransactionForm extends JDialog {
     public String getTransactionType() { return (String)typeBox.getSelectedItem(); }
     public String isDeposit() { return (String) depositExpenseBox.getSelectedItem(); }
     public String getCode() { return (String)codeBox.getSelectedItem(); }
+    public String getDesc() {return descField.getText(); }
     
     public static void addCode(String customCode, String isExpense) throws IOException {
 
@@ -196,7 +205,6 @@ public class TransactionForm extends JDialog {
     }
     
     public static boolean containsCode(String customCode) {
-
 
         // Check expense codes
         for(String code : expenseCodes) {

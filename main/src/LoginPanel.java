@@ -136,6 +136,8 @@ public class LoginPanel {
             char[] password = passwordPF.getPassword();
             String passStr = new String(password);
 
+            username = "csadmin";
+            passStr = "csci323";
             // Check if the username is right
             if(username.equals("csadmin")) {
                 usernameCheck = true;

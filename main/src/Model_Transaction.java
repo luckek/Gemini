@@ -13,8 +13,9 @@ public class Model_Transaction {
     protected double netAmt;
     protected double percentage;
     protected double fee;
+    protected String desc;
 
-    public Model_Transaction(String name, String type, int code, double grossAmt, String isDeposit, String date) {
+    public Model_Transaction(String type, String name, int code, String isDeposit, double grossAmt, String date, String desc) {
 
         this.name = name;
         this.type = type;
@@ -25,6 +26,7 @@ public class Model_Transaction {
         this.netAmt = grossAmt;
         this.percentage = 1;
         this.fee = 0;
+        this.desc = desc;
     }
 
     public void setName(String name) {
@@ -58,10 +60,6 @@ public class Model_Transaction {
         fee = new BigDecimal(grossAmt - netAmt).setScale(2, RoundingMode.HALF_EVEN).doubleValue();
     }
 
-    public void setDate(String date) {
-        this.date = date;
-    }
-
     public String getName() {
         return name;
     }
@@ -89,9 +87,11 @@ public class Model_Transaction {
         return date;
     }
 
+    public String getDesc() {return desc; }
+
     public String[] getTransactionInfo() {
 
-        String[] info = new String[8];
+        String[] info = new String[9];
 
         info[0] = name;
         info[1] = date;
@@ -101,6 +101,7 @@ public class Model_Transaction {
         info[5] = Double.toString(netAmt);
         info[6] = isDeposit;
         info[7] = Double.toString(fee);
+        info[8] = desc;
 
         return info;
     }

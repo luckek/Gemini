@@ -64,7 +64,7 @@ public class Model_Read_Files {
 
                 // Get transaction info
                 sb.append(transaction.getName() + "," + transaction.getDate() + "," + transaction.getGross() + ","
-                        + transaction.getType() + "," + transaction.getCode() + "," + transaction.isDeposit() + ",\n");
+                        + transaction.getType() + "," + transaction.getCode() + "," + transaction.isDeposit() + "," + transaction.getDesc() + ",\n");
             }
 
             String encryptedString = Encryption.Encrypt(sb.toString(), key);

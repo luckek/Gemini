@@ -151,5 +151,4 @@ public class Model_MgmtAccount {
     void retireAccount(String acctToRetire) {
         subAccounts.get(acctToRetire).setIsRetired(true);
     }
-
 }

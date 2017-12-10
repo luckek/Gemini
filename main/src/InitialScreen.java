@@ -448,7 +448,7 @@ public class InitialScreen extends JFrame {
             if(balance > 0) {
                 Date date = new Date();
                 DateFormat dateFormatter = new SimpleDateFormat("MM/dd/yyyy");
-                Model_Transaction t = new Model_Transaction(newAcctName, "Check", 12345, balance, "Deposit", dateFormatter.format(date));
+                Model_Transaction t = new Model_Transaction("Check", newAcctName , 12345, "Deposit", balance, dateFormatter.format(date), "Created new account");
                 addTransaction(t);
             }
             // note that a change has been made
@@ -467,7 +467,7 @@ public class InitialScreen extends JFrame {
         // Open form and initialize it
         TransactionForm tForm = new TransactionForm(this, Main.FRAME_STRING, true, accts);
 
-        String[] transactionData = new String[6];
+        String[] transactionData = new String[7];
 
         // Get transaction data
         transactionData[0] = tForm.getAcctName();
@@ -476,6 +476,7 @@ public class InitialScreen extends JFrame {
         transactionData[3] = tForm.getTransactionType();
         transactionData[4] = tForm.getCode();
         transactionData[5] = tForm.isDeposit();
+        transactionData[6] = tForm.getDesc();
         return transactionData;
     }
 
@@ -518,15 +519,15 @@ public class InitialScreen extends JFrame {
         // Create transaction
         if(type.equalsIgnoreCase("Cash")) {
 
-            t = new Model_Cash(type, name, 0, expDep, new Double(gross), date);
+            t = new Model_Cash(type, name, 0, expDep, new Double(gross), date, "");
         }
         else if(type.equalsIgnoreCase("Check")) {
 
-            t = new Model_Check(type, name, 0, expDep, new Double(gross), date);
+            t = new Model_Check(type, name, 0, expDep, new Double(gross), date, "");
 
         } else {
 
-            t = new Model_Credit(type, name, 0, expDep, new Double(gross), date);
+            t = new Model_Credit(type, name, 0, expDep, new Double(gross), date, "");
         }
 
         // Remove row
@@ -800,15 +801,15 @@ public class InitialScreen extends JFrame {
             // Decide type of transaction
             if(newRowData[3].equalsIgnoreCase("Cash")) {
 
-                transaction = new Model_Cash(newRowData[3], newRowData[0], new Integer(newRowData[4]), newRowData[5], new Double(newRowData[2]), newRowData[1]);
+                transaction = new Model_Cash(newRowData[3], newRowData[0], new Integer(newRowData[4]), newRowData[5], new Double(newRowData[2]), newRowData[1], newRowData[6]);
 
             } else if(newRowData[3].equalsIgnoreCase("Credit Card")) {
 
-                transaction = new Model_Credit(newRowData[3], newRowData[0], new Integer(newRowData[4]), newRowData[5], new Double(newRowData[2]), newRowData[1]);
+                transaction = new Model_Credit(newRowData[3], newRowData[0], new Integer(newRowData[4]), newRowData[5], new Double(newRowData[2]), newRowData[1], newRowData[6]);
 
             } else { // Check
 
-                transaction = new Model_Check(newRowData[3], newRowData[0], new Integer(newRowData[4]), newRowData[5], new Double(newRowData[2]), newRowData[1]);
+                transaction = new Model_Check(newRowData[3], newRowData[0], new Integer(newRowData[4]), newRowData[5], new Double(newRowData[2]), newRowData[1], newRowData[6]);
             }
 
             // Add new transaction

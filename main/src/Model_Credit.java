@@ -3,8 +3,9 @@ import java.math.RoundingMode;
 
 public class Model_Credit extends Model_Transaction {
 
-    Model_Credit(String type, String name, int code, String isDeposit, double grossAmt, String date) {
-        super(name, type, code, grossAmt, isDeposit, date);
+    Model_Credit(String type, String name, int code, String isDeposit, double grossAmt, String date, String desc) {
+        super(type, name, code, isDeposit, grossAmt, date, desc);
+
         percentage = 0.12;
         double tmpAmt = grossAmt - (grossAmt * percentage);
 
