@@ -510,6 +510,7 @@ public class InitialScreen extends JFrame {
         String name = (String)tmpModel.getValueAt(modelIndex, 0);
         String date = (String)tmpModel.getValueAt(modelIndex, 1);
         String gross = (String)tmpModel.getValueAt(modelIndex, 2);
+        gross = gross.replace("$", "");
         String type = (String)tmpModel.getValueAt(modelIndex, 3);
         String expDep = (String)tmpModel.getValueAt(modelIndex, 6);
         Model_Transaction t;
@@ -672,6 +673,7 @@ public class InitialScreen extends JFrame {
     private void saveDialog() { JOptionPane.showMessageDialog(this, "Save successful"); }
 
     private String[] editAccountDialog(String acctName) {
+        if(acctName == null) { return new String[] {null, null, null, null}; }
         EditAccountDialog dlg = new EditAccountDialog(this, Main.FRAME_STRING, true, controller.getAccountInfo(acctName));
         return new String[] {dlg.getEmail(), dlg.getDesc(), dlg.getNumber(), Integer.toString(dlg.getOkPressed())};
     }
@@ -824,9 +826,11 @@ public class InitialScreen extends JFrame {
             if (index != Integer.MIN_VALUE) {
 
                 String grossAmountStr = (String)transactionTable.getValueAt(index, 2);
+                grossAmountStr = grossAmountStr.replace("$", "");
                 double grossAmount = new Double(grossAmountStr);
 
                 String netAmountStr = (String)transactionTable.getValueAt(index, 5);
+                netAmountStr = netAmountStr.replace("$", "");
                 double netAmout = new Double(netAmountStr);
 
                 double fees = grossAmount - netAmout;
