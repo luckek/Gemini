@@ -30,7 +30,7 @@ public class InitialScreen extends JFrame {
     private String logoPath = "main/resources/logo1.png";
     private ButtonGroup radioGroup;
     private Controller controller;
-    private String[] columnNames = {"Name", "Date", "Gross Amt", "Type", "Code", "Net Amt", "Exp / Dep", "Fees"};
+    private String[] columnNames = {"Name", "Date", "Gross Amt", "Type", "Code", "Net Amt", "Exp / Dep", "Fees", "Description"};
     private boolean changeCheck = false;
     private boolean inInit;
 
@@ -41,7 +41,7 @@ public class InitialScreen extends JFrame {
         // Configuring frame behavior
         setVisible(true);
 
-        setSize(1100, 700);
+        setSize(1400, 700);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         // Instantiating components
@@ -53,10 +53,10 @@ public class InitialScreen extends JFrame {
         JPanel transactionPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JPanel outterPanel = new JPanel(new BorderLayout());
         JPanel headerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        JPanel grossBalancePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        JPanel netBalancePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        JPanel feesPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        JPanel outterBalancePanel = new JPanel();
+        JPanel grossBalancePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel netBalancePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel feesPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel outterBalancePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JPanel addRemovePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JPanel radioPanel = new JPanel();
 
@@ -103,18 +103,18 @@ public class InitialScreen extends JFrame {
         // More components
         JScrollPane transactionPane = new JScrollPane(transactionTable);
         transactionTable.setFillsViewportHeight(true);
+        transactionTable.getColumn("Description").setPreferredWidth(200);
 
         // Layouts and sizing
         transactionPanel.setLayout(new BoxLayout(transactionPanel, BoxLayout.PAGE_AXIS));
         leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.LINE_AXIS));
-        outterBalancePanel.setLayout(new BoxLayout(outterBalancePanel, BoxLayout.LINE_AXIS));
         radioPanel.setLayout(new BoxLayout(radioPanel, BoxLayout.PAGE_AXIS));
         wrapperPanel.setLayout(new GridLayout(0, 1));
 
         leftPanel.setMaximumSize(new Dimension(700, 200));
-        transactionPane.setMaximumSize(new Dimension(700, 500));
+        transactionPane.setMaximumSize(new Dimension(1000, 500));
         headerPanel.setPreferredSize(new Dimension(300, 25));
-        outterBalancePanel.setPreferredSize(new Dimension(100, 100));
+        outterBalancePanel.setPreferredSize(new Dimension(80, 100));
         addButton.setPreferredSize(new Dimension(100, 22));
         removeButton.setPreferredSize(new Dimension(100, 22));
         codeButton.setPreferredSize(new Dimension(150, 22));
@@ -187,11 +187,11 @@ public class InitialScreen extends JFrame {
 
         headerPanel.add(transactionLabel);
 
-        outterBalancePanel.add(Box.createRigidArea(new Dimension(70, 0)));
+        outterBalancePanel.add(Box.createRigidArea(new Dimension(130, 0)));
         outterBalancePanel.add(grossBalancePanel);
-        outterBalancePanel.add(Box.createRigidArea(new Dimension(90, 0)));
+        outterBalancePanel.add(Box.createRigidArea(new Dimension(125, 0)));
         outterBalancePanel.add(netBalancePanel);
-        outterBalancePanel.add(Box.createRigidArea(new Dimension(0, 0)));
+        outterBalancePanel.add(Box.createRigidArea(new Dimension(70, 0)));
         outterBalancePanel.add(feesPanel);
 
         grossBalancePanel.add(new JLabel("Gross Balance:"));
