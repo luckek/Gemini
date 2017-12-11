@@ -314,6 +314,7 @@ public class InitialScreen extends JFrame {
         if(balanceStr.substring(balanceStr.length() - 1 ).equalsIgnoreCase(")")) {
             balanceStr = balanceStr.replaceAll("()", "");
         }
+        balanceStr = balanceStr.replace(",", "");
         return new Double(balanceStr);
     }
 
@@ -827,7 +828,7 @@ public class InitialScreen extends JFrame {
             if (index != Integer.MIN_VALUE) {
 
                 String grossAmountStr = (String)transactionTable.getValueAt(index, 2);
-                grossAmountStr = grossAmountStr.replace("$", "");
+                grossAmountStr = grossAmountStr.replace("$", "").replace(",", "");
                 double grossAmount = new Double(grossAmountStr);
 
                 String netAmountStr = (String)transactionTable.getValueAt(index, 5);
