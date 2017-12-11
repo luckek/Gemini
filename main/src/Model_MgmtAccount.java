@@ -135,7 +135,17 @@ public class Model_MgmtAccount {
     void removeTransaction(Model_Transaction transaction) {
 
         // Get transaction and remove it.
-        transactions.remove(transaction);
+
+        for(int i = 0; i < transactions.size(); i++) {
+            String currName = transactions.get(i).getName();
+            String date = transactions.get(i).getDate();
+            double net = transactions.get(i).getNet();
+
+            if(currName.equalsIgnoreCase(transaction.getName()) && date.equalsIgnoreCase(transaction.getDate())) {
+                transactions.remove(i);
+                break;
+            }
+        }
 
         // Update account
         double value = transaction.getGross();

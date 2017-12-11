@@ -278,11 +278,12 @@ public class InitialScreen extends JFrame {
 
             // Get gross
             String grossStr = (String) transactionTable.getValueAt(i, 2);
-            double grossValue = new Double(grossStr.replace("$", ""));
+            grossStr = grossStr.replace(",", "");
+            double grossValue = new Double(grossStr.replace("$", "").replace(",", ""));
 
             // Get net
             String netStr = (String)transactionTable.getValueAt(i, 5);
-            double netValue =  new Double(netStr.replace("$", ""));
+            double netValue =  new Double(netStr.replace("$", "").replace(",", ""));
 
             // Calculate fees
             double fees = grossValue - netValue;
@@ -514,21 +515,24 @@ public class InitialScreen extends JFrame {
         String gross = (String)tmpModel.getValueAt(modelIndex, 2);
         gross = gross.replace("$", "");
         String type = (String)tmpModel.getValueAt(modelIndex, 3);
+        String codeStr = (String)tmpModel.getValueAt(modelIndex, 4);
+        int code = new Integer(codeStr);
         String expDep = (String)tmpModel.getValueAt(modelIndex, 6);
+        String desc = (String)tmpModel.getValueAt(modelIndex, 8);
         Model_Transaction t;
 
         // Create transaction
         if(type.equalsIgnoreCase("Cash")) {
 
-            t = new Model_Cash(type, name, 0, expDep, new Double(gross), date, "");
+            t = new Model_Cash(type, name, code, expDep, new Double(gross), date, desc);
         }
         else if(type.equalsIgnoreCase("Check")) {
 
-            t = new Model_Check(type, name, 0, expDep, new Double(gross), date, "");
+            t = new Model_Check(type, name, code, expDep, new Double(gross), date, desc);
 
         } else {
 
-            t = new Model_Credit(type, name, 0, expDep, new Double(gross), date, "");
+            t = new Model_Credit(type, name, code, expDep, new Double(gross), date, desc);
         }
 
         // Remove row
