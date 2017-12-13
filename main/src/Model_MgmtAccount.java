@@ -139,7 +139,6 @@ public class Model_MgmtAccount {
         for(int i = 0; i < transactions.size(); i++) {
             String currName = transactions.get(i).getName();
             String date = transactions.get(i).getDate();
-            double net = transactions.get(i).getNet();
 
             if(currName.equalsIgnoreCase(transaction.getName()) && date.equalsIgnoreCase(transaction.getDate())) {
                 transactions.remove(i);
