@@ -16,9 +16,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-// TODO: make sure backing out cancels action
-// TODO: ability to edit account
-
 public class InitialScreen extends JFrame {
 
     private JComboBox<String> accountList;
@@ -26,8 +23,6 @@ public class InitialScreen extends JFrame {
     private JLabel grossBalanceLabel;
     private JLabel netBalanceLabel;
     private JLabel feesLabel;
-    private JLabel logoLabel;
-    private String logoPath = "main/resources/logo1.png";
     private ButtonGroup radioGroup;
     private Controller controller;
     private String[] columnNames = {"Name", "Date", "Gross Amt", "Type", "Code", "Net Amt", "Exp / Dep", "Fees", "Description"};
