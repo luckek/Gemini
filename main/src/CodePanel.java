@@ -39,6 +39,7 @@ public class CodePanel extends JDialog {
         JPanel infoPanel = new JPanel();
         JPanel codePanel = new JPanel();
         JPanel isExpensePanel = new JPanel();
+        JPanel bottomPanel =  new JPanel(new FlowLayout(FlowLayout.CENTER));
 
         // Layouts
         centerPanel.setLayout(new GridLayout(3, 0, 90, 0));
@@ -48,13 +49,12 @@ public class CodePanel extends JDialog {
 
         // Add components
         add(mainPanel);
-        mainPanel.add(addButton, BorderLayout.PAGE_END);
-        mainPanel.add(centerPanel, BorderLayout.CENTER);
 
-        isExpensePanel.add(isExpenseBox);
+        mainPanel.add(centerPanel, BorderLayout.CENTER);
+        mainPanel.add(bottomPanel, BorderLayout.PAGE_END);
+
 
         centerPanel.add(infoPanel);
-//		centerPanel.add(Box.createRigidArea(new Dimension(10, 20)));
         centerPanel.add(codePanel);
         centerPanel.add(isExpensePanel);
 
@@ -63,6 +63,10 @@ public class CodePanel extends JDialog {
 
         codePanel.add(codeLabel);
         codePanel.add(codeField);
+
+        isExpensePanel.add(isExpenseBox);
+
+        bottomPanel.add(addButton);
 
         pack();
         setVisible(true);
